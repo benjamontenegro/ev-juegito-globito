@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 //using UnityEngine.SceneManagement;
 
+
 public class PlayerMain : MonoBehaviour
 {
     Rigidbody2D rb;
@@ -24,6 +25,8 @@ public class PlayerMain : MonoBehaviour
     void Update()
     {
         isGrounded = Physics.Raycast(groundCheck.position, Vector2.down, 0.2f, groundMask);
+
+        //float _dir = Mathf.Sign(Keyboard.current.dKey.isPressed - Keyboard.current.aKey.isPressed);
 
         if (Keyboard.current.dKey.isPressed)
             rb.linearVelocityX = 100 * m_spd * Time.deltaTime;
