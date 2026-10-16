@@ -6,15 +6,13 @@ using UnityEngine.InputSystem;
 public class PlayerMain : MonoBehaviour
 {
     Rigidbody2D rb;
+    bool isGrounded;
 
-    public Transform groundCheck;
-    //public float groundDistance
-    public LayerMask groundMask;
-    public bool isGrounded;
+    float grav = 4.0f;
+    float m_spd = 15.0f;
+    float j_spd = 17f;
 
-    public float grav = 4.0f;
-    public float m_spd = 10.0f;
-    public float j_spd = 15.0f;
+    float y_pos_ground = 0.6f;
 
     void Start() // INICIO
     {
@@ -24,9 +22,8 @@ public class PlayerMain : MonoBehaviour
 
     void Update()
     {
-        isGrounded = Physics.Raycast(groundCheck.position, Vector2.down, 0.2f, groundMask);
-
-        //float _dir = Mathf.Sign(Keyboard.current.dKey.isPressed - Keyboard.current.aKey.isPressed);
+        isGrounded = Physics2D.Raycast(transform.position, 
+            Vector2.down, y_pos_ground, LayerMask.GetMask("Wall"));
 
         if (Keyboard.current.dKey.isPressed)
             rb.linearVelocityX = 100 * m_spd * Time.deltaTime;
@@ -36,5 +33,10 @@ public class PlayerMain : MonoBehaviour
 
         if (isGrounded && Keyboard.current.spaceKey.wasPressedThisFrame)
             rb.AddForce(Vector3.up * j_spd, ForceMode2D.Impulse);
+    }
+
+    void OnDrawGizmos()
+    {
+        Gizmos.DrawLine(transform.position, transform.position + new Vector3(0, -y_pos_ground));
     }
 }
