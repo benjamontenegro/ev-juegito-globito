@@ -1,22 +1,29 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-//using UnityEngine.SceneManagement;
-
+using TMPro;
+using UnityEditor;
 
 public class PlayerMain : MonoBehaviour
 {
-    Rigidbody2D rb;
-    bool isGrounded;
-
-    float grav = 4.0f;
-    float m_spd = 15.0f;
-    float j_spd = 17f;
-
-    float y_pos_ground = 0.6f;
+    [SerializeField] private Rigidbody2D rb;
+    [SerializeField] private Transform pos;
+    
+    [SerializeField] private bool isGrounded;
+    public float grav = 4.0f;
+    public float m_spd = 10.0f;
+    public float j_spd = 17f;
+    public float y_pos_ground = 0.6f;
+    
+    void Awake()
+    {
+        // GetAllReferences();
+        pos = GetComponent<Transform>();
+        rb = GetComponent<Rigidbody2D>();
+    }
 
     void Start() // INICIO
     {
-        rb = GetComponent<Rigidbody2D>();
+        // rb = GetComponent<Rigidbody2D>();
         rb.gravityScale = grav;
     }
 
@@ -37,6 +44,9 @@ public class PlayerMain : MonoBehaviour
 
     void OnDrawGizmos()
     {
+        // Gizmos.DrawLine(pos.position, pos.position +new Vector3(rb.linearVelocityX, rb.linearVelocityY));
+        // Handles.Label(transform.position +new Vector3(-1, 4),
+        //     $"spd {rb.linearVelocity.magnitude}");
         Gizmos.DrawLine(transform.position, transform.position + new Vector3(0, -y_pos_ground));
     }
 }
