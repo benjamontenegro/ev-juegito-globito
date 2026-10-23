@@ -145,6 +145,8 @@ public class PlayerMain : MonoBehaviour
         if (MoveStats.DebugShowGrounded)
         {
             Color rayCol = Color.green;
+            if (_grounded)
+                rayCol = Color.red;
 
             Debug.DrawRay(new Vector2(boxCastOrigin.x -boxCastSize.x / 2, boxCastOrigin.y),
                 Vector2.down *MoveStats.GroundDetectRayDist, rayCol);
