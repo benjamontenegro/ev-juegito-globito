@@ -1,31 +1,34 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using System.Collections;
-using System.Collections.Generic;
+// using System.Collections;
+// using System.Collections.Generic;
+// using System;
 
 public class InputHandler : MonoBehaviour
 {
     // CLASE DEL PLAYERINPUT
-    public static PlayerInput PlayerInput; 
+    public static PlayerInput PlInp; 
 
     public static Vector2 Movement;
     public static bool JumpWasPressed;
     public static bool JumpIsHeld;
     public static bool JumpWasReleased;
-    // public static bool RunIsHeld;
-    
+
     private InputAction _moveAction;
     private InputAction _jumpAction;
 
     private void Awake()
     {
-        // PlayerInput = GetComponent<PlayerInput>();
+        PlInp = new PlayerInput();
 
-        _moveAction = PlayerInput.Player.Move;
-        _jumpAction = PlayerInput.Player.Jump;
+        _moveAction = PlInp.Player.Move;
+        _jumpAction = PlInp.Player.Jump;
     }
 
-    void Update()
+    private void OnEnable() { PlInp.Player.Enable(); }
+    private void OnDisable() { PlInp.Player.Disable(); }
+
+    private void Update()
     {
         Movement = _moveAction.ReadValue<Vector2>();
         // ARRIA ABAJO IZQUIERDA Y DERECHA

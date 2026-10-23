@@ -1,0 +1,44 @@
+ // [SerializeField] private Rigidbody2D rb;
+    // [SerializeField] private Transform pos;
+    
+    // private bool isGrounded;
+    // public float grav = 4.0f;
+    // public float m_spd = 10.0f;
+    // public float j_spd = 17f;
+    // public float y_pos_ground = 0.6f;
+    
+    // void Awake()
+    // {
+    //     // GetAllReferences();
+    //     pos = GetComponent<Transform>();
+    //     rb = GetComponent<Rigidbody2D>();
+    // }
+
+    // void Start() // INICIO
+    // {
+    //     // rb = GetComponent<Rigidbody2D>();
+    //     rb.gravityScale = grav;
+    // }
+
+    // void Update()
+    // {
+    //     isGrounded = Physics2D.Raycast(transform.position, 
+    //         Vector2.down, y_pos_ground, LayerMask.GetMask("Wall"));
+
+    //     if (Keyboard.current.dKey.isPressed)
+    //         rb.linearVelocityX = 100 * m_spd * Time.deltaTime;
+
+    //     if (Keyboard.current.aKey.isPressed)
+    //         rb.linearVelocityX = 100 * -m_spd * Time.deltaTime;
+
+    //     if (isGrounded && Keyboard.current.spaceKey.wasPressedThisFrame)
+    //         rb.AddForce(Vector3.up * j_spd, ForceMode2D.Impulse);
+    // }
+
+    // void OnDrawGizmos()
+    // {
+    //     // Gizmos.DrawLine(pos.position, pos.position +new Vector3(rb.linearVelocityX, rb.linearVelocityY));
+    //     // Handles.Label(transform.position +new Vector3(-1, 4),
+    //     //     $"spd {rb.linearVelocity.magnitude}");
+    //     Gizmos.DrawLine(transform.position, transform.position + new Vector3(0, -y_pos_ground));
+    // }

@@ -1,52 +1,166 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using TMPro;
-using UnityEditor;
+// using TMPro;
+// using UnityEditor;
 
 public class PlayerMain : MonoBehaviour
 {
-    [SerializeField] private Rigidbody2D rb;
-    [SerializeField] private Transform pos;
-    
-    [SerializeField] private bool isGrounded;
-    public float grav = 4.0f;
-    public float m_spd = 10.0f;
-    public float j_spd = 17f;
-    public float y_pos_ground = 0.6f;
-    
-    void Awake()
+    #region REFERENCIAS + VARIABLES
+    // ################################################################
+    // REFERENCIA UFFFF
+
+    [Header("Referencias uwu")]
+    public PlayerMoveStats MoveStats;
+    [SerializeField] private Collider2D _feetColl;
+    [SerializeField] private Collider2D _bodyColl;
+
+    private Rigidbody2D _rb;
+
+    private Vector2 _moveVel;
+    private bool _faceDir; 
+    // BOOLEANO PQ -> 1 / 0 -<
+    // DERECHA == TRUE, IZQUIERDA == FALSE
+
+    private RaycastHit2D _groundHit;
+    private RaycastHit2D _headHit;
+    private bool _grounded;
+    private bool _bumpHead;
+
+    // COSAS SALTO
+    public float VerticalVelocity { get; private set; }
+    private bool _isJumping;
+    private bool _isFalling;
+    private bool _isFastFalling;
+    private float _fastFallTime;
+    private float _fastFallReleaseSpeed;
+    private int _jumpsUsed;
+
+    private float _apexPoint;
+    private float _timePastApexThreshold;
+    private bool _isPastApexThreshold;
+
+    private float _jumpBufferTimer;
+    private float _jumpReleasedOnBuffer;
+    private float _jumpCoyoteTimer;
+
+    #endregion
+
+    #region BEHAVIOR
+    // ################################################################
+
+    private void Awake()
     {
-        // GetAllReferences();
-        pos = GetComponent<Transform>();
-        rb = GetComponent<Rigidbody2D>();
+        _faceDir = true;
+        _rb = GetComponent<Rigidbody2D>();
     }
 
-    void Start() // INICIO
+    private void Update()
     {
-        // rb = GetComponent<Rigidbody2D>();
-        rb.gravityScale = grav;
+        
     }
 
-    void Update()
+    void FixedUpdate()
     {
-        isGrounded = Physics2D.Raycast(transform.position, 
-            Vector2.down, y_pos_ground, LayerMask.GetMask("Wall"));
+        CollisionChecks();
 
-        if (Keyboard.current.dKey.isPressed)
-            rb.linearVelocityX = 100 * m_spd * Time.deltaTime;
+        if (_grounded)
+        {
+            Move(MoveStats.MoveAcc, MoveStats.MoveFri, InputHandler.Movement);
+        }
+        else
+        {
+            Move(MoveStats.MoveAccAir, MoveStats.MoveFriAir, InputHandler.Movement);
+        }
+    }
+    #endregion
 
-        if (Keyboard.current.aKey.isPressed)
-            rb.linearVelocityX = 100 * -m_spd * Time.deltaTime;
+    #region MOVIMIENTO 
+    // ################################################################
 
-        if (isGrounded && Keyboard.current.spaceKey.wasPressedThisFrame)
-            rb.AddForce(Vector3.up * j_spd, ForceMode2D.Impulse);
+    private void Move(float acc, float fri, Vector2 moveInput)
+    {
+        // check dir uwu
+        TurnCheck(moveInput);
+
+        if (moveInput != Vector2.zero)
+        {
+            Vector2 finalMoveVel = Vector2.zero;
+            finalMoveVel = new Vector2(moveInput.x, 0f) * MoveStats.MaxMoveSpd;
+
+            _moveVel = Vector2.Lerp(_moveVel, finalMoveVel, acc *Time.fixedDeltaTime);
+            _rb.linearVelocity = new Vector2(_moveVel.x, _rb.linearVelocity.y);
+        }
+        else if (moveInput == Vector2.zero)
+        {
+            _moveVel = Vector2.Lerp(_moveVel, Vector2.zero, fri *Time.fixedDeltaTime);
+            _rb.linearVelocity = new Vector2(_moveVel.x, _rb.linearVelocity.y);
+        }
     }
 
-    void OnDrawGizmos()
+    private void TurnCheck(Vector2 moveInput)
     {
-        // Gizmos.DrawLine(pos.position, pos.position +new Vector3(rb.linearVelocityX, rb.linearVelocityY));
-        // Handles.Label(transform.position +new Vector3(-1, 4),
-        //     $"spd {rb.linearVelocity.magnitude}");
-        Gizmos.DrawLine(transform.position, transform.position + new Vector3(0, -y_pos_ground));
+        if (_faceDir && moveInput.x < 0)
+        {
+            Turn(false);
+        }
+        else if (!_faceDir && moveInput.x > 0)
+        {
+            Turn(true);
+        }
     }
+
+    private void Turn(bool turnRight)
+    {
+        if (turnRight)
+        {
+            _faceDir = true;
+            transform.Rotate(0f, 180f, 0f);
+        }
+        else
+        {
+            _faceDir = false;
+            transform.Rotate(0f, -180f, 0f);
+        }
+    }
+
+    #endregion
+
+    #region COLISIONES
+    // ################################################################
+
+    private void IsGrounded()
+    {
+        Vector2 boxCastOrigin = new Vector2(_feetColl.bounds.center.x, _feetColl.bounds.min.y);
+        Vector2 boxCastSize = new Vector2(_feetColl.bounds.size.x, MoveStats.GroundDetectRayDist);
+        
+        _groundHit = Physics2D.BoxCast(
+            boxCastOrigin, boxCastSize,0f, Vector2.down, MoveStats.GroundDetectRayDist, MoveStats.GroundLy);
+        
+        if (_groundHit.collider != null)
+        {
+            _grounded = true;
+        }
+        else { _grounded = false; }
+
+        if (MoveStats.DebugShowGrounded)
+        {
+            Color rayCol = Color.green;
+
+            Debug.DrawRay(new Vector2(boxCastOrigin.x -boxCastSize.x / 2, boxCastOrigin.y),
+                Vector2.down *MoveStats.GroundDetectRayDist, rayCol);
+            Debug.DrawRay(new Vector2(boxCastOrigin.x +boxCastSize.x / 2, boxCastOrigin.y),
+                Vector2.down *MoveStats.GroundDetectRayDist, rayCol);
+            Debug.DrawRay(new Vector2(boxCastOrigin.x -boxCastSize.x / 2, 
+                boxCastOrigin.y -MoveStats.GroundDetectRayDist), Vector2.right *boxCastSize.x, rayCol);
+        }
+
+    }
+
+    private void CollisionChecks()
+    {
+        IsGrounded();
+    }
+
+    #endregion
+
 }
