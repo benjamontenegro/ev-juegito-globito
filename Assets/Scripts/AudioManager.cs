@@ -1,49 +1,41 @@
+using UnityEditor.Timeline.Actions;
 using UnityEngine;
-using UnityEngine.InputSystem;
+// using UnityEngine.InputSystem;
 
 public class AudioManager : MonoBehaviour
 {
-    AudioSource audioSource;
-    public AudioClip[] sfxClips;
+    private AudioSource AudioSrc;
+    public AudioClip JumpSound;
+    public AudioClip LandSound;
     
-    public void PlayAudio()
+    public void PlayAudioClip(AudioClip clip)
     {
-        audioSource.Play();
-    }
-    public void PauseAudio()
-    {
-        audioSource.Pause();
+        AudioSrc.PlayOneShot(clip);
     }
 
-    public void PlaySoundRandom()
+    private void Awake()
     {
-        int randomnum = Random.Range(0, sfxClips.Length);
-        audioSource.PlayOneShot(sfxClips[randomnum]);
+        AudioSrc = GetComponent<AudioSource>();
+        JumpSound = LoadAudioClip("Audio/kirbyjump1"); 
+        LandSound = LoadAudioClip("Audio/kirbyland1");
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    #region EXTRA SHIT
+
+    private AudioClip LoadAudioClip(string audioPath)
     {
-        audioSource = GetComponent<AudioSource>();
+        AudioClip sfx = Resources.Load<AudioClip>(audioPath);
+
+        if (sfx != null)
+            Debug.Log($"SOUND LOADED BRO (from {"shit"})");
+        else
+            Debug.Log($"could load {audioPath}");
+        // PENDIENTE
+        // VER COMO HACER QUE CARGUE UNA VEZ 
+        // Y NO CADA VEZ QUE CARGUE LA ESCENA
+
+        return sfx;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-        if (Keyboard.current.tabKey.wasPressedThisFrame)
-        {
-            if (Keyboard.current.qKey.isPressed)
-            {
-                PlaySoundRandom();
-            }
-            else
-            {
-                if (!audioSource.isPlaying)
-                    PlayAudio();
-                else
-                    PauseAudio();
-            }
-        }
-    }
+    #endregion
 }

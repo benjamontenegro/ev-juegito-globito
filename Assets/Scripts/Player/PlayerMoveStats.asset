@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab20529b598636843b244bdfbe3b043c, type: 3}
   m_Name: PlayerMoveStats
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMoveStats
-  MaxMoveSpd: 12.5
-  MoveAcc: 7
-  MoveFri: 20
-  MoveAccAir: 4
+  MaxMoveSpd: 12
+  MoveAcc: 20
+  MoveFri: 30
+  MoveAccAir: 8
   MoveFriAir: 0.5
   GroundLy:
     serializedVersion: 2
@@ -23,15 +23,15 @@ MonoBehaviour:
   GroundDetectRayDist: 0.05
   HeadDetectRayDist: 0.02
   HeadWidth: 0.75
-  JumpHeight: 6.5
-  JumpHeightCompensationFactor: 1.054
+  JumpHeight: 3.5
+  JumpHeightCompensationFactor: 1.1
   TimeTillJumpApex: 0.35
-  GravityOnReleaseMult: 2
+  GravityOnReleaseMult: 1
   MaxFallSpd: 20
-  JumpsCanAmount: 2
+  JumpsCanAmount: 1
   timeForUpcancel: 0.027
-  ApexThreshold: 0.97
-  ApexHangTime: 0.07
+  ApexThreshold: 1
+  ApexHangTime: 0.01
   JumpBuffer: 0.125
   JumpCoyote: 0.1
   DebugShowGrounded: 1

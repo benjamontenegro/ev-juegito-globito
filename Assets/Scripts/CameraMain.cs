@@ -4,7 +4,7 @@ public class CameraMain : MonoBehaviour
 {
     public Transform target;
 
-    float cam_spd = 0.01f;
+    [Range(0.001f, 0.5f)] public float cam_spd = 0.01f;
     Vector3 offset;
 
     void Awake()

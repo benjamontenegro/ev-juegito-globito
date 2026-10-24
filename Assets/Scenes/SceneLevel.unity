@@ -3707,7 +3707,6 @@ Transform:
   - {fileID: 29653297}
   - {fileID: 355047485}
   - {fileID: 1248919194}
-  - {fileID: 1887991100}
   - {fileID: 1418470733}
   - {fileID: 560195259}
   m_Father: {fileID: 0}
@@ -3913,6 +3912,7 @@ Transform:
   - {fileID: 1555478509}
   - {fileID: 180392082}
   - {fileID: 713783233}
+  - {fileID: 1887991100}
   m_Father: {fileID: 399177568}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &565988222
@@ -3978,11 +3978,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33c847bd310c70b458bf1a65c0847c6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AudioManager
-  sfxClips:
-  - {fileID: 8300000, guid: c6ed7cc12a7009540b7cf2e84aca7999, type: 3}
-  - {fileID: 8300000, guid: 5507c5c1abf133d43a53e8f71650855e, type: 3}
-  - {fileID: 8300000, guid: 4e4d92af3357a0047ad7926884655523, type: 3}
-  - {fileID: 8300000, guid: 350d15d18b8e21944a4da0ae959ab42d, type: 3}
+  JumpSound: {fileID: 0}
+  LandSound: {fileID: 0}
 --- !u!82 &584526052
 AudioSource:
   m_ObjectHideFlags: 0
@@ -3996,7 +3993,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 0.525
+  m_Volume: 0.1
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -4309,6 +4306,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMain
   MoveStats: {fileID: 11400000, guid: efc2dc47f0fe012468080c8cac0646ae, type: 2}
+  Sound: {fileID: 584526051}
   _feetColl: {fileID: 774390313}
   _bodyColl: {fileID: 1974726878}
 --- !u!50 &704879085
@@ -4327,7 +4325,7 @@ Rigidbody2D:
   m_LinearDamping: 0
   m_AngularDamping: 0
   m_GravityScale: 0
-  m_Material: {fileID: 6200000, guid: 6d1a9fa763209a04681b9caa92714030, type: 2}
+  m_Material: {fileID: 6200000, guid: b11b5538237e6b4468cef06029c5c478, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -5787,6 +5785,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CameraMain
   target: {fileID: 704879083}
+  cam_spd: 0.1
 --- !u!1 &1275383226
 GameObject:
   m_ObjectHideFlags: 0
@@ -7317,6 +7316,7 @@ GameObject:
   - component: {fileID: 1887991102}
   - component: {fileID: 1887991101}
   - component: {fileID: 1887991103}
+  - component: {fileID: 1887991104}
   m_Layer: 10
   m_Name: Wall (12)
   m_TagString: Untagged
@@ -7337,7 +7337,7 @@ Transform:
   m_LocalScale: {x: 3, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 399177568}
+  m_Father: {fileID: 560195259}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &1887991101
 Rigidbody2D:
@@ -7397,7 +7397,7 @@ BoxCollider2D:
     serializedVersion: 2
     m_Bits: 4294967295
   m_IsTrigger: 0
-  m_UsedByEffector: 0
+  m_UsedByEffector: 1
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
@@ -7471,6 +7471,25 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!251 &1887991104
+PlatformEffector2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1887991099}
+  m_Enabled: 1
+  m_UseColliderMask: 1
+  m_ColliderMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RotationalOffset: 0
+  m_UseOneWay: 1
+  m_UseOneWayGrouping: 0
+  m_SurfaceArc: 90
+  m_UseSideFriction: 0
+  m_UseSideBounce: 0
+  m_SideArc: 1
 --- !u!1 &1960193139
 GameObject:
   m_ObjectHideFlags: 0

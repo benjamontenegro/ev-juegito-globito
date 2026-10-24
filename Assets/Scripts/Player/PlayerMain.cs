@@ -13,6 +13,7 @@ public class PlayerMain : MonoBehaviour
 
     [Header("Referencias uwu")]
     public PlayerMoveStats MoveStats;
+    public AudioManager Sound;
     [SerializeField] private Collider2D _feetColl;
     [SerializeField] private Collider2D _bodyColl;
 
@@ -197,6 +198,8 @@ public class PlayerMain : MonoBehaviour
             _isPastApexThreshold = false;
             VerticalVelocity = Physics2D.gravity.y;
             _jumpsUsed = 0;
+
+            Sound.PlayAudioClip(Sound.LandSound);
         }
     }
 
@@ -206,11 +209,14 @@ public class PlayerMain : MonoBehaviour
         {
             _isJumping = true;
         }
+        
         _jumpBufferTimer = 0f;
         _jumpsUsed += AmountJumpsUsed;
         VerticalVelocity = MoveStats.InicialJumpVel;
-    }
 
+        Sound.PlayAudioClip(Sound.JumpSound);
+    }
+ 
     private void Jump()
     {
         // APPLY GRAV
