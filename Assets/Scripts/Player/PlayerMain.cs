@@ -1,3 +1,4 @@
+using System.Threading;
 using UnityEngine;
 using UnityEngine.InputSystem;
 // using TMPro;
@@ -40,7 +41,7 @@ public class PlayerMain : MonoBehaviour
     private bool _isPastApexThreshold;
 
     private float _jumpBufferTimer;
-    private float _jumpReleasedOnBuffer;
+    private bool _jumpReleasedOnBuffer;
     private float _jumpCoyoteTimer;
 
     #endregion
@@ -56,25 +57,24 @@ public class PlayerMain : MonoBehaviour
 
     private void Update()
     {
-        
+        // SOLO REVISA LOS INPUTS DEL SALTO
+        JumpChecks();
+        CountTimers();
     }
 
     void FixedUpdate()
     {
         CollisionChecks();
+        Jump();
 
-        if (_grounded)
-        {
-            Move(MoveStats.MoveAcc, MoveStats.MoveFri, InputHandler.Movement);
-        }
-        else
-        {
-            Move(MoveStats.MoveAccAir, MoveStats.MoveFriAir, InputHandler.Movement);
-        }
+        float FinalAcc = _grounded ? MoveStats.MoveAcc : MoveStats.MoveAccAir;
+        float FinalFri = _grounded ? MoveStats.MoveFri : MoveStats.MoveFriAir;
+
+        Move(FinalAcc, FinalFri, InputHandler.Movement);
     }
     #endregion
 
-    #region MOVIMIENTO 
+    #region MOVIMIENTO X
     // ################################################################
 
     private void Move(float acc, float fri, Vector2 moveInput)
@@ -125,6 +125,31 @@ public class PlayerMain : MonoBehaviour
 
     #endregion
 
+    #region MOVIMIENTO Y
+    // ################################################################
+
+    private void JumpChecks()
+    { 
+        // PRESS JUMP 
+        if (InputHandler.JumpWasPressed)
+        {
+            _jumpBufferTimer = MoveStats.JumpBuffer;
+            _jumpReleasedOnBuffer = false;
+        }
+        // RELEASE JUMP
+        // START JUMP + BUFFER + COYOTE 
+        // DOUBLE/AIR JUMP
+        // COYOTE JUMP
+        // LANDED
+    }
+
+    private void Jump()
+    {
+        
+    }
+
+    #endregion
+
     #region COLISIONES
     // ################################################################
 
@@ -161,6 +186,26 @@ public class PlayerMain : MonoBehaviour
     private void CollisionChecks()
     {
         IsGrounded();
+    }
+
+    #endregion
+
+    #region TIMERS
+    // ################################################################
+
+    private void CountTimers()
+    {
+        _jumpBufferTimer -= Time.deltaTime;
+
+        _jumpCoyoteTimer = (!_grounded) ? 
+            _jumpCoyoteTimer -= Time.deltaTime : MoveStats.JumpCoyote;
+
+        // if (_grounded)
+        // {    
+        //     _jumpCoyoteTimer -= Time.deltaTime;
+        // }
+        // else
+        // { _jumpCoyoteTimer = MoveStats.JumpCoyote; }
     }
 
     #endregion
