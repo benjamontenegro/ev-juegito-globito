@@ -27,7 +27,7 @@ public class AudioManager : MonoBehaviour
         AudioClip sfx = Resources.Load<AudioClip>(audioPath);
 
         if (sfx != null)
-            Debug.Log($"SOUND LOADED BRO (from {"shit"})");
+            Debug.Log($"SOUND LOADED BRO (from {audioPath})");
         else
             Debug.Log($"could load {audioPath}");
         // PENDIENTE

@@ -223,7 +223,7 @@ public class PlayerMain : MonoBehaviour
         if (_isJumping)
         {
              // CHECK FOR BUMPING HEADS
-            if (_bumpHead) { _isFastFalling = true; }
+            // if (_bumpHead) { _isFastFalling = true; }
 
             // GRAVITY ASCENT
             if (VerticalVelocity >= 0f)
