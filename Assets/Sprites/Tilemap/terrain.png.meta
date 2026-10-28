@@ -5,6 +5,12 @@ TextureImporter:
   - first:
       213: 8765297898444631108
     second: terrain_0
+  - first:
+      213: -5519051278557835307
+    second: terrain_1
+  - first:
+      213: 2963411684039260603
+    second: terrain_2
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -48,7 +54,7 @@ TextureImporter:
   compressionQuality: 50
   spriteMode: 2
   spriteExtrude: 1
-  spriteMeshType: 1
+  spriteMeshType: 0
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 16
@@ -125,20 +131,20 @@ TextureImporter:
       name: terrain_1
       rect:
         serializedVersion: 2
-        x: 16
+        x: 32
         y: 0
         width: 16
         height: 16
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 8, z: 0, w: 0}
+      border: {x: 0, y: 0, z: 0, w: 13}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 4ad5d14ca19f8ec4481a045ca871de85
-      internalID: 801973312
+      spriteID: 5df05647a146863b0800000000000000
+      internalID: -5519051278557835307
       vertices: []
       indices: 
       edges: []
@@ -147,20 +153,20 @@ TextureImporter:
       name: terrain_2
       rect:
         serializedVersion: 2
-        x: 32
+        x: 64
         y: 0
         width: 16
-        height: 3
+        height: 16
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      border: {x: 3, y: 3, z: 3, w: 3}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: ef25e8b50b650ac4980a567f1cf9b82d
-      internalID: -199949142
+      spriteID: bb9f66ec937202920800000000000000
+      internalID: 2963411684039260603
       vertices: []
       indices: 
       edges: []
@@ -169,7 +175,29 @@ TextureImporter:
       name: terrain_3
       rect:
         serializedVersion: 2
-        x: 32
+        x: 16
+        y: 0
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 12, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 091c47c3af1ff7449b38f15858cfd757
+      internalID: -109777830
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: terrain_4
+      rect:
+        serializedVersion: 2
+        x: 48
         y: 0
         width: 16
         height: 16
@@ -181,8 +209,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4fe0b1f6f09c2b14395e72fbc6840e67
-      internalID: -158930144
+      spriteID: e05ce23c457b6bf41b99401375fd6658
+      internalID: 1311308696
       vertices: []
       indices: 
       edges: []
@@ -191,7 +219,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: a70dfd15001546845b84f22747a5ddb3
+    spriteID: 54175ec3371bd0b4eaf0b73e17d1da34
     internalID: 0
     vertices: []
     indices: 
@@ -204,9 +232,10 @@ TextureImporter:
         value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":16.0,"y":16.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":1,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
       terrain_0: 8765297898444631108
-      terrain_1: 801973312
-      terrain_2: -199949142
-      terrain_3: -158930144
+      terrain_1: -5519051278557835307
+      terrain_2: 2963411684039260603
+      terrain_3: -109777830
+      terrain_4: 1311308696
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

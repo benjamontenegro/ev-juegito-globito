@@ -51,13 +51,13 @@ public class PlayerMain : MonoBehaviour
     #region BEHAVIOR
     // ################################################################
 
-    private void Awake()
+    void Awake()
     {
         _faceDir = true;
         _rb = GetComponent<Rigidbody2D>();
     }
 
-    private void Update()
+    void Update()
     {
         // SOLO REVISA LOS INPUTS DEL SALTO
         JumpChecks();
