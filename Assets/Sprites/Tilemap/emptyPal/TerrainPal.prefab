@@ -172,7 +172,7 @@ GameObject:
   - component: {fileID: 4797905834941872518}
   - component: {fileID: 5634052878077553694}
   m_Layer: 0
-  m_Name: NullPallete
+  m_Name: TerrainPal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -206,7 +206,7 @@ Grid:
   m_CellGap: {x: 0, y: 0, z: 0}
   m_CellLayout: 0
   m_CellSwizzle: 0
---- !u!114 &9057989706584839060
+--- !u!114 &5060325624029710301
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

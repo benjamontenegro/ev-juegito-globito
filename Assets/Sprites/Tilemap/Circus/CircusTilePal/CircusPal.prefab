@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5977161687468266096}
   - component: {fileID: 4173694716417740623}
   m_Layer: 0
-  m_Name: New Tile Palette
+  m_Name: CircusPal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
