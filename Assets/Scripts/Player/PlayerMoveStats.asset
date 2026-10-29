@@ -19,7 +19,7 @@ MonoBehaviour:
   MoveFriAir: 0.5
   GroundLy:
     serializedVersion: 2
-    m_Bits: 1024
+    m_Bits: 3072
   GroundDetectRayDist: 0.05
   HeadDetectRayDist: 0.03
   HeadWidth: 0.7
