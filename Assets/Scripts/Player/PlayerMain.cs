@@ -62,6 +62,11 @@ public class PlayerMain : MonoBehaviour
         // SOLO REVISA LOS INPUTS DEL SALTO
         JumpChecks();
         CountTimers();
+
+        if (Keyboard.current.fKey.wasPressedThisFrame)
+        {
+            Die();
+        }
     }
 
     void FixedUpdate()
@@ -74,6 +79,7 @@ public class PlayerMain : MonoBehaviour
 
         Move(FinalAcc, FinalFri, InputHandler.Movement);
     }
+    
     #endregion
 
     #region MOVIMIENTO X
@@ -199,7 +205,7 @@ public class PlayerMain : MonoBehaviour
             VerticalVelocity = Physics2D.gravity.y;
             _jumpsUsed = 0;
 
-            Sound.PlayAudioClip(Sound.LandSound);
+            Sound.PlayAudioClip("land");
         }
     }
 
@@ -214,7 +220,7 @@ public class PlayerMain : MonoBehaviour
         _jumpsUsed += AmountJumpsUsed;
         VerticalVelocity = MoveStats.InicialJumpVel;
 
-        Sound.PlayAudioClip(Sound.JumpSound);
+        Sound.PlayAudioClip("jump");
     }
  
     private void Jump()
@@ -355,25 +361,35 @@ public class PlayerMain : MonoBehaviour
         else { _bumpHead = false; }
 
         #region DEBUG SHIT
-        if (MoveStats.DebugShowGrounded)
-        {
-            float HeadW = MoveStats.HeadWidth;
-            Color rayCol = _bumpHead ? Color.red : Color.green;
+        // if (MoveStats.DebugShowGrounded)
+        // {
+        //     float HeadW = MoveStats.HeadWidth;
+        //     Color rayCol = _bumpHead ? Color.red : Color.green;
 
-            Debug.DrawRay(new Vector2(BoxCastOrigin.x -BoxCastSize.x / 2 *HeadW, BoxCastOrigin.y),
-                Vector2.up *MoveStats.HeadDetectRayDist, rayCol);
-            Debug.DrawRay(new Vector2(BoxCastOrigin.x +(BoxCastSize.x / 2) *HeadW, BoxCastOrigin.y),
-                Vector2.up *MoveStats.HeadDetectRayDist, rayCol);
-            Debug.DrawRay(new Vector2(BoxCastOrigin.x -BoxCastSize.x / 2, 
-                BoxCastOrigin.y -MoveStats.HeadDetectRayDist), Vector2.right *BoxCastSize.x *HeadW, rayCol);
-        }
+        //     Debug.DrawRay(new Vector2(BoxCastOrigin.x -BoxCastSize.x / 2 *HeadW, BoxCastOrigin.y),
+        //         Vector2.up *MoveStats.HeadDetectRayDist, rayCol);
+        //     Debug.DrawRay(new Vector2(BoxCastOrigin.x +(BoxCastSize.x / 2) *HeadW, BoxCastOrigin.y),
+        //         Vector2.up *MoveStats.HeadDetectRayDist, rayCol);
+        //     Debug.DrawRay(new Vector2(BoxCastOrigin.x -BoxCastSize.x / 2, 
+        //         BoxCastOrigin.y -MoveStats.HeadDetectRayDist), Vector2.right *BoxCastSize.x *HeadW, rayCol);
+        // }
         #endregion
+    }
+
+    private void DetectCollisionSpikes()
+    {
+        // if (_bodyColl.IsTouching(collision) 
+        //     && collision.gameObject.CompareTag("WallHurt"))
+        // {
+        //     Die();
+        // }
     }
 
     private void CollisionChecks()
     {
         IsGrounded();
         BumpedHead();
+        DetectCollisionSpikes();
     }
 
     #endregion
@@ -398,4 +414,13 @@ public class PlayerMain : MonoBehaviour
 
     #endregion
 
+    #region EXTRAS
+    
+    private void Die()
+    {
+        Object.Destroy(gameObject);
+        Sound.PlayAudioClip("hurt");
+    }
+    
+    #endregion
 }

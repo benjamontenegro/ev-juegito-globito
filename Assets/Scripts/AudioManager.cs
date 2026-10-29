@@ -1,35 +1,56 @@
-using UnityEditor.Timeline.Actions;
+using System.Collections.Generic;
 using UnityEngine;
-// using UnityEngine.InputSystem;
 
 public class AudioManager : MonoBehaviour
 {
-    private AudioSource AudioSrc;
-    public AudioClip JumpSound;
-    public AudioClip LandSound;
-    
-    public void PlayAudioClip(AudioClip clip)
+    [SerializeField] private AudioSource AudioSrc;
+    [SerializeField] private List<SfxClip> AllSounds;
+
+    public struct SfxClip
     {
-        AudioSrc.PlayOneShot(clip);
+        public AudioClip clip;
+        public string sfxName;
+
+        public SfxClip (string name, string resourcePath)
+        {
+            clip = LoadAudioClip(resourcePath);
+            sfxName = name;
+        }
     }
 
-    private void Awake()
+    void Awake()
     {
+        AllSounds = new List<SfxClip>();
         AudioSrc = GetComponent<AudioSource>();
-        JumpSound = LoadAudioClip("Audio/kirbyjump1"); 
-        LandSound = LoadAudioClip("Audio/kirbyland1");
+        LoadAllSfxClips();
     }
 
-    #region EXTRA SHIT
+    #region FUNCIONES
+    
+    public void PlayAudioClip(string clipName)
+    {
+        AudioClip clip = AllSounds.Find(x => x.sfxName == clipName).clip;
+        if (clip != null)
+            AudioSrc.PlayOneShot(clip);
+        // else
+        //     Debug.Log($"Failed to play sound \"{clipName}\"");
+    }
 
-    private AudioClip LoadAudioClip(string audioPath)
+    private void LoadAllSfxClips()
+    {
+        AllSounds.Add(new SfxClip("jump", "Audio/kirbyjump1"));
+        AllSounds.Add(new SfxClip("land", "Audio/kirbyland1"));
+        AllSounds.Add(new SfxClip("hurt", "Audio/kirbyhurt"));
+    }
+
+    public static AudioClip LoadAudioClip(string audioPath)
     {
         AudioClip sfx = Resources.Load<AudioClip>(audioPath);
 
-        if (sfx != null)
-            Debug.Log($"SOUND LOADED BRO (from {audioPath})");
-        else
-            Debug.Log($"could load {audioPath}");
+        // if (sfx != null)
+        //     Debug.Log($"SOUND LOADED BRO (from {audioPath})");
+        // else
+        //     Debug.Log($"could load {audioPath}");
         // PENDIENTE
         // VER COMO HACER QUE CARGUE UNA VEZ 
         // Y NO CADA VEZ QUE CARGUE LA ESCENA
