@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab20529b598636843b244bdfbe3b043c, type: 3}
+  m_Name: PlayerMoveStats
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerMoveStats
+  MaxMoveSpd: 10
+  MoveAcc: 20
+  MoveFri: 30
+  MoveAccAir: 8
+  MoveFriAir: 0.5
+  GroundLy:
+    serializedVersion: 2
+    m_Bits: 3072
+  GroundDetectRayDist: 0.05
+  HeadDetectRayDist: 0.03
+  HeadWidth: 0.7
+  JumpHeight: 3.5
+  JumpHeightCompensationFactor: 1.1
+  TimeTillJumpApex: 0.45
+  GravityOnReleaseMult: 2
+  MaxFallSpd: 40
+  JumpsCanAmount: 1
+  timeForUpcancel: 0.1
+  ApexThreshold: 0.762
+  ApexHangTime: 0.01
+  JumpBuffer: 0.12
+  JumpCoyote: 0.1
+  DebugShowGrounded: 1

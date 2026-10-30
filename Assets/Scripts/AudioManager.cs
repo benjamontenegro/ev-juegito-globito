@@ -1,49 +1,62 @@
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class AudioManager : MonoBehaviour
 {
-    AudioSource audioSource;
-    public AudioClip[] sfxClips;
-    
-    public void PlayAudio()
-    {
-        audioSource.Play();
-    }
-    public void PauseAudio()
-    {
-        audioSource.Pause();
-    }
+    [SerializeField] private AudioSource AudioSrc;
+    [SerializeField] private List<SfxClip> AllSounds;
 
-    public void PlaySoundRandom()
+    public struct SfxClip
     {
-        int randomnum = Random.Range(0, sfxClips.Length);
-        audioSource.PlayOneShot(sfxClips[randomnum]);
-    }
+        public AudioClip clip;
+        public string sfxName;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        audioSource = GetComponent<AudioSource>();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-        if (Keyboard.current.tabKey.wasPressedThisFrame)
+        public SfxClip (string name, string resourcePath)
         {
-            if (Keyboard.current.qKey.isPressed)
-            {
-                PlaySoundRandom();
-            }
-            else
-            {
-                if (!audioSource.isPlaying)
-                    PlayAudio();
-                else
-                    PauseAudio();
-            }
+            clip = LoadAudioClip(resourcePath);
+            sfxName = name;
         }
     }
+
+    void Awake()
+    {
+        AllSounds = new List<SfxClip>();
+        AudioSrc = GetComponent<AudioSource>();
+        LoadAllSfxClips();
+    }
+
+    #region FUNCIONES
+    
+    public void PlayAudioClip(string clipName)
+    {
+        AudioClip clip = AllSounds.Find(x => x.sfxName == clipName).clip;
+        if (clip != null)
+            AudioSrc.PlayOneShot(clip);
+        // else
+        //     Debug.Log($"Failed to play sound \"{clipName}\"");
+    }
+
+    private void LoadAllSfxClips()
+    {
+        AllSounds.Add(new SfxClip("jump", "Audio/kirbyjump1"));
+        AllSounds.Add(new SfxClip("land", "Audio/kirbyland1"));
+        AllSounds.Add(new SfxClip("hurt", "Audio/kirbyhurt"));
+    }
+
+    public static AudioClip LoadAudioClip(string audioPath)
+    {
+        AudioClip sfx = Resources.Load<AudioClip>(audioPath);
+
+        // if (sfx != null)
+        //     Debug.Log($"SOUND LOADED BRO (from {audioPath})");
+        // else
+        //     Debug.Log($"could load {audioPath}");
+        // PENDIENTE
+        // VER COMO HACER QUE CARGUE UNA VEZ 
+        // Y NO CADA VEZ QUE CARGUE LA ESCENA
+
+        return sfx;
+    }
+
+    #endregion
 }

@@ -7,6 +7,8 @@ TagManager:
   - Wall
   - Entity
   - EntityEnemy
+  - GameHandler
+  - WallHurt
   layers:
   - Default
   - TransparentFX
@@ -19,8 +21,8 @@ TagManager:
   - 
   - 
   - Wall
-  - 
-  - 
+  - WallOneWay
+  - WallNotGround
   - 
   - 
   - 
@@ -41,6 +43,18 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: BgLayer0
+    uniqueID: 2518266541
+    locked: 0
+  - name: BgLayer1
+    uniqueID: 2322281801
+    locked: 0
+  - name: BgLayer2
+    uniqueID: 3920340433
+    locked: 0
+  - name: BgLayer3
+    uniqueID: 2391361119
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
