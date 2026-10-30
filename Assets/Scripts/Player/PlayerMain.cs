@@ -79,7 +79,12 @@ public class PlayerMain : MonoBehaviour
 
         Move(FinalAcc, FinalFri, InputHandler.Movement);
     }
-    
+
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        DetectCollisionSpikes(collision);
+    }
+
     #endregion
 
     #region MOVIMIENTO X
@@ -335,12 +340,18 @@ public class PlayerMain : MonoBehaviour
         {
             Color rayCol = _grounded ? Color.red : Color.green;
 
-            Debug.DrawRay(new Vector2(boxCastOrigin.x -boxCastSize.x / 2, boxCastOrigin.y),
+            Debug.DrawRay(
+                new Vector2(boxCastOrigin.x -boxCastSize.x / 2, boxCastOrigin.y),
                 Vector2.down *MoveStats.GroundDetectRayDist, rayCol);
-            Debug.DrawRay(new Vector2(boxCastOrigin.x +boxCastSize.x / 2, boxCastOrigin.y),
+            Debug.DrawRay(
+                new Vector2(boxCastOrigin.x +boxCastSize.x / 2, boxCastOrigin.y),
                 Vector2.down *MoveStats.GroundDetectRayDist, rayCol);
-            Debug.DrawRay(new Vector2(boxCastOrigin.x -boxCastSize.x / 2, 
-                boxCastOrigin.y -MoveStats.GroundDetectRayDist), Vector2.right *boxCastSize.x, rayCol);
+            Debug.DrawRay(
+                new Vector2(boxCastOrigin.x -boxCastSize.x / 2, boxCastOrigin.y -MoveStats.GroundDetectRayDist), 
+                Vector2.right *boxCastSize.x, rayCol);
+            Debug.DrawRay(
+                new Vector2(boxCastOrigin.x -boxCastSize.x / 2, boxCastOrigin.y), 
+                Vector2.right *boxCastSize.x, rayCol);
         }
         #endregion
     }
@@ -361,35 +372,37 @@ public class PlayerMain : MonoBehaviour
         else { _bumpHead = false; }
 
         #region DEBUG SHIT
-        // if (MoveStats.DebugShowGrounded)
-        // {
-        //     float HeadW = MoveStats.HeadWidth;
-        //     Color rayCol = _bumpHead ? Color.red : Color.green;
+        if (MoveStats.DebugShowGrounded)
+        {
+            float HeadW = MoveStats.HeadWidth;
+            Color rayCol = _bumpHead ? Color.red : Color.green;
 
-        //     Debug.DrawRay(new Vector2(BoxCastOrigin.x -BoxCastSize.x / 2 *HeadW, BoxCastOrigin.y),
-        //         Vector2.up *MoveStats.HeadDetectRayDist, rayCol);
-        //     Debug.DrawRay(new Vector2(BoxCastOrigin.x +(BoxCastSize.x / 2) *HeadW, BoxCastOrigin.y),
-        //         Vector2.up *MoveStats.HeadDetectRayDist, rayCol);
-        //     Debug.DrawRay(new Vector2(BoxCastOrigin.x -BoxCastSize.x / 2, 
-        //         BoxCastOrigin.y -MoveStats.HeadDetectRayDist), Vector2.right *BoxCastSize.x *HeadW, rayCol);
-        // }
+            Debug.DrawRay(
+                new Vector2(BoxCastOrigin.x -BoxCastSize.x / 2 *HeadW, BoxCastOrigin.y),
+                Vector2.up *MoveStats.HeadDetectRayDist, rayCol);
+            Debug.DrawRay(
+                new Vector2(BoxCastOrigin.x +BoxCastSize.x / 2 *HeadW, BoxCastOrigin.y),
+                Vector2.up *MoveStats.HeadDetectRayDist, rayCol);
+            Debug.DrawRay(
+                new Vector2(BoxCastOrigin.x -BoxCastSize.x / 2, BoxCastOrigin.y -MoveStats.HeadDetectRayDist),
+                BoxCastSize.x * HeadW * Vector2.right, rayCol);
+            Debug.DrawRay(
+                new Vector2(BoxCastOrigin.x -BoxCastSize.x / 2, BoxCastOrigin.y),
+                BoxCastSize.x * HeadW * Vector2.right, rayCol);
+        }
         #endregion
     }
 
-    private void DetectCollisionSpikes()
+    private void DetectCollisionSpikes(Collider2D collision)
     {
-        // if (_bodyColl.IsTouching(collision) 
-        //     && collision.gameObject.CompareTag("WallHurt"))
-        // {
-        //     Die();
-        // }
+        if (collision.gameObject.CompareTag("WallHurt"))
+            Die();
     }
 
     private void CollisionChecks()
     {
         IsGrounded();
         BumpedHead();
-        DetectCollisionSpikes();
     }
 
     #endregion
@@ -403,13 +416,6 @@ public class PlayerMain : MonoBehaviour
 
         _jumpCoyoteTimer = (!_grounded) ? 
             _jumpCoyoteTimer -= Time.deltaTime : MoveStats.JumpCoyote;
-
-        // if (_grounded)
-        // {    
-        //     _jumpCoyoteTimer -= Time.deltaTime;
-        // }
-        // else
-        // { _jumpCoyoteTimer = MoveStats.JumpCoyote; }
     }
 
     #endregion

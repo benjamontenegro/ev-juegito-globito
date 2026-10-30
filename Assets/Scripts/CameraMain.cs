@@ -1,3 +1,5 @@
+// using UnityEditor;
+using Unity.VectorGraphics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -9,13 +11,16 @@ public class CameraMain : MonoBehaviour
     
     public float camFollowSpd = 0.01f;
     private CameraMode camMode = CameraMode.STANDART;
-    [Range(0.5f, 10f)] public float camTestSpd = 4f;
     
+    [SerializeField] private bool camDebugToggle = false;
     private bool camDebug = false;
     private Vector3 cameraOffset;
     private Vector3 camPosDesired;
+    
+    // [SerializeField] private float FindTargetTime = 3f;
+    // private float FindTargetDelay;
 
-    private float DebugAccSpd = 0;
+    private float camTestSpd = 0;
 
     void Start()
     {
@@ -44,15 +49,23 @@ public class CameraMain : MonoBehaviour
             break;
         }
     }
-    
+
+    #region COSAS EXTRA
+    //#########################################
+    //#########################################
+    //#########################################
+
     private void SetCameraMode()
     {        
-        if (Keyboard.current.gKey.wasPressedThisFrame)
+        if (camDebugToggle && Keyboard.current.gKey.wasPressedThisFrame)
+        {
             camDebug = !camDebug;
+            // Selection.activeObject = camDebug? gameObject : null;
+        }
 
         if (camDebug)
             camMode = CameraMode.TEST;
-        else if (cameraTarget != null && cameraTarget.activeInHierarchy)
+        else if (cameraTarget != null)
             camMode = CameraMode.FOLLOW;
         else
             camMode = CameraMode.STANDART;
@@ -75,15 +88,13 @@ public class CameraMain : MonoBehaviour
 
     private void CameraOnTest(Vector2 move)
     {
-        if (move == Vector2.zero)
-            DebugAccSpd = 0f;
-        else
-            DebugAccSpd = Mathf.MoveTowards(DebugAccSpd, camTestSpd, camTestSpd /3);
-        
-        float spd = DebugAccSpd;
+        camTestSpd = (move == Vector2.zero) ? 0f : Mathf.MoveTowards(camTestSpd, 2f, 0.1f);
+        float spd = camTestSpd *60 *Time.deltaTime;
+        camPosDesired += new Vector3(move.x *spd, move.y *spd, 0);
 
-        transform.position = Vector3.Lerp(transform.position,
-            transform.position + new Vector3(move.x, move.y, 0), spd);
-
+        Vector3 posSmooth = Vector3.Lerp(transform.position, camPosDesired, camFollowSpd);
+        transform.position = new Vector3(posSmooth.x, posSmooth.y, posSmooth.z);
     }
+
+    #endregion
 }

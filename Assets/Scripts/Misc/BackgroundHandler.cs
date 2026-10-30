@@ -1,16 +1,24 @@
-using Unity.VisualScripting;
 using UnityEditor.SceneManagement;
+using UnityEditor.Timeline;
 using UnityEngine;
 
 public class BackgroundHandler : MonoBehaviour
 {
+    [System.Serializable]
+    public struct Parallax
+    {
+        [Range(0f, 1f)] public float amount;
+        public float timeFactor;
+    }
+
     [Header("Referencias uwu")]
     [SerializeField] private Transform cameraPos;
+    public float BackgroundTimeMove;
     private Vector3 lastCameraPos;
 
     [Header("Capas")]
     [Tooltip("Parallax por cada capa")]
-    [SerializeField] private float[] parallaxFactor;
+    [SerializeField] private Parallax[] parallaxInfo;
 
     private SpriteRenderer[] backgrounds;
     private int backgroundChilds;
@@ -18,6 +26,8 @@ public class BackgroundHandler : MonoBehaviour
 
     private void Start()
     {
+        // backgroundTimeMove = 0;
+
         if (cameraPos == null)
             cameraPos = Camera.current.transform;
         
@@ -37,21 +47,39 @@ public class BackgroundHandler : MonoBehaviour
         }
     }
 
-    private void LateUpdate()
+    void Update()
+    {
+        BackgroundTimeMove = Time.deltaTime;
+        // +1 pixel por segundo
+    }
+
+    void LateUpdate()
     {
         Vector3 deltaMove = cameraPos.position - lastCameraPos;
 
         for (int i = 0; i < backgroundChilds; i++)
         {
             Transform child = transform.GetChild(i);
-            float parallax_y = deltaMove.y; //* parallaxFactor[i];
-            float parallax_x = deltaMove.x * parallaxFactor[i];
-            child.position += new Vector3(parallax_x, parallax_y);
+            Parallax parallax = parallaxInfo[i];
+            
+            float parallaxXPos = deltaMove.x * parallax.amount;
+            float parallaxYPos = deltaMove.y;
+            float parallaxXBg = (BackgroundTimeMove *parallax.timeFactor) *parallax.amount;
+            
+            // SUMAR BACKGROUND TIME MOVE AL X POS
 
-            float distMove = cameraPos.position.x * (1 -parallaxFactor[i]);
+            child.position += new Vector3(parallaxXPos +parallaxXBg, parallaxYPos);
+            
+            // float distMove = cameraPos.position.x * (1 -parallax.amount);
+            
+            // SI EL FONDO CENTRAL YA NO ESTA EN LA CAMARA
             if (Mathf.Abs(cameraPos.position.x -child.position.x) >= backgroundTexWidth[i])
             {
+                // LOOPEAR FONDO
+                // CALCULAR DISTANCIA QUE EL FONDO DEBE TRASLADARSE
                 float offsetX = (cameraPos.position.x -child.position.x) % backgroundTexWidth[i];
+                
+                // SUMAR OFFSET AL FONDO
                 child.position = new Vector3(cameraPos.position.x +offsetX, child.position.y);
             }
         }
