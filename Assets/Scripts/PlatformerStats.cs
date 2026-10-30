@@ -48,12 +48,14 @@ public class PlatformerStats : ScriptableObject
     // OSEA QUE ALMENOS LAS DISTANCIAS SE TOCAN A 1 SEG??
     // OJALA
     
-    public float GroundedColDist = 0.0167f; //SIX SEVEN
-    public float GroundedColHeight = 0.0167f;
+    // public float GroundedColDist = 0.0167f; //SIX SEVEN
+    public float GroundedColReach = 0.0167f;
+    public float SideColReach = 0.0167f;
+    
     public float HeadWidthDif = 0.125f;
+    public float ColReachDif = 0.0167f;
 
-    public float SideColWidth = 0.0167f;
-    public float SideColDist = 0.0167f;
+    // public float SideColDist = 0.0167f;
 
     [Header("Debug")]
     public bool debugBboxEnable = true;

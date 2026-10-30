@@ -22,7 +22,7 @@ MonoBehaviour:
     m_Bits: 2048
   SideFlags:
     serializedVersion: 2
-    m_Bits: 4096
+    m_Bits: 5120
   CeilFlags:
     serializedVersion: 2
     m_Bits: 1024

@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 // [RequireComponent(typeof(Rigidbody2D))]
@@ -9,7 +8,7 @@ public class EnemyBouncerMain : MonoBehaviour
         
     [Header("Referencias")]
 
-    [SerializeField] private PlatformerStats _platformer;
+    [SerializeField] private PlatformerStats _mover;
 
     private Vector2 _moveVel;
     private Vector2 _moveVelPrev;
@@ -39,6 +38,7 @@ public class EnemyBouncerMain : MonoBehaviour
     
     #endregion ############################################################
     #region EVENTS ############################################################
+    #endregion ############################################################
     
     void Awake()
     {
@@ -66,22 +66,23 @@ public class EnemyBouncerMain : MonoBehaviour
         MoveApplyVelocity(); // APPLY VELOCITIES
     }
 
-    #endregion ############################################################
     #region ENEMY MOVE ############################################################
     
+    ///<summary> enemy jumpin timin thing stuff </summary>
     private void EnemyJumpTimer()
     {
         JumpTimer = (JumpTimer > 0) ? JumpTimer -Time.deltaTime : JumpTimer;
     }
 
+    ///<summary> enemy moving stuff </summary>
     private void EnemyMove()
     {
         _moveVel.x = Mathf.MoveTowards(_moveVel.x, MoveSpd *MoveDirX, 
             MoveAcc *60 *Time.fixedDeltaTime);
 
         _moveVel.y = !_grounded ? 
-            Mathf.MoveTowards(_moveVel.y, -_platformer.MaxFallSpd,
-                _platformer.GravSpd *60 *Time.fixedDeltaTime) : 0;
+            Mathf.MoveTowards(_moveVel.y, -_mover.MaxFallSpd,
+                _mover.GravSpd *60 *Time.fixedDeltaTime) : 0;
         
         if (GetOnGround() && JumpTimer <= 0)
         {
@@ -108,6 +109,9 @@ public class EnemyBouncerMain : MonoBehaviour
         _leftColl = HitCollSides(false).collider != null;
         _rightColl = HitCollSides(true).collider != null;
         _bumpHead = HitCollAbove().collider != null;
+
+        if (_mover.debugBboxEnable)
+            DebugDrawBoxCast(_coll.bounds.center, _coll.bounds.size, Vector2.zero, 0f);
     }
 
     /// <summary> Stop _moveVel on collisions </summary>
@@ -146,14 +150,14 @@ public class EnemyBouncerMain : MonoBehaviour
     // THIS ONE SHOULD BE USED BY MANY
     private RaycastHit2D HitCollGrounded(bool OneWay)
     {
-        LayerMask GroundFlags = OneWay ? _platformer.GroundOneWayFlags : _platformer.GroundFlags;
+        LayerMask GroundFlags = OneWay ? _mover.GroundOneWayFlags : _mover.GroundFlags;
 
         Vector2 origin = new Vector2(_coll.bounds.center.x, _coll.bounds.min.y);
-        Vector2 size = new Vector2(_coll.bounds.size.x -_platformer.SideColDist,
-            _platformer.GroundedColHeight /2);
+        Vector2 size = new Vector2(_coll.bounds.size.x -_mover.ColReachDif,
+            _mover.GroundedColReach /2);
         Vector2 offsetDir = Vector2.down;
-        float offsetDist = _platformer.GroundedColDist /2;
-
+        float offsetDist = _mover.GroundedColReach /2;
+        
         return Physics2D.BoxCast(origin, size, 0f, offsetDir, offsetDist, GroundFlags);
     }
 
@@ -161,12 +165,12 @@ public class EnemyBouncerMain : MonoBehaviour
     {
         // OCUPA GROUNDEDCOLS POR MIENTRAS UWU
         Vector2 origin = new(_coll.bounds.center.x, _coll.bounds.max.y);
-        Vector2 size = new Vector2(_coll.bounds.size.x -_platformer.HeadWidthDif,
-            _platformer.GroundedColHeight /2);
+        Vector2 size = new Vector2(_coll.bounds.size.x -_mover.HeadWidthDif -_mover.ColReachDif,
+            _mover.GroundedColReach /2);
         Vector2 offsetDir = Vector2.up;
-        float offsetDist = _platformer.GroundedColDist /2;
+        float offsetDist = _mover.GroundedColReach /2;
 
-        return Physics2D.BoxCast(origin, size, 0f, offsetDir, offsetDist, _platformer.CeilFlags);
+        return Physics2D.BoxCast(origin, size, 0f, offsetDir, offsetDist, _mover.CeilFlags);
     }
 
     private RaycastHit2D HitCollSides(bool isRightSide)
@@ -174,11 +178,13 @@ public class EnemyBouncerMain : MonoBehaviour
         Vector2 origin = new Vector2(
             isRightSide? _coll.bounds.max.x : _coll.bounds.min.x,
             _coll.bounds.center.y);
-        Vector2 size = new Vector2(_platformer.SideColWidth, _coll.bounds.size.y);
+        Vector2 size = new Vector2(
+            _mover.SideColReach /2,
+            _coll.bounds.size.y -_mover.GroundedColReach -_mover.ColReachDif);
         Vector2 offsetDir = isRightSide? Vector2.right : Vector2.left;
-        float offsetDist = _platformer.SideColDist;
+        float offsetDist = _mover.SideColReach /2;
 
-        return Physics2D.BoxCast(origin, size, 0f, offsetDir, offsetDist, _platformer.SideFlags);
+        return Physics2D.BoxCast(origin, size, 0f, offsetDir, offsetDist, _mover.SideFlags);
     }
     
     /// <summary> Detect if on ground </summary>
@@ -191,6 +197,23 @@ public class EnemyBouncerMain : MonoBehaviour
             return true;
         
         return false;
+    }
+
+    public void DebugDrawBoxCast(Vector2 origin, Vector2 size, Vector2 dir, float dist)
+    {
+        Color col = Color.lightGray;
+
+        Vector2 pointA = new Vector2(
+            origin.x - (size.x /2) +(dir.x *dist),
+            origin.y - (size.y /2) +(dir.y *dist));
+        Vector2 pointB = new Vector2(
+            origin.x + (size.x /2) +(dir.x *dist),
+            origin.y + (size.y /2) +(dir.y *dist));
+
+        Debug.DrawLine(new Vector2(pointA.x, pointA.y), new Vector2(pointB.x, pointA.y), col);
+        Debug.DrawLine(new Vector2(pointA.x, pointA.y), new Vector2(pointA.x, pointB.y), col);
+        Debug.DrawLine(new Vector2(pointA.x, pointB.y), new Vector2(pointB.x, pointB.y), col);
+        Debug.DrawLine(new Vector2(pointB.x, pointA.y), new Vector2(pointB.x, pointB.y), col);
     }
     
     #endregion ############################################################
