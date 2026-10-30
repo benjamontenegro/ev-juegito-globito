@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7189f1956ab69144b833a8dfde736b42, type: 3}
+  m_Name: PlatformerStatsAsset
+  m_EditorClassIdentifier: Assembly-CSharp::PlatformerStats
+  MaxFallSpd: 30
+  GravSpd: 0.7
+  GroundFlags:
+    serializedVersion: 2
+    m_Bits: 1024
+  GroundOneWayFlags:
+    serializedVersion: 2
+    m_Bits: 2048
+  SideFlags:
+    serializedVersion: 2
+    m_Bits: 4096
+  CeilFlags:
+    serializedVersion: 2
+    m_Bits: 1024
+  GroundedColDist: 0.0167
+  GroundedColHeight: 0.0167
+  HeadWidthDif: 0.125
+  SideColWidth: 0.0167
+  SideColDist: 0.0167
+  debugBboxEnable: 1

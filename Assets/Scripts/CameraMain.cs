@@ -25,6 +25,7 @@ public class CameraMain : MonoBehaviour
     void Start()
     {
         cameraOffset = new Vector3(0, 0, transform.position.z);
+        camPosDesired += cameraOffset;
 
         // GET PLAYER
         if (cameraTarget == null)
