@@ -1,31 +1,5 @@
 using UnityEngine;
 
-/// <summary>
-/// SHORTHANDS DE LA CLASE UNITYENGINE.TIME. <br/>
-/// ES UN ENCHUFE TERRIBLE FLOJO HRMNOOOO
-/// </summary>
-public static class Dtime
-{
-    /// <summary>
-    /// "60 *Time.deltatime" <br/>
-    /// Despues cambia esto porfavorrr
-    /// </summary>
-    public static float time { get
-        {
-            return 60 *Time.deltaTime;
-        }
-    }
-    /// <summary>
-    /// "60 *Time.fixedDeltaTime" <br/>
-    /// Hrmno cambia esto
-    /// </summary>
-    public static float fTime { get
-        {
-            return 60 *Time.fixedDeltaTime;
-        }
-    }
-}
-
 [CreateAssetMenu(fileName = "PlatformerStatsAsset", menuName = "Scriptable Objects/PlatformerStats")]
 public class PlatformerStats : ScriptableObject
 {
