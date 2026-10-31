@@ -1,36 +1,32 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
-// [RequireComponent(typeof(Collider2D))]
-public class PlatformerBody : MonoBehaviour
+public class EntityMovement : MonoBehaviour
 {
     #region REFS #############################################################
 
     public PlatformerStats stats;
 
-    public Vector2 moveVel;
-    public Vector2 moveVelPrev;
-    public bool lookDir; // TRUE == ->, FALSE == <-
+    [HideInInspector] public Vector2 moveVel;
+    [HideInInspector] public Vector2 moveVelPrev;
+    [HideInInspector] public bool lookDir; // TRUE == ->, FALSE == <-
 
-    public bool isGrounded;
-    public bool leftColl;
-    public bool rightColl;
-    public bool bumpHead;
+    [HideInInspector] public bool isGrounded;
+    [HideInInspector] public bool leftColl;
+    [HideInInspector] public bool rightColl;
+    [HideInInspector] public bool bumpHead;
 
     private Rigidbody2D _rb;
     // LLENAR CAMPO A MANO
-    [SerializeField] private Collider2D _coll; 
-        
-    #endregion
-    
-    void Awake()
-    {
-        _rb = GetComponent<Rigidbody2D>();
+    [SerializeField] private Collider2D _coll;
 
-        if (_coll != null)
-            _coll = GetComponent<Collider2D>();
+    #endregion
+
+    void Awake() { 
+        lookDir = true;
+        _rb = GetComponent<Rigidbody2D>();
     }
-    
+
     #region MOVEMENT ############################################################
 
     /// <summary> save previous velocity, other checks, etc... </summary>

@@ -6101,6 +6101,7 @@ GameObject:
   - component: {fileID: 1960193140}
   - component: {fileID: 1960193143}
   - component: {fileID: 1960193142}
+  - component: {fileID: 1960193144}
   m_Layer: 0
   m_Name: EnemyBouncer
   m_TagString: EntityEnemy
@@ -6195,8 +6196,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2526adf52f663634d9b10e6d12881cb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyBouncerMain
-  _mover: {fileID: 11400000, guid: c008387af2301b548ab82f2813882786, type: 2}
-  _coll: {fileID: 131759898}
   _sfx: {fileID: 584526054}
   MoveSpd: 2
   MoveAcc: 0.5
@@ -6230,6 +6229,27 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
+--- !u!114 &1960193144
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1960193139}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14fc9d561b27d124897deadc06d955be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlatformerBody
+  stats: {fileID: 11400000, guid: c008387af2301b548ab82f2813882786, type: 2}
+  moveVel: {x: 0, y: 0}
+  moveVelPrev: {x: 0, y: 0}
+  lookDir: 0
+  isGrounded: 0
+  leftColl: 0
+  rightColl: 0
+  bumpHead: 0
+  _coll: {fileID: 131759898}
 --- !u!1 &1973688237
 GameObject:
   m_ObjectHideFlags: 0

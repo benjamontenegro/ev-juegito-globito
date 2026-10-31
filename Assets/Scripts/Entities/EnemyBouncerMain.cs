@@ -1,13 +1,13 @@
 using UnityEngine;
 
-[RequireComponent(typeof(PlatformerBody))]
+[RequireComponent(typeof(EntityMovement))]
 public class EnemyBouncerMain : MonoBehaviour
 {
     #region REFS ############################################################
         
     [Header("Referencias")]
 
-    private PlatformerBody Ent;
+    private EntityMovement Ent;
     private PlatformerStats Stats;
 
     [SerializeField] private AudioManager _sfx; // PUEDE SER MANUAL??
@@ -27,7 +27,7 @@ public class EnemyBouncerMain : MonoBehaviour
 
     void Awake()
     {
-        Ent = GetComponent<PlatformerBody>();
+        Ent = GetComponent<EntityMovement>();
         Stats = Ent.stats;
     }
 
