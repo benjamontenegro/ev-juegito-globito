@@ -29,6 +29,9 @@ public class EnemyBouncerMain : MonoBehaviour
     {
         Ent = GetComponent<EntityMovement>();
         Stats = Ent.stats;
+
+        if (MoveDirX == -1)
+            Ent.Turn(false);
     }
 
     void Update()
