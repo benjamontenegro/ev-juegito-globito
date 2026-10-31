@@ -595,7 +595,7 @@ Transform:
   m_GameObject: {fileID: 72869233}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -26, y: 8, z: 0}
+  m_LocalPosition: {x: -24.139359, y: 9.969178, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -6197,11 +6197,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyBouncerMain
   _sfx: {fileID: 584526054}
-  MoveSpd: 2
-  MoveAcc: 0.5
+  MoveSpd: 2.5
+  MoveAcc: 0.3
   MoveDirX: 1
-  JumpSpd: 16
-  JumpTimeAmt: 1
+  JumpSpd: 12
+  JumpTimeAmt: 10
 --- !u!50 &1960193143
 Rigidbody2D:
   serializedVersion: 5
