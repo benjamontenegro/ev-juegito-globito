@@ -40,7 +40,7 @@ MonoBehaviour:
     m_Bits: 1024
   GroundedColReach: 0.063
   SideColReach: 0.063
-  ClippingColReach: 0.24
+  ClippingColReach: 0.125
   HeadWidthDif: 0.25
   ColReachDif: 0.063
   debugBboxEnable: 0

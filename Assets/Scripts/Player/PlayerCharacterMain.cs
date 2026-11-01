@@ -19,39 +19,44 @@ public class PlayerCharacterMain : MonoBehaviour
 
     [SerializeField] float JumpSpd = 17f;
     private bool isJumpHolding;
-    [SerializeField] float JumpHoldMult = 0.5f;
+    [SerializeField] float JumpHoldMult = 0.4f;
     
     private float timerJumpBuffer;
     private float timerJumpCoyote;
-    private bool groundWas; 
+    private bool isGroundedSave; // CHECKEO DEL PISO PERSONAL, SE PASA AL ENT POR LAS WEAS
+    // LIT SOLO HECHO PARA EL TIMERJUMPCOYOTE DE MIERDA QUE NO ME AGARRABA
 
     private Vector2 MoveAxis;
     
+    #region llamadas o mensajes????? ####################################
+
     void Awake()
     {
         Ent = GetComponent<EntityMovement>();
         Stats = Ent.stats;
     }
 
-    void Update()
-    {
-        DelayCounters();
-
-        if (InputHandler.JumpWasPressed) // JUMP INPUTED
-            timerJumpBuffer = (0.017f *7);
-        
-        MoveAxis = InputHandler.Movement;
-    }
-
     void FixedUpdate()
     {
-        Ent.PreCollisions();
+        Ent.PreCollisions(); // VELOCIDADES OLD
 
-        PlayerMove();
+        PlayerMove(); // KI
         
-        Ent.MoveApplyVelocity(); // APPLY VELOCITIES
-        Ent.GetCollisionChecks(); // GET CHECKS
-        Ent.PostCollisions(); // STOP SPEEDS ON DETECTED COLLISIONS
+        Ent.MoveApplyVelocity(); // VELOCITIES
+
+        Ent.GetCollisionChecks(); // ACTUALIZAR CHECKEO COLISIONES
+
+        Ent.PostCollisions(); // STOP SPEEDS BASED ON DETECTED COLLISIONS
+    }
+
+    void Update()
+    {
+        DelayCounters(); // CHECK FOR COUNTERS
+
+        if (InputHandler.JumpWasPressed) // JUMP INPUTED
+            timerJumpBuffer = 0.017f *7;
+        
+        MoveAxis = InputHandler.Movement;
     }
 
     void OnDrawGizmos()
@@ -59,25 +64,32 @@ public class PlayerCharacterMain : MonoBehaviour
         // if (PlatformerStats.debugTextEnable)
         // {
         GUIStyle _style = GUIStyle.none;
-        _style.fontSize = 12;
+        _style.fontSize = 7;
         _style.normal.textColor = Color.white;
         
-        Handles.Label(transform.position -new Vector3(0, -3f),
-            $"coyote {timerJumpCoyote} \nbuffer {timerJumpBuffer}");
+        string msg = $"\nbuffer {Mathf.Round(timerJumpBuffer *60)}"
+        + $"\n (temp grounded) {isGroundedSave}";
+
+        Handles.Label(transform.position -new Vector3(0, -3.5f), msg);
         // }
     }
+    
+    #endregion ####################################
 
+    #region METODOS ############################################
 
     public void PlayerMove()
     {
+        bool _groundwas = Ent.isGrounded;
         bool _ground = Ent.GetOnGround();
 
-        if (_ground && !groundWas)
+        // LANDING
+        if (_ground && !_groundwas)
         {
             isJumpHolding = false;
             _sfx.PlayAudioClip("land");
         }
-        groundWas = _ground;
+        _groundwas = _ground;
 
         /// SE MUEVE CON ACELERACION UWU
         float _acc = _ground ? MoveAcc : MoveAirAcc;;
@@ -99,24 +111,25 @@ public class PlayerCharacterMain : MonoBehaviour
                 _fri *60 *Time.deltaTime);
         }
 
+        // GRAVEDAD
         Ent.moveVel.y = !_ground ? 
             Mathf.MoveTowards(Ent.moveVel.y, -Stats.MaxFallSpd,
             Stats.GravSpd *60 *Time.fixedDeltaTime) : 0;
 
-
-        if ((timerJumpBuffer > 0f) && (timerJumpCoyote > 0f))
+        // SALTO
+        if (timerJumpBuffer > 0f && timerJumpCoyote > 0f)
         {
-            timerJumpBuffer = -1f;
-            timerJumpCoyote = -1f;
-            
             Ent.moveVel.y = JumpSpd;
-            Ent.isGrounded = false; // DURO
-
             isJumpHolding = true;
-            
-             _sfx.PlayAudioClip("jump");
+
+            timerJumpBuffer = -0.017f;
+            timerJumpCoyote = -0.017f;
+            _groundwas = false; // FORZAR EL ISGROUNDSAVE A FALSO
+
+            _sfx.PlayAudioClip("jump");
         }
 
+        // SOLTAR EL SALTO
         if (isJumpHolding && !InputHandler.JumpIsHeld)
         {
             if (Ent.moveVel.y > 0f)
@@ -125,13 +138,20 @@ public class PlayerCharacterMain : MonoBehaviour
             }
             isJumpHolding = false;
         }
+
+        isGroundedSave = _groundwas; // PASARLE EL GROUNDSAVE QUE IGNORA EL ENT.GROUNDSAVE
+        // ESTO NO MERECE SEMEJANTE WEBEO
+        // ASJDHSKADHBSKD UNITY DE MIERDA
     }
 
     public void DelayCounters()
     {
         // timerJumpBuffer = (timerJumpBuffer > 0f) ? 
         timerJumpBuffer -= Time.deltaTime; //: timerJumpBuffer;
-        timerJumpCoyote = Ent.isGrounded ? 
-            0.1f : timerJumpCoyote -Time.deltaTime;
+        
+        timerJumpCoyote = isGroundedSave ? 
+            (0.017f *6) : timerJumpCoyote -Time.deltaTime;
     }
+
+    #endregion
 }

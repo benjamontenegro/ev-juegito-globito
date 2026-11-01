@@ -45,17 +45,18 @@ public class EntityMovement : MonoBehaviour
             DrawGroundedDebug();
             DrawSideDebug(true);
             DrawSideDebug(false);
-            
-            if (stats.debugTextEnable)
-            {
-                GUIStyle _style = GUIStyle.none;
-                _style.fontSize = 12;
-                _style.normal.textColor = Color.white;
-                
-                Handles.Label(transform.position -new Vector3(0, -1f),
-                    $"xv {moveVel.x} yv {moveVel.y} \n gr {isGrounded} sd l{leftColl} r{rightColl}");
-            }
         }
+                
+        if (stats.debugTextEnable)
+        {
+            GUIStyle _style = GUIStyle.none;
+            _style.fontSize = 12;
+            _style.normal.textColor = Color.white;
+            
+            Handles.Label(transform.position -new Vector3(0, -1f),
+                $"xv {moveVel.x} yv {moveVel.y} \n gr {isGrounded} sd l{leftColl} r{rightColl}");
+        }
+        
     }
 
     #region MOVEMENT ############################################################
