@@ -29,6 +29,7 @@ public class EnemyBouncerMain : MonoBehaviour
     {
         Ent = GetComponent<EntityMovement>();
         Stats = Ent.stats;
+        _sfx = GameObject.FindWithTag("GameHandler").GetComponentInChildren<AudioManager>();
 
         if (MoveDirX == -1)
             Ent.Turn(false);
@@ -42,12 +43,12 @@ public class EnemyBouncerMain : MonoBehaviour
     void FixedUpdate()
     {
         Ent.PreCollisions();
-        Ent.GetCollisionChecks(); // GET CHECKS
-        Ent.PostCollisions(); // STOP SPEEDS ON DETECTED COLLISIONS
-
+        
         EnemyMove();
         
         Ent.MoveApplyVelocity(); // APPLY VELOCITIES
+        Ent.GetCollisionChecks(); // GET CHECKS
+        Ent.PostCollisions(); // STOP SPEEDS ON DETECTED COLLISIONS
     }
     
     #endregion ############################################################
@@ -63,14 +64,16 @@ public class EnemyBouncerMain : MonoBehaviour
     /// <summary> enemy moving stuff </summary>
     void EnemyMove()
     {
+        bool _ground = Ent.GetOnGround();
+
         Ent.moveVel.x = Mathf.MoveTowards(Ent.moveVel.x, MoveSpd *MoveDirX, 
             MoveAcc *60 *Time.fixedDeltaTime);
 
-        Ent.moveVel.y = !Ent.isGrounded ? 
+        Ent.moveVel.y = !_ground ? 
             Mathf.MoveTowards(Ent.moveVel.y, -Stats.MaxFallSpd, 
             Stats.GravSpd *60 *Time.fixedDeltaTime) : 0;
         
-        if (Ent.isGrounded && JumpTimer <= 0)
+        if (_ground && JumpTimer <= 0)
         {
             Ent.moveVel.y = JumpSpd;
             _sfx.PlayAudioClip("jump");

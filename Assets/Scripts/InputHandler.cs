@@ -33,8 +33,8 @@ public class InputHandler : MonoBehaviour
         Movement = _moveAction.ReadValue<Vector2>();
         // ARRIA ABAJO IZQUIERDA Y DERECHA
 
-        JumpWasPressed = _jumpAction.WasPressedThisFrame();
-        JumpIsHeld = _jumpAction.IsPressed();
+        JumpWasPressed  = _jumpAction.WasPressedThisFrame();
+        JumpIsHeld      = _jumpAction.IsPressed();
         JumpWasReleased = _jumpAction.WasReleasedThisFrame();
         // se entiende? xd
     }
