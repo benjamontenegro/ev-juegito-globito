@@ -36,6 +36,7 @@ public class PlayerCharacterMain : MonoBehaviour
     void Update()
     {
         DelayCounters();
+
         if (InputHandler.JumpWasPressed) // JUMP INPUTED
             timerJumpBuffer = (0.017f *7);
         
@@ -51,6 +52,19 @@ public class PlayerCharacterMain : MonoBehaviour
         Ent.MoveApplyVelocity(); // APPLY VELOCITIES
         Ent.GetCollisionChecks(); // GET CHECKS
         Ent.PostCollisions(); // STOP SPEEDS ON DETECTED COLLISIONS
+    }
+
+    void OnDrawGizmos()
+    {
+        // if (PlatformerStats.debugTextEnable)
+        // {
+        GUIStyle _style = GUIStyle.none;
+        _style.fontSize = 12;
+        _style.normal.textColor = Color.white;
+        
+        Handles.Label(transform.position -new Vector3(0, -3f),
+            $"coyote {timerJumpCoyote} \nbuffer {timerJumpBuffer}");
+        // }
     }
 
 

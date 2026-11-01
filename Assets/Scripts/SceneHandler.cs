@@ -8,7 +8,16 @@ public class SceneHandler : MonoBehaviour
     private bool _playerToBeRespawned = false;
     private float _playerRespawnDelay;
     [SerializeField] private float RespawnTime = 0.5f;
-    
+
+    [Header("DEBUG TIME SLOW")]
+    [SerializeField][Range(0f, 1f)] private float debugTimeScaleModify = 1.0f;
+    private float debugDefaultFixedDeltaTime;
+
+    void Awake()
+    {
+        debugDefaultFixedDeltaTime = Time.fixedDeltaTime;
+    }
+
     void Update()
     {
         CountTimers();
@@ -17,6 +26,9 @@ public class SceneHandler : MonoBehaviour
             TriggerPlayerRespawn();
         
         PlayerIsAlive = (GameObject.FindWithTag("Player") != null) ? true : false;
+
+        Time.timeScale = debugTimeScaleModify;
+        Time.fixedDeltaTime = debugDefaultFixedDeltaTime *debugTimeScaleModify;
     }
 
     #region EXTRA SHIT

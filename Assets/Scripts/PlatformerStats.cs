@@ -17,6 +17,10 @@ public class PlatformerStats : ScriptableObject
     public LayerMask GroundOneWayFlags;
     public LayerMask SideOneWayFlags;
     public LayerMask SideFlags;
+
+    public LayerMask SideLeftFlags;
+    public LayerMask SideRightFlags;
+    
     public LayerMask CeilFlags;
 
     // 0.017f == FRACCION DE SEGUNDO QUE PASA UN FRAME
@@ -35,5 +39,5 @@ public class PlatformerStats : ScriptableObject
 
     [Header("Debug")]
     public bool debugBboxEnable = true;
-    public bool positionRoundEnable = true;
+    public bool debugTextEnable = true;
 }

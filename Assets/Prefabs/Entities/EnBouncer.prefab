@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 1499237280719109939}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.9375, y: 0, z: -5}
+  m_LocalPosition: {x: 0, y: 0, z: -5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -85,12 +85,12 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Sprite: {fileID: 8975721076584580134, guid: 2182b51253e8e0e4b860c400d4b92aa5, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 1.5, y: 1.5}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -154,8 +154,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlatformerBody
   stats: {fileID: 11400000, guid: c008387af2301b548ab82f2813882786, type: 2}
   moveVel: {x: 0, y: 0}
-  moveVelInt: {x: 0, y: 0}
-  moveVelFract: {x: 0, y: 0}
   moveVelPrev: {x: 0, y: 0}
   lookDir: 0
   isGrounded: 0
@@ -163,6 +161,7 @@ MonoBehaviour:
   rightColl: 0
   bumpHead: 0
   isGroundClipping: 0
+  isWallSideClipping: 0
   _coll: {fileID: 5541454785545242707}
 --- !u!1 &4521898549099716285
 GameObject:
@@ -190,7 +189,7 @@ Transform:
   m_GameObject: {fileID: 4521898549099716285}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -0.25, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

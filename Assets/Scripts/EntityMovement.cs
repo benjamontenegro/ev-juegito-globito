@@ -1,6 +1,9 @@
+using System;
+using UnityEditor;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
+// [RequireComponent(typeof(Collider2D))]
 public class EntityMovement : MonoBehaviour
 {
     #region REFS #############################################################
@@ -8,8 +11,8 @@ public class EntityMovement : MonoBehaviour
     public PlatformerStats stats;
 
     public Vector2 moveVel;
-    public Vector2Int moveVelInt;
-    public Vector2 moveVelFract;
+    // public Vector2Int moveVelInt;
+    // public Vector2 moveVelFract;
 
     [HideInInspector] public Vector2 moveVelPrev;
     [HideInInspector] public bool lookDir; // TRUE == ->, FALSE == <-
@@ -19,6 +22,7 @@ public class EntityMovement : MonoBehaviour
     [HideInInspector] public bool rightColl;
     [HideInInspector] public bool bumpHead;
     [HideInInspector] public bool isGroundClipping;
+    [HideInInspector] public bool isWallSideClipping;
 
     private Rigidbody2D _rb;
     // LLENAR CAMPO A MANO
@@ -26,7 +30,8 @@ public class EntityMovement : MonoBehaviour
 
     #endregion
 
-    void Awake() { 
+    void Awake() 
+    { 
         lookDir = true;
         _rb = GetComponent<Rigidbody2D>();
     }
@@ -40,6 +45,16 @@ public class EntityMovement : MonoBehaviour
             DrawGroundedDebug();
             DrawSideDebug(true);
             DrawSideDebug(false);
+            
+            if (stats.debugTextEnable)
+            {
+                GUIStyle _style = GUIStyle.none;
+                _style.fontSize = 12;
+                _style.normal.textColor = Color.white;
+                
+                Handles.Label(transform.position -new Vector3(0, -1f),
+                    $"xv {moveVel.x} yv {moveVel.y} \n gr {isGrounded} sd l{leftColl} r{rightColl}");
+            }
         }
     }
 
@@ -59,6 +74,7 @@ public class EntityMovement : MonoBehaviour
         rightColl = GenOnWallSide(true);
         bumpHead = HitCollAbove().collider != null;
         isGroundClipping = HitCollBody(true).collider != null;
+        isWallSideClipping = HitCollBody(false).collider != null;
     }
 
     /// <summary> Stop moveVel on collisions </summary>
@@ -76,21 +92,22 @@ public class EntityMovement : MonoBehaviour
         if (turnRight && !lookDir)
         {
             lookDir = true;
-            transform.Rotate(0f, 180f, 0f);
+            GetComponent<SpriteRenderer>().flipX = false;
         }
         if (!turnRight && lookDir)
         {
             lookDir = false;
-            transform.Rotate(0f, -180f, 0f);
+            GetComponent<SpriteRenderer>().flipX = true;
+            // transform.Rotate(0f, -180f, 0f);
         }
     }
 
-    private void AdjustMoveVelocity()
-    {
-        moveVelFract += moveVel;
-        moveVelInt = Vector2Int.RoundToInt(moveVel);
-        moveVelFract -= moveVelInt;
-    }
+    // private void AdjustMoveVelocity()
+    // {
+    //     moveVelFract += moveVel;
+    //     moveVelInt = Vector2Int.RoundToInt(moveVel);
+    //     moveVelFract -= moveVelInt;
+    // }
 
     /// <summary> moveVel -> RigidBody2D.linearVelocity </summary>
     public void MoveApplyVelocity()
@@ -110,7 +127,7 @@ public class EntityMovement : MonoBehaviour
         bool _onewayground = HitCollGrounded(true).collider != null;
         bool _bodyclipping = HitCollBody(true).collider != null;
 
-        if (_ground || (_onewayground && moveVelPrev.y <= 0f && !_bodyclipping))
+        if (_ground || (_onewayground && moveVel.y <= 0 && !_bodyclipping))
             return true;
         
         return false;
@@ -132,7 +149,7 @@ public class EntityMovement : MonoBehaviour
             //     _onewayDiff = _coll.bounds.max.x <= _onewaywall.collider.bounds.min.x;
             // else
             //     _onewayDiff = _coll.bounds.min.x >= _onewaywall.collider.bounds.max.x;
-            _onewayspd = isRightSide ? (moveVel.x >= 0) : (moveVel.x <= 0);
+            _onewayspd = isRightSide ? !(moveVel.x < 0) : !(moveVel.x > 0);
         }
 
         bool _bodyclipping = HitCollBody(false).collider != null;
@@ -193,7 +210,8 @@ public class EntityMovement : MonoBehaviour
     /// <summary> get raycast from left/right side </summary>
     public RaycastHit2D HitCollSides(bool isRightSide, bool OneWay)
     {
-        LayerMask WallFlags = !OneWay ? stats.AllWallFlags : stats.SideFlags;
+        LayerMask WallFlags = !OneWay ? stats.AllWallFlags : 
+            (isRightSide ? stats.SideLeftFlags : stats.SideRightFlags);
 
         Vector2 origin = new Vector2(
             isRightSide? _coll.bounds.max.x : _coll.bounds.min.x,
@@ -283,7 +301,7 @@ public class EntityMovement : MonoBehaviour
         Vector2 offsetDir = Vector2.zero;
         float offsetDist = 0f;
 
-        Gizmos.color = isGroundClipping ? Color.darkRed : Color.darkGreen;
+        Gizmos.color = !isWallSideClipping? (isGroundClipping ? Color.darkRed : Color.darkGreen) : Color.darkMagenta;
         DrawBoxCast(origin, size, offsetDir, offsetDist);
         Gizmos.color = Color.black;
     }
