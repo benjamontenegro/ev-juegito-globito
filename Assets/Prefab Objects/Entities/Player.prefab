@@ -243,6 +243,7 @@ MonoBehaviour:
   MoveAirFri: 0.14
   JumpSpd: 16
   JumpHoldMult: 0.65
+  JumpEnemyStoolSpd: 7.4
 --- !u!95 &2457591181937448454
 Animator:
   serializedVersion: 7

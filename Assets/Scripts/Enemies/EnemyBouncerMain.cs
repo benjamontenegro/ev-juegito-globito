@@ -78,7 +78,7 @@ public class EnemyBouncerMain : MonoBehaviour
         if (_ground && jumpTimer <= 0)
         {
             MoveY = JumpSpd;
-            _sfx.PlayAudioClip("jump");
+            _sfx.PlayAudioClipAtPlace("jump", transform.position);
             jumpTimer = JumpTimeAmt;
         }
 

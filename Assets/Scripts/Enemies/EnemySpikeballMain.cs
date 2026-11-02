@@ -13,9 +13,14 @@ public class EnemySpikeballMain : MonoBehaviour
     AudioManager _sfx;
     
     [Header("Variables del enemigo")]
-    [SerializeField] private float MoveMaxSpd = 5f;
-    [SerializeField] private float MoveAcc = 5f;
+    [SerializeField] private float MoveMaxSpd = 3f;
+    [SerializeField] private float MoveAcc = 0.8f;
+    
+    [SerializeField] private float MoveYWaveSpd = 1f;
+    [SerializeField] private float MoveYWaveAcc = 0.7f;
+    [SerializeField] private float MoveYWaveFreq = 3f;
     [SerializeField] private int MoveDirX;
+
 
     float MoveYWaveTimer;
 
@@ -27,7 +32,7 @@ public class EnemySpikeballMain : MonoBehaviour
 
     #endregion ############################################################
 
-    #region MESSAGES ############################################################
+    #region EVENTOS ############################################################
 
     void Awake()
     {
@@ -40,25 +45,43 @@ public class EnemySpikeballMain : MonoBehaviour
             Ent.Turn(false);
     }
 
+    void FixedUpdate()
+    {
+        Ent.PreCollisions();
+        EnemyMove();
+        Ent.MoveApplyVelocity();
+        Ent.GetCollisionChecks();
+        Ent.PostCollisions();
+    }
+
+    void Update()
+    {
+        CountTimers();
+    }
+
     #endregion
 
     #region METODOS ############################################################
     
     private void EnemyMove()
     {
-        MoveX = Mathf.MoveTowards(MoveX, MoveMaxSpd, MoveAcc *60 *Time.fixedDeltaTime);
+        MoveX = Mathf.MoveTowards(MoveX, MoveMaxSpd *MoveDirX, MoveAcc *60 *Time.fixedDeltaTime);
 
         if ((Ent.lookDir && Ent.rightColl) || (!Ent.lookDir && Ent.leftColl))
         {
             Ent.Turn(!Ent.lookDir);
             MoveDirX = Ent.lookDir ? 1 : -1;
             MoveX = Ent.moveVelPrev.x;
-        }   
+        }
+
+        float ySine = Mathf.Sin(MoveYWaveTimer *MoveYWaveFreq);
+
+        MoveY = Mathf.MoveTowards(MoveY, MoveYWaveSpd *ySine, MoveYWaveAcc);
     }
 
     private void CountTimers()
     {
-        
+        MoveYWaveTimer += Time.deltaTime;
     }
 
     #endregion

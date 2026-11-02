@@ -27,13 +27,23 @@ public class AudioManager : MonoBehaviour
 
     #region FUNCIONES
     
+    /// <summary> reproducir audio segun nombre (anotados aca) </summary>
     public void PlayAudioClip(string clipName)
     {
         AudioClip clip = AllSounds.Find(x => x.sfxName == clipName).clip;
         if (clip != null)
             AudioSrc.PlayOneShot(clip);
-        // else
-        //     Debug.Log($"Failed to play sound \"{clipName}\"");
+    }
+
+    /// <summary> PlayAudioClip: lo mismo en 3d </summary>
+    public void PlayAudioClipAtPlace(string clipName, Vector2 position)
+    {
+        // ESTOE S TEMPORAL,
+        // HACER UIN AUDIOSORUCE POOL EN EL FUUTURO
+        AudioClip clip = AllSounds.Find(x => x.sfxName == clipName).clip;
+        
+        if (clip != null)
+            AudioSource.PlayClipAtPoint(clip, position);
     }
 
     private void LoadAllSfxClips()
@@ -41,6 +51,7 @@ public class AudioManager : MonoBehaviour
         AllSounds.Add(new SfxClip("jump", "Audio/kirbyjump1"));
         AllSounds.Add(new SfxClip("land", "Audio/kirbyland1"));
         AllSounds.Add(new SfxClip("hurt", "Audio/kirbyhurt"));
+        AllSounds.Add(new SfxClip("bump", "Audio/sfxbump"));
     }
 
     public static AudioClip LoadAudioClip(string audioPath)

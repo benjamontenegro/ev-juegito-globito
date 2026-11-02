@@ -157,6 +157,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fbb3122fac68d54bae4cbc7b9179699, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpikeballMain
+  MoveMaxSpd: 3
+  MoveAcc: 0.8
+  MoveYWaveSpd: 0.7
+  MoveYWaveAcc: 0.5
+  MoveYWaveFreq: 3.5
+  MoveDirX: 0
 --- !u!1 &6896394214843472348
 GameObject:
   m_ObjectHideFlags: 0
@@ -169,7 +175,7 @@ GameObject:
   - component: {fileID: 5534211638024883029}
   m_Layer: 0
   m_Name: EnSpikeBallCollider
-  m_TagString: Untagged
+  m_TagString: EntityEnemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -219,7 +225,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
