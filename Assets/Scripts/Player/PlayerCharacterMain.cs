@@ -4,48 +4,55 @@ using UnityEditor;
 [RequireComponent(typeof(EntityMovement))]
 public class PlayerCharacterMain : MonoBehaviour
 {
+    #region refs ####################################
+
     [Header("Referencias")]
 
-    private EntityMovement Ent;
-    private PlatformerStats Stats;
-    [SerializeField] private AudioManager _sfx; // PUEDE SER MANUAL??
+    EntityMovement Ent;
+    PlatformerStats stats;
+    AudioManager _sfx;
+
+    SpriteRenderer _spriteRenderer;
+    Animator _anim;
+
+    float timerJumpBuffer;
+    float timerJumpCoyote;
+    bool isGroundedSave; // CHECKEO DEL PISO PERSONAL, SE PASA AL ENT POR LAS WEAS
+    // LIT SOLO HECHO PARA EL TIMERJUMPCOYOTE DE MIERDA QUE NO ME AGARRABA
+    Vector2 moveAxis;
     
     [Header("Movimiento")]
-    [SerializeField] float MoveSpd = 12f;
+    [SerializeField] float MoveMaxSpd = 12f;
     [SerializeField] float MoveAcc = 3.5f;
     [SerializeField] float MoveFri = 6f;
     [SerializeField] float MoveAirAcc = 1f;
     [SerializeField] float MoveAirFri = 0.3f;
 
     [SerializeField] float JumpSpd = 17f;
-    private bool isJumpHolding;
+    bool isJumpHolding;
     [SerializeField] float JumpHoldMult = 0.4f;
     
-    private float timerJumpBuffer;
-    private float timerJumpCoyote;
-    private bool isGroundedSave; // CHECKEO DEL PISO PERSONAL, SE PASA AL ENT POR LAS WEAS
-    // LIT SOLO HECHO PARA EL TIMERJUMPCOYOTE DE MIERDA QUE NO ME AGARRABA
-
-    private Vector2 MoveAxis;
+    #endregion####################################
     
     #region llamadas o mensajes????? ####################################
 
     void Awake()
     {
         Ent = GetComponent<EntityMovement>();
-        Stats = Ent.stats;
+        stats = Ent.stats;
+
+        _spriteRenderer = GetComponent<SpriteRenderer>();
+        _anim = GetComponent<Animator>();
+        
+        _sfx = GameObject.FindWithTag("GameHandler").GetComponentInChildren<AudioManager>();
     }
 
     void FixedUpdate()
     {
         Ent.PreCollisions(); // VELOCIDADES OLD
-
         PlayerMove(); // KI
-        
         Ent.MoveApplyVelocity(); // VELOCITIES
-
         Ent.GetCollisionChecks(); // ACTUALIZAR CHECKEO COLISIONES
-
         Ent.PostCollisions(); // STOP SPEEDS BASED ON DETECTED COLLISIONS
     }
 
@@ -56,7 +63,7 @@ public class PlayerCharacterMain : MonoBehaviour
         if (InputHandler.JumpWasPressed) // JUMP INPUTED
             timerJumpBuffer = 0.017f *7;
         
-        MoveAxis = InputHandler.Movement;
+        moveAxis = InputHandler.Movement;
     }
 
     void OnDrawGizmos()
@@ -78,7 +85,8 @@ public class PlayerCharacterMain : MonoBehaviour
 
     #region METODOS ############################################
 
-    public void PlayerMove()
+    /// <summary> main pleyer </summary>
+    void PlayerMove()
     {
         bool _groundwas = Ent.isGrounded;
         bool _ground = Ent.GetOnGround();
@@ -95,15 +103,12 @@ public class PlayerCharacterMain : MonoBehaviour
         float _acc = _ground ? MoveAcc : MoveAirAcc;;
         float _fri = _ground ? MoveFri : MoveAirFri;
 
-        if (MoveAxis.x != 0)
+        if (moveAxis.x != 0)
         {
-            Ent.moveVel.x = Mathf.MoveTowards(Ent.moveVel.x, MoveSpd *MoveAxis.x, 
+            Ent.moveVel.x = Mathf.MoveTowards(Ent.moveVel.x, MoveMaxSpd *moveAxis.x, 
                 _acc *60 *Time.deltaTime);
             
-            if (MoveAxis.x == 1)
-                Ent.Turn(true);
-            else
-                Ent.Turn(false);
+            TurnDirection(-moveAxis.x);
         }
         else
         {
@@ -113,8 +118,8 @@ public class PlayerCharacterMain : MonoBehaviour
 
         // GRAVEDAD
         Ent.moveVel.y = !_ground ? 
-            Mathf.MoveTowards(Ent.moveVel.y, -Stats.MaxFallSpd,
-            Stats.GravSpd *60 *Time.fixedDeltaTime) : 0;
+            Mathf.MoveTowards(Ent.moveVel.y, -stats.MaxFallSpd,
+            stats.GravSpd *60 *Time.fixedDeltaTime) : 0;
 
         // SALTO
         if (timerJumpBuffer > 0f && timerJumpCoyote > 0f)
@@ -142,9 +147,43 @@ public class PlayerCharacterMain : MonoBehaviour
         isGroundedSave = _groundwas; // PASARLE EL GROUNDSAVE QUE IGNORA EL ENT.GROUNDSAVE
         // ESTO NO MERECE SEMEJANTE WEBEO
         // ASJDHSKADHBSKD UNITY DE MIERDA
+
+        HandleSprites();
     }
 
-    public void DelayCounters()
+    /// <summary> cambiar direccion y sprite segun sign(float)  </summary>
+    void TurnDirection(float turnDir)
+    {
+        float _dir = Mathf.Sign(turnDir);
+        if (_dir == 0)
+            return;
+        
+        _spriteRenderer.flipX = _dir == 1;
+        Ent.Turn(_dir);
+    }
+
+    /// <summary> coso de sprites </summary>
+    void HandleSprites()
+    {
+        bool _walk = moveAxis.x == 0;
+        
+
+        _anim.SetBool("isGrounded", isGroundedSave);
+        _anim.SetBool("isWalking", _walk);
+        // Que recuerdos bro...
+        
+        // if (isGroundedSave)
+        // {
+            
+        // }
+        // else
+        // {
+            
+        // }
+    }
+
+    /// <summary> contadores </summary>
+    void DelayCounters()
     {
         // timerJumpBuffer = (timerJumpBuffer > 0f) ? 
         timerJumpBuffer -= Time.deltaTime; //: timerJumpBuffer;
@@ -153,5 +192,5 @@ public class PlayerCharacterMain : MonoBehaviour
             (0.017f *6) : timerJumpCoyote -Time.deltaTime;
     }
 
-    #endregion
+    #endregion ####################################
 }

@@ -10,9 +10,9 @@ public class EntityMovement : MonoBehaviour
 
     public PlatformerStats stats;
 
-    public Vector2 moveVel;
+    [HideInInspector] public Vector2 moveVel;
     // public Vector2Int moveVelInt;
-    // public Vector2 moveVelFract;
+    // public Vector2 moveVelFract;s
 
     [HideInInspector] public Vector2 moveVelPrev;
     [HideInInspector] public bool lookDir; // TRUE == ->, FALSE == <-
@@ -24,8 +24,9 @@ public class EntityMovement : MonoBehaviour
     [HideInInspector] public bool isGroundClipping;
     [HideInInspector] public bool isWallSideClipping;
 
-    private Rigidbody2D _rb;
-    // LLENAR CAMPO A MANO
+    Rigidbody2D _rb;
+
+    [Header("Colideador colisor colison")]
     [SerializeField] private Collider2D _coll;
 
     #endregion
@@ -87,19 +88,31 @@ public class EntityMovement : MonoBehaviour
             moveVel.y = 0f;
     }
 
-    /// <summary> Turn player left or right + rotate 180 </summary>
+    /// <summary> Turn player left or right + rotate 180 <br/> (true right, false left) </summary>
     public void Turn(bool turnRight)
     {
         if (turnRight && !lookDir)
         {
             lookDir = true;
-            GetComponent<SpriteRenderer>().flipX = false;
+            // GetComponent<SpriteRenderer>().flipX = false;
         }
         if (!turnRight && lookDir)
         {
             lookDir = false;
-            GetComponent<SpriteRenderer>().flipX = true;
+            // GetComponent<SpriteRenderer>().flipX = true;
             // transform.Rotate(0f, -180f, 0f);
+        }
+    }
+    /// <summary> Turn player left or right + rotate 180 <br/> BASED ON A FLOAT SIGNUM </summary>
+    public void Turn(float turnAxis)
+    {
+        if (Mathf.Sign(turnAxis) == -1f)
+        {
+            lookDir = false;
+        }
+        if (Mathf.Sign(turnAxis) == 1f)
+        {
+            lookDir = true;
         }
     }
 

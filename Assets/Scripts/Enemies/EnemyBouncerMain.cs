@@ -7,28 +7,32 @@ public class EnemyBouncerMain : MonoBehaviour
         
     [Header("Referencias")]
 
-    private EntityMovement Ent;
-    private PlatformerStats Stats;
-
-    [SerializeField] private AudioManager _sfx; // PUEDE SER MANUAL??
+    EntityMovement Ent;
+    PlatformerStats stats;
+    AudioManager _sfx;
     
     [Header("Variables del enemigo")]
-    [SerializeField] private float MoveSpd = 12.5f;
+    [SerializeField] private float MoveMaxSpd = 12.5f;
     [SerializeField] private float MoveAcc = 0.5f;
     [SerializeField] private int MoveDirX;
 
     [SerializeField] private float JumpSpd = 16f;
     [SerializeField] private float JumpTimeAmt = 3f;
-    private float JumpTimer;
-    
+    float jumpTimer;
+
+    float MoveX { get => Ent.moveVel.x; set => Ent.moveVel.x = value; }
+    float MoveY { get => Ent.moveVel.y; set => Ent.moveVel.y = value; }
+
     #endregion ############################################################
-    
+
     #region EVENTS ############################################################
+
 
     void Awake()
     {
         Ent = GetComponent<EntityMovement>();
-        Stats = Ent.stats;
+        stats = Ent.stats;
+
         _sfx = GameObject.FindWithTag("GameHandler").GetComponentInChildren<AudioManager>();
 
         if (MoveDirX == -1)
@@ -37,18 +41,16 @@ public class EnemyBouncerMain : MonoBehaviour
 
     void Update()
     {
-        EnemyJumpTimer();
+        EnemyjumpTimer();
     }
 
     void FixedUpdate()
     {
         Ent.PreCollisions();
-        
         EnemyMove();
-        
-        Ent.MoveApplyVelocity(); // APPLY VELOCITIES
-        Ent.GetCollisionChecks(); // GET CHECKS
-        Ent.PostCollisions(); // STOP SPEEDS ON DETECTED COLLISIONS
+        Ent.MoveApplyVelocity();
+        Ent.GetCollisionChecks();
+        Ent.PostCollisions();
     }
     
     #endregion ############################################################
@@ -56,35 +58,35 @@ public class EnemyBouncerMain : MonoBehaviour
     #region ENEMY MOVE ############################################################
     
     ///<summary> enemy jumpin timin thing stuff </summary>
-    void EnemyJumpTimer()
+    private void EnemyjumpTimer()
     {
-        JumpTimer = (JumpTimer > 0) ? JumpTimer -Time.deltaTime : JumpTimer;
+        jumpTimer = (jumpTimer > 0) ? jumpTimer -Time.deltaTime : jumpTimer;
     }
 
     /// <summary> enemy moving stuff </summary>
-    void EnemyMove()
+    private void EnemyMove()
     {
         bool _ground = Ent.GetOnGround();
 
-        Ent.moveVel.x = Mathf.MoveTowards(Ent.moveVel.x, MoveSpd *MoveDirX, 
+        MoveX = Mathf.MoveTowards(MoveX, MoveMaxSpd *MoveDirX, 
             MoveAcc *60 *Time.fixedDeltaTime);
 
-        Ent.moveVel.y = !_ground ? 
-            Mathf.MoveTowards(Ent.moveVel.y, -Stats.MaxFallSpd, 
-            Stats.GravSpd *60 *Time.fixedDeltaTime) : 0;
+        MoveY = !_ground ? 
+            Mathf.MoveTowards(MoveY, -stats.MaxFallSpd, 
+            stats.GravSpd *60 *Time.fixedDeltaTime) : 0;
         
-        if (_ground && JumpTimer <= 0)
+        if (_ground && jumpTimer <= 0)
         {
-            Ent.moveVel.y = JumpSpd;
+            MoveY = JumpSpd;
             _sfx.PlayAudioClip("jump");
-            JumpTimer = JumpTimeAmt;
+            jumpTimer = JumpTimeAmt;
         }
 
         if ((Ent.lookDir && Ent.rightColl) || (!Ent.lookDir && Ent.leftColl))
         {
             Ent.Turn(!Ent.lookDir);
             MoveDirX = Ent.lookDir ? 1 : -1;
-            Ent.moveVel.x = Ent.moveVelPrev.x;
+            MoveX = Ent.moveVelPrev.x;
         }   
     }
 

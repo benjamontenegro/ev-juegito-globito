@@ -27,7 +27,7 @@
                     "priority": 0
                 },
                 {
-                    "name": "Action1",
+                    "name": "Attack1",
                     "type": "Button",
                     "id": "5ef4fa42-2fd9-4d2f-a530-5685596c50ed",
                     "expectedControlType": "",
@@ -111,7 +111,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Action1",
+                    "action": "Attack1",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
