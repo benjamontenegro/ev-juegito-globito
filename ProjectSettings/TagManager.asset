@@ -9,6 +9,8 @@ TagManager:
   - EntityEnemy
   - GameHandler
   - WallHurt
+  - EntitySpring
+  - EntityItem
   layers:
   - Default
   - TransparentFX

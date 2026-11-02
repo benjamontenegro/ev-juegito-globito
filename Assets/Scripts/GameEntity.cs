@@ -2,9 +2,19 @@ using System;
 using UnityEditor;
 using UnityEngine;
 
+public enum EntityType
+{
+    NULL = -1,
+    PLAYER,
+    PROP,
+    ENEMY,
+    ENEMYPROJECTILE,
+    ITEM
+}
+
 [RequireComponent(typeof(Rigidbody2D))]
 // [RequireComponent(typeof(Collider2D))]
-public class EntityMovement : MonoBehaviour
+public class GameEntity : MonoBehaviour
 {
     #region REFS #############################################################
 
@@ -25,6 +35,9 @@ public class EntityMovement : MonoBehaviour
     [HideInInspector] public bool isWallSideClipping;
 
     Rigidbody2D _rb;
+
+    public EntityType entityType = EntityType.NULL;
+    public string entityName = "";
 
     [Header("Colideador colisor colison")]
     [SerializeField] private Collider2D _coll;
@@ -240,6 +253,13 @@ public class EntityMovement : MonoBehaviour
     }
     
     #endregion ############################################################
+
+    #region MORE METHODS ########################################################
+
+    // ????
+
+    #endregion
+
 
     #region EXTRA STUFF DEBUG ############################################################
     

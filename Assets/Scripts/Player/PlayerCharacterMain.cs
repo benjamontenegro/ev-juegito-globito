@@ -1,15 +1,16 @@
 using UnityEngine;
 using UnityEditor;
 using TMPro;
+using System;
 
-[RequireComponent(typeof(EntityMovement))]
+[RequireComponent(typeof(GameEntity))]
 public class PlayerCharacterMain : MonoBehaviour
 {
     #region refs ####################################
 
     [Header("Referencias")]
 
-    EntityMovement Ent;
+    GameEntity Ent;
     PlatformerStats stats;
     AudioManager _sfx;
 
@@ -41,7 +42,7 @@ public class PlayerCharacterMain : MonoBehaviour
 
     void Awake()
     {
-        Ent = GetComponent<EntityMovement>();
+        Ent = GetComponent<GameEntity>();
         stats = Ent.stats;
 
         _spriteRenderer = GetComponent<SpriteRenderer>();
@@ -174,6 +175,57 @@ public class PlayerCharacterMain : MonoBehaviour
         if (IsTrigger && collide.CompareTag("WallHurt"))
         {
             PlayerDie();
+            return;
+        }
+
+        if (collide.CompareTag("EntitySpring"))
+        {
+            var _spring = collide.transform.parent;
+            int _springdir = Mathf.RoundToInt(_spring.transform.eulerAngles.z / 90);
+
+            // if (_spring.TryGetComponent(out GameEntity Ent))
+            //     switch (_spring.GetComponent<GameEntity>().entityName)
+            //     {
+            //         case "spring":
+
+            bool _holdpress = InputHandler.JumpIsHeld;
+
+            switch (_springdir)
+            {
+                default:
+                break;
+                case 0:
+                    Ent.moveVel.y = JumpSpd * (_holdpress ? 1.6f : 0.8f);
+                    Ent.moveVel.x *= 0.4f;
+                break;
+
+                case 1: case 3:
+                    Ent.moveVel.x = (MoveMaxSpd +3.6f) * (_springdir == 3 ? 1 : -1) *(_holdpress ? 1.6f : 1f);
+                    Ent.moveVel.y = JumpSpd *0.4f *(_holdpress ? 1.7f : 1f);
+
+                break;
+            }
+            if (_holdpress)
+            {
+                isJumpHolding = true;
+            }
+
+            _sfx.PlayAudioClip("springbounce");
+
+            _spring.GetComponent<Animator>().CrossFade(Animator.StringToHash("Bounce"), 0.7f, 0);
+
+                //     break;
+                // }
+            return;
+        }
+
+        if (collide.CompareTag("EntityItem"))
+        {
+            GameObject _coin = collide.transform.parent.gameObject;
+
+            _sfx.PlayAudioClip("coin");
+            Destroy(_coin);
+            return;
         }
 
         if (collide.CompareTag("EntityEnemy"))
@@ -201,6 +253,7 @@ public class PlayerCharacterMain : MonoBehaviour
                     PlayerDie();
                 }
             }
+            return;
         }
     }
 
@@ -274,7 +327,7 @@ public class PlayerCharacterMain : MonoBehaviour
     void PlayerDie()
     {
         _sfx.PlayAudioClip("hurt");
-        Object.Destroy(gameObject);
+        Destroy(gameObject);
 
         GameObject.Find("SceneHandler").GetComponent<SceneHandler>().TriggerPlayerRespawn();
     }

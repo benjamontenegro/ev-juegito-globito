@@ -144,6 +144,8 @@ MonoBehaviour:
   bumpHead: 0
   isGroundClipping: 0
   isWallSideClipping: 0
+  entityType: 3
+  entityName: spikeball
   _coll: {fileID: 5534211638024883029}
 --- !u!114 &1517338618933661393
 MonoBehaviour:

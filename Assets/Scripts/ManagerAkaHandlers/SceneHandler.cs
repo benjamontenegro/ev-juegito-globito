@@ -7,7 +7,7 @@ public class SceneHandler : MonoBehaviour
     
     private bool _playerToBeRespawned = false;
     private float _playerRespawnDelay;
-    [SerializeField] private float RespawnTime = 0.5f;
+    [SerializeField] private float RespawnTime = 1.5f;
 
     [Header("DEBUG TIME SLOW")]
     [SerializeField][Range(0f, 1f)] private float debugTimeScaleModify = 1.0f;

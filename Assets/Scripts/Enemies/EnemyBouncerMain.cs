@@ -1,13 +1,13 @@
 using UnityEngine;
 
-[RequireComponent(typeof(EntityMovement))]
+[RequireComponent(typeof(GameEntity))]
 public class EnemyBouncerMain : MonoBehaviour
 {
     #region REFS ############################################################
         
     [Header("Referencias")]
 
-    EntityMovement Ent;
+    GameEntity Ent;
     PlatformerStats stats;
     AudioManager _sfx;
     
@@ -30,7 +30,7 @@ public class EnemyBouncerMain : MonoBehaviour
 
     void Awake()
     {
-        Ent = GetComponent<EntityMovement>();
+        Ent = GetComponent<GameEntity>();
         stats = Ent.stats;
 
         _sfx = GameObject.FindWithTag("GameHandler").GetComponentInChildren<AudioManager>();

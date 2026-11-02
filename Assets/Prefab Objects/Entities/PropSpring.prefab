@@ -14,7 +14,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 201803024154935604, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
       propertyPath: m_Size.y
-      value: 0.5
+      value: 0.375
       objectReference: {fileID: 0}
     - target: {fileID: 201803024154935604, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
       propertyPath: m_Offset.y
@@ -30,11 +30,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2720144137696034713, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.25
+      value: -0.3175
       objectReference: {fileID: 0}
     - target: {fileID: 2880488099230891523, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
       propertyPath: m_Name
       value: SpringCollider
+      objectReference: {fileID: 0}
+    - target: {fileID: 2880488099230891523, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
+      propertyPath: m_TagString
+      value: EntitySpring
+      objectReference: {fileID: 0}
+    - target: {fileID: 4352437599708655383, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
+      propertyPath: entityName
+      value: spring
+      objectReference: {fileID: 0}
+    - target: {fileID: 4352437599708655383, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
+      propertyPath: entityType
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7103583079627461005, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
       propertyPath: m_Sprite
@@ -43,34 +55,6 @@ PrefabInstance:
     - target: {fileID: 7103583079627461005, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
       propertyPath: m_WasSpriteAssigned
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8631454745252158176, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 7.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 8631454745252158176, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -2.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 8631454745252158176, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8631454745252158176, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8631454745252158176, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8631454745252158176, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8631454745252158176, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8631454745252158176, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -86,7 +70,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8724403974266133089, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
       propertyPath: m_Name
-      value: PropSpring Variant
+      value: PropSpring
+      objectReference: {fileID: 0}
+    - target: {fileID: 8724403974266133089, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
+      propertyPath: m_TagString
+      value: EntitySpring
       objectReference: {fileID: 0}
     - target: {fileID: 8781263265352325043, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
       propertyPath: m_Controller

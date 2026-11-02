@@ -144,6 +144,8 @@ MonoBehaviour:
   bumpHead: 0
   isGroundClipping: 0
   isWallSideClipping: 0
+  entityType: 2
+  entityName: bouncer
   _coll: {fileID: 5541454785545242707}
 --- !u!114 &6820663374730566748
 MonoBehaviour:
@@ -157,8 +159,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2526adf52f663634d9b10e6d12881cb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyBouncerMain
-  _sfx: {fileID: 0}
-  MoveSpd: 3.6
+  MoveMaxSpd: 12.5
   MoveAcc: 0.2
   MoveDirX: 1
   JumpSpd: 17

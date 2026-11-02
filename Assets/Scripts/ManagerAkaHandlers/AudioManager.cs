@@ -51,7 +51,15 @@ public class AudioManager : MonoBehaviour
         AllSounds.Add(new SfxClip("jump", "Audio/kirbyjump1"));
         AllSounds.Add(new SfxClip("land", "Audio/kirbyland1"));
         AllSounds.Add(new SfxClip("hurt", "Audio/kirbyhurt"));
+
+        AllSounds.Add(new SfxClip("inflate", "Audio/playerfloat"));
+        AllSounds.Add(new SfxClip("coin", "Audio/coin"));
+        AllSounds.Add(new SfxClip("cannon", "Audio/cannon"));
         AllSounds.Add(new SfxClip("bump", "Audio/sfxbump"));
+        AllSounds.Add(new SfxClip("break", "Audio/breakblock"));
+        AllSounds.Add(new SfxClip("breakbig", "Audio/breakblock2"));
+        AllSounds.Add(new SfxClip("bounce", "Audio/bounce"));
+        AllSounds.Add(new SfxClip("springbounce", "Audio/springbounce"));
     }
 
     public static AudioClip LoadAudioClip(string audioPath)
