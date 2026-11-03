@@ -53,6 +53,7 @@ public class AudioManager : MonoBehaviour
         AllSounds.Add(new SfxClip("hurt", "Audio/kirbyhurt"));
 
         AllSounds.Add(new SfxClip("inflate", "Audio/playerfloat"));
+        AllSounds.Add(new SfxClip("pop", "Audio/poploud"));
         AllSounds.Add(new SfxClip("coin", "Audio/coin"));
         AllSounds.Add(new SfxClip("cannon", "Audio/cannon"));
         AllSounds.Add(new SfxClip("bump", "Audio/sfxbump"));

@@ -2,6 +2,8 @@ using UnityEngine;
 using UnityEditor;
 using TMPro;
 using System;
+using Unity.Mathematics;
+using System.Threading;
 
 [RequireComponent(typeof(GameEntity))]
 public class PlayerCharacterMain : MonoBehaviour
@@ -22,17 +24,31 @@ public class PlayerCharacterMain : MonoBehaviour
     // LIT SOLO HECHO PARA EL TIMERJUMPCOYOTE DE MIERDA QUE NO ME AGARRABA
     Vector2 moveAxis;
     
-    [Header("Movimiento")]
-    [SerializeField] float MoveMaxSpd = 12f;
-    [SerializeField] float MoveAcc = 3.5f;
-    [SerializeField] float MoveFri = 6f;
-    [SerializeField] float MoveAirAcc = 1f;
-    [SerializeField] float MoveAirFri = 0.3f;
+    bool isInflatedState = false;
+    float timerInflated;
+    float bumpHeadBounceBuffer = -4f;
 
-    [SerializeField] float JumpSpd = 17f;
+    [SerializeField] float GravInflatedSpd = 0.3f;
+    [SerializeField] float MaxInflatedSpd = -3.5f;
+    [SerializeField] float MoveInflatedMaxSpd = 4f;
+    [SerializeField] float MoveInflatedAcc = 0.35f;
+    [SerializeField] float MoveInflatedFri = 0.03f;
+    [SerializeField] float InflatedHeadBumpSpd = -7f;
+    [SerializeField] float InflateStateSwapTimer = 0.4f;
+    
+    // [Header("Movimiento")]
+
+    float MoveMaxSpd = 8f;
+    float MoveAcc = 2.5f;
+    float MoveFri = 4f;
+    float MoveAirAcc = 1.2f;
+    float MoveAirFri = 0.3f;
+
+    float JumpSpd = 13.6f;
+    
     bool isJumpHolding;
-    [SerializeField] float JumpHoldMult = 0.4f;
-    [SerializeField] float JumpEnemyStoolSpd = 6.5f;
+    float JumpHoldMult = 0.75f;
+    float JumpEnemyStoolSpd = 10f;
     
     
     #endregion####################################
@@ -67,6 +83,8 @@ public class PlayerCharacterMain : MonoBehaviour
             timerJumpBuffer = 0.017f *7;
         
         moveAxis = InputHandler.Movement;
+        
+        Inflate();
 
         HandleSprites();
     }
@@ -83,10 +101,10 @@ public class PlayerCharacterMain : MonoBehaviour
         _style.fontSize = 7;
         _style.normal.textColor = Color.white;
         
-        string msg = $"\nbuffer {Mathf.Round(timerJumpBuffer *60)}"
+        string msg = $"\nballoon bump t {Mathf.Round(bumpHeadBounceBuffer *60)}"
         + $"\n (temp grounded) {isGroundedSave}";
 
-        Handles.Label(transform.position -new Vector3(0, -3.5f), msg);
+        Handles.Label(transform.position -new Vector3(0, -1.5f), msg);
         // }
     }
     
@@ -109,15 +127,17 @@ public class PlayerCharacterMain : MonoBehaviour
         _groundwas = _ground;
 
         /// SE MUEVE CON ACELERACION UWU
-        float _acc = _ground ? MoveAcc : MoveAirAcc;;
-        float _fri = _ground ? MoveFri : MoveAirFri;
+        var _maxspd = isInflatedState ? MoveInflatedMaxSpd : MoveMaxSpd;
+        var _acc    = _ground ? MoveAcc : (isInflatedState ? MoveInflatedAcc : MoveAirAcc);
+        var _fri    = _ground ? MoveFri : (isInflatedState ? MoveInflatedFri : MoveAirFri);
 
         if (moveAxis.x != 0)
         {
-            Ent.moveVel.x = Mathf.MoveTowards(Ent.moveVel.x, MoveMaxSpd *moveAxis.x, 
+            Ent.moveVel.x = Mathf.MoveTowards(Ent.moveVel.x, _maxspd *moveAxis.x, 
                 _acc *60 *Time.deltaTime);
             
-            TurnDirection(-moveAxis.x);
+            if (isGroundedSave)
+                TurnDirection(-moveAxis.x);
         }
         else
         {
@@ -126,9 +146,12 @@ public class PlayerCharacterMain : MonoBehaviour
         }
 
         // GRAVEDAD
+
+        var _finalgrav = isInflatedState ? GravInflatedSpd : stats.GravSpd;
+        var _finalmaxfall = isInflatedState ? MaxInflatedSpd : stats.MaxFallSpd;
+
         Ent.moveVel.y = !_ground ? 
-            Mathf.MoveTowards(Ent.moveVel.y, -stats.MaxFallSpd,
-            stats.GravSpd *60 *Time.fixedDeltaTime) : 0;
+            Mathf.MoveTowards(Ent.moveVel.y, -_finalmaxfall, _finalgrav *60 *Time.fixedDeltaTime) : Ent.moveVel.y;
 
         // SALTO
         if (timerJumpBuffer > 0f && timerJumpCoyote > 0f)
@@ -167,6 +190,58 @@ public class PlayerCharacterMain : MonoBehaviour
         Ent.Turn(_dir);
     }
 
+    /// <summary> comportamiento sobre inflacion... </summary>
+    void Inflate()
+    {
+        // AL INFLARSE
+        if (InputHandler.AbilityIsHeld && !isInflatedState)
+        {
+            isInflatedState = true;
+            
+            _sfx.PlayAudioClip("inflate");
+            if (!isGroundedSave)
+            {
+                // Ent.moveVel.x *= 0.3f;
+                Ent.moveVel.y = Mathf.Min(Ent.moveVel.y, JumpSpd -5f);
+                
+                isGroundedSave = false;
+                Ent.isGrounded = false;
+            }
+
+            if (moveAxis.x != 0)
+                TurnDirection(-moveAxis.x);
+            
+            isJumpHolding = false;
+        }
+    
+        // CHOCARSE CON EL TECHO
+        if (isInflatedState && Ent.bumpHead && bumpHeadBounceBuffer < 0f)
+        {
+            bumpHeadBounceBuffer = 0.017f *4;
+
+            Ent.moveVel.x *= 0.3f;
+            Ent.moveVel.y = InflatedHeadBumpSpd;
+
+            _sfx.PlayAudioClip("bounce");
+        }
+
+        // DEJAR IR EL AIRE
+        if (!InputHandler.AbilityIsHeld && isInflatedState && (timerInflated > InflateStateSwapTimer))
+        {
+            isInflatedState = false;
+            timerInflated = 0f;
+
+            _sfx.PlayAudioClip("pop");
+            
+            if (moveAxis.x != 0)
+            {
+                // Ent.moveVel.x = moveAxis.x *(MoveMaxSpd *1.3f);
+                TurnDirection(-moveAxis.x);
+            }
+        }
+    }
+
+    /// <summary> Al chocar con un enemigo </summary>
     void PlayerCollideCall(GameObject collide, bool IsTrigger)
     {
         if (IsTrigger && collide.CompareTag("WallHurt"))
@@ -179,15 +254,6 @@ public class PlayerCharacterMain : MonoBehaviour
         {
             GameObject _spring  = collide.transform.parent.gameObject;
             int _springdir      = Mathf.RoundToInt(_spring.transform.eulerAngles.z / 90);
-
-            Debug.Log($"colision con {_spring.GetComponent<GameEntity>().entityName}");
-
-            // if (_spring.TryGetComponent(out GameEntity Ent))
-            //     switch (_spring.GetComponent<GameEntity>().entityName)
-            //     {
-            //         case "spring":
-            //         break;
-            //     }
 
             bool _holdpress = InputHandler.JumpIsHeld;
 
@@ -218,7 +284,7 @@ public class PlayerCharacterMain : MonoBehaviour
         if (collide.CompareTag("EntityItem"))
         {
             GameObject _coin = collide.transform.parent.gameObject;
-            Debug.Log($"colision con {_coin.GetComponent<GameEntity>().entityName}");
+            // Debug.Log($"colision con {_coin.GetComponent<GameEntity>().entityName}");
 
             _sfx.PlayAudioClip("coin");
             Destroy(_coin);
@@ -227,31 +293,35 @@ public class PlayerCharacterMain : MonoBehaviour
 
         if (collide.CompareTag("EntityEnemy"))
         {
-            Collider2D _enemyColl = collide.GetComponentInChildren<Collider2D>();
-            
-            Debug.Log($"colision con {collide.GetComponent<GameEntity>().entityName}");
+            string enemy_name = collide.GetComponent<GameEntity>().entityName;
 
-            if (_enemyColl != null)
+            switch (enemy_name)
             {
-                if (collide.transform.position.y < transform.position.y && !isGroundedSave)
-                {
-                    bool _holdpress = InputHandler.JumpIsHeld;
-
-                    _sfx.PlayAudioClip("bump");
-
-                    Ent.moveVel.y = JumpEnemyStoolSpd * (_holdpress ? 1.4f : 1f);
-                    if (_holdpress)
+                default:
+                    if (collide.transform.position.y < transform.position.y && !isGroundedSave)
                     {
-                        isJumpHolding = true;
-                        // dsps tmbn aplicarle algo al enemigosinono
+                        bool _holdpress = InputHandler.JumpIsHeld;
+
+                        _sfx.PlayAudioClip("bump");
+
+                        Ent.moveVel.y = JumpEnemyStoolSpd * (_holdpress ? 1.4f : 1f);
+                        if (_holdpress)
+                        {
+                            isJumpHolding = true;
+                            // dsps tmbn aplicarle algo al enemigosinono
+                        }
                     }
-                }
-                else
-                {
+                    else
+                    {
+                        PlayerDie();
+                    }
+                break;
+
+                case "spikeball":
+
                     PlayerDie();
-                }
+                break;
             }
-            return;
         }
     }
 
@@ -288,9 +358,8 @@ public class PlayerCharacterMain : MonoBehaviour
         bool _walk = moveAxis.x != 0;
         bool _keyj = InputHandler.PlInp.Player.Attack1.WasPressedThisFrame();
 
-        if (_keyj) 
-            return Lockstate(sprBalloonIdle, 1f);
-
+        if (isInflatedState)
+            return sprBalloonIdle;
         if (isGroundedSave)
         {
             if (_walk) 
@@ -299,16 +368,16 @@ public class PlayerCharacterMain : MonoBehaviour
         }
         return sprFall;
 
-        int Lockstate(int s, float t)
-        {
-            // Es lo mismoque un crossfade pero
-            // lo bloquea por un tiempo
-            _lockedUntil = Time.time +t;
-            // PODRIA SER UN TIMER MEJOR HMMMM
-            // O DETECTAR CUANDO SE ACABE EL SPRITE
-            // ESTO ES TEMPORAL MANITO
-            return s;
-        }
+        // int Lockstate(int s, float t)
+        // {
+        //     // Es lo mismoque un crossfade pero
+        //     // lo bloquea por un tiempo
+        //     _lockedUntil = Time.time +t;
+        //     // PODRIA SER UN TIMER MEJOR HMMMM
+        //     // O DETECTAR CUANDO SE ACABE EL SPRITE
+        //     // ESTO ES TEMPORAL MANITO
+        //     return s;
+        // }
     }
 
     /// <summary> contadores </summary>
@@ -319,6 +388,11 @@ public class PlayerCharacterMain : MonoBehaviour
         
         timerJumpCoyote = isGroundedSave ? 
             (0.017f *6) : timerJumpCoyote -Time.deltaTime;
+        
+        timerInflated = isInflatedState ? 
+            timerInflated +Time.deltaTime : timerInflated;
+
+        bumpHeadBounceBuffer -= Time.deltaTime;
     }
 
     void PlayerDie()

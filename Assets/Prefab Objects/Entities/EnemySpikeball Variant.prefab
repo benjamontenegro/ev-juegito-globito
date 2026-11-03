@@ -1,0 +1,130 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &4175193278510953763
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 201803024154935604, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
+      propertyPath: m_Size.x
+      value: 0.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 201803024154935604, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
+      propertyPath: m_Size.y
+      value: 0.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 201803024154935604, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
+      propertyPath: m_Offset.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2880488099230891523, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
+      propertyPath: m_Name
+      value: EnemySpikeballCollider
+      objectReference: {fileID: 0}
+    - target: {fileID: 2880488099230891523, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
+    - target: {fileID: 4352437599708655383, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
+      propertyPath: _coll
+      value: 
+      objectReference: {fileID: 4268769105397724183}
+    - target: {fileID: 4352437599708655383, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
+      propertyPath: entityName
+      value: spikeball
+      objectReference: {fileID: 0}
+    - target: {fileID: 4352437599708655383, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
+      propertyPath: entityType
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7103583079627461005, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 6386405737600401545, guid: 8c010f1d9dabedf4d81dfbc625719838, type: 3}
+    - target: {fileID: 8631454745252158176, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8631454745252158176, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8631454745252158176, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8631454745252158176, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8631454745252158176, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8631454745252158176, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8631454745252158176, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8631454745252158176, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8631454745252158176, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8631454745252158176, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8724403974266133089, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
+      propertyPath: m_Name
+      value: EnemySpikeball Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 8724403974266133089, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
+      propertyPath: m_TagString
+      value: EntityEnemy
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8724403974266133089, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2495199762396944416}
+  m_SourcePrefab: {fileID: 100100000, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
+--- !u!61 &4268769105397724183 stripped
+BoxCollider2D:
+  m_CorrespondingSourceObject: {fileID: 201803024154935604, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
+  m_PrefabInstance: {fileID: 4175193278510953763}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &4675311572566798146 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8724403974266133089, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
+  m_PrefabInstance: {fileID: 4175193278510953763}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2495199762396944416
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4675311572566798146}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1fbb3122fac68d54bae4cbc7b9179699, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemySpikeballMain
+  MoveMaxSpd: 2.5
+  MoveAcc: 0.5
+  MoveYWaveSpd: 0.5
+  MoveYWaveAcc: 0.5
+  MoveYWaveFreq: 5
+  MoveDirX: 1
