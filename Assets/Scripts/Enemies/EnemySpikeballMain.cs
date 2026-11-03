@@ -2,33 +2,25 @@ using System;
 using UnityEngine;
 
 [RequireComponent(typeof(GameEntity))]
-public class EnemySpikeballMain : MonoBehaviour
+public class EnemySpikeballMain : MonoBehaviour, IEntityEnemy
 {
     #region REFS ############################################################
-        
-    [Header("Referencias")]
 
     GameEntity Ent;
+    float MoveX { get => Ent.moveVel.x; set => Ent.moveVel.x = value; }
+    float MoveY { get => Ent.moveVel.y; set => Ent.moveVel.y = value; }
     PlatformerStats stats;
     AudioManager _sfx;
     
-    [Header("Variables del enemigo")]
+    float MoveYWaveTimer;
+
+    [Header("BOLA DE PINCHOS")]
     [SerializeField] private float MoveMaxSpd = 3f;
     [SerializeField] private float MoveAcc = 0.8f;
-    
     [SerializeField] private float MoveYWaveSpd = 1f;
     [SerializeField] private float MoveYWaveAcc = 0.7f;
     [SerializeField] private float MoveYWaveFreq = 3f;
     [SerializeField] private int MoveDirX;
-
-
-    float MoveYWaveTimer;
-
-    float MoveX { get => Ent.moveVel.x; set => Ent.moveVel.x = value; }
-    float MoveY { get => Ent.moveVel.y; set => Ent.moveVel.y = value; }
-
-
-    // private float movex { get ; set; }
 
     #endregion ############################################################
 
@@ -62,6 +54,10 @@ public class EnemySpikeballMain : MonoBehaviour
     #endregion
 
     #region METODOS ############################################################
+
+    public bool CanEnemyDie() => true;
+    
+    public void Die() => Destroy(gameObject);
     
     private void EnemyMove()
     {

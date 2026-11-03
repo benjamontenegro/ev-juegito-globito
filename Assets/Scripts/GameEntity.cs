@@ -187,6 +187,11 @@ public class GameEntity : MonoBehaviour
         return false;
     }
 
+    public void MoveToPos(Vector2 newPos)
+    {
+        _rb.MovePosition(newPos);
+    }
+
     /// <summary>
     /// Get raycast if its clipping with any wall
     /// </summary>
@@ -250,6 +255,12 @@ public class GameEntity : MonoBehaviour
         float offsetDist = stats.SideColReach /4;
 
         return Physics2D.BoxCast(origin, size, 0f, offsetDir, offsetDist, WallFlags);
+    }
+
+    /// <summary> activar o desactivar el collider2d </summary>
+    public void ColliderToggleEnable(bool Enabled)
+    {
+        _coll.enabled = Enabled;
     }
     
     #endregion ############################################################

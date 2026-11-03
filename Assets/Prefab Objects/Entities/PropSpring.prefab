@@ -38,7 +38,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2880488099230891523, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
       propertyPath: m_TagString
-      value: EntitySpring
+      value: Untagged
       objectReference: {fileID: 0}
     - target: {fileID: 4352437599708655383, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
       propertyPath: entityName

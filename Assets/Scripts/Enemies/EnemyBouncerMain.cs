@@ -1,32 +1,28 @@
 using UnityEngine;
 
 [RequireComponent(typeof(GameEntity))]
-public class EnemyBouncerMain : MonoBehaviour
+public class EnemyBouncerMain : MonoBehaviour, IEntityEnemy
 {
     #region REFS ############################################################
-        
-    [Header("Referencias")]
 
     GameEntity Ent;
+    float MoveX { get => Ent.moveVel.x; set => Ent.moveVel.x = value; }
+    float MoveY { get => Ent.moveVel.y; set => Ent.moveVel.y = value; }
     PlatformerStats stats;
     AudioManager _sfx;
     
-    [Header("Variables del enemigo")]
+    float jumpTimer;
+    
+    [Header("BOUNCER")]
     [SerializeField] private float MoveMaxSpd = 12.5f;
     [SerializeField] private float MoveAcc = 0.5f;
     [SerializeField] private int MoveDirX;
-
     [SerializeField] private float JumpSpd = 16f;
     [SerializeField] private float JumpTimeAmt = 3f;
-    float jumpTimer;
-
-    float MoveX { get => Ent.moveVel.x; set => Ent.moveVel.x = value; }
-    float MoveY { get => Ent.moveVel.y; set => Ent.moveVel.y = value; }
 
     #endregion ############################################################
 
     #region EVENTS ############################################################
-
 
     void Awake()
     {
@@ -56,6 +52,10 @@ public class EnemyBouncerMain : MonoBehaviour
     #endregion ############################################################
 
     #region ENEMY MOVE ############################################################
+
+    public bool CanEnemyDie() => true;
+    
+    public void Die() => Destroy(gameObject);
     
     ///<summary> enemy jumpin timin thing stuff </summary>
     private void EnemyjumpTimer()
@@ -91,5 +91,6 @@ public class EnemyBouncerMain : MonoBehaviour
     }
 
     #endregion ############################################################
+
 
 }

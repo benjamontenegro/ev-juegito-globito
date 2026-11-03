@@ -26,7 +26,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2880488099230891523, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
       propertyPath: m_TagString
-      value: EntityItem
+      value: Untagged
       objectReference: {fileID: 0}
     - target: {fileID: 4352437599708655383, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
       propertyPath: entityName
@@ -91,5 +91,25 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8724403974266133089, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7280165897428469056}
   m_SourcePrefab: {fileID: 100100000, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
+--- !u!1 &3029720608337517914 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8724403974266133089, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
+  m_PrefabInstance: {fileID: 5987806079348688699}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7280165897428469056
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3029720608337517914}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e07c8e68a93403a45b01a5ac413b7b43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ItemGem

@@ -20,6 +20,10 @@ PrefabInstance:
       propertyPath: m_Offset.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 201803024154935604, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2880488099230891523, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
       propertyPath: m_Name
       value: EnemySpikeballCollider
