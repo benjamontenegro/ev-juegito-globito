@@ -13,7 +13,6 @@ public class PlayerCharacterMain : MonoBehaviour
     GameEntity Ent;
     PlatformerStats stats;
     AudioManager _sfx;
-
     SpriteRenderer _spriteRenderer;
     Animator _anim;
 
@@ -148,9 +147,7 @@ public class PlayerCharacterMain : MonoBehaviour
         if (isJumpHolding && !InputHandler.JumpIsHeld)
         {
             if (Ent.moveVel.y > 0f)
-            {
                 Ent.moveVel.y = Mathf.Lerp(Ent.moveVel.y, 0, JumpHoldMult);
-            }
             isJumpHolding = false;
         }
 
@@ -180,20 +177,23 @@ public class PlayerCharacterMain : MonoBehaviour
 
         if (collide.CompareTag("EntitySpring"))
         {
-            var _spring = collide.transform.parent;
-            int _springdir = Mathf.RoundToInt(_spring.transform.eulerAngles.z / 90);
+            GameObject _spring  = collide.transform.parent.gameObject;
+            int _springdir      = Mathf.RoundToInt(_spring.transform.eulerAngles.z / 90);
+
+            Debug.Log($"colision con {_spring.GetComponent<GameEntity>().entityName}");
 
             // if (_spring.TryGetComponent(out GameEntity Ent))
             //     switch (_spring.GetComponent<GameEntity>().entityName)
             //     {
             //         case "spring":
+            //         break;
+            //     }
 
             bool _holdpress = InputHandler.JumpIsHeld;
 
             switch (_springdir)
             {
-                default:
-                break;
+                default: break;
                 case 0:
                     Ent.moveVel.y = JumpSpd * (_holdpress ? 1.6f : 0.8f);
                     Ent.moveVel.x *= 0.4f;
@@ -205,23 +205,20 @@ public class PlayerCharacterMain : MonoBehaviour
 
                 break;
             }
-            if (_holdpress)
-            {
-                isJumpHolding = true;
-            }
 
+            if (_holdpress)
+                isJumpHolding = true;
+            
             _sfx.PlayAudioClip("springbounce");
 
             _spring.GetComponent<Animator>().CrossFade(Animator.StringToHash("Bounce"), 0.7f, 0);
-
-                //     break;
-                // }
             return;
         }
 
         if (collide.CompareTag("EntityItem"))
         {
             GameObject _coin = collide.transform.parent.gameObject;
+            Debug.Log($"colision con {_coin.GetComponent<GameEntity>().entityName}");
 
             _sfx.PlayAudioClip("coin");
             Destroy(_coin);
@@ -230,12 +227,13 @@ public class PlayerCharacterMain : MonoBehaviour
 
         if (collide.CompareTag("EntityEnemy"))
         {
-            GameObject _enemy = collide;
-            Collider2D _enemyColl = _enemy.GetComponentInChildren<Collider2D>();
+            Collider2D _enemyColl = collide.GetComponentInChildren<Collider2D>();
+            
+            Debug.Log($"colision con {collide.GetComponent<GameEntity>().entityName}");
 
             if (_enemyColl != null)
             {
-                if (_enemy.transform.position.y < transform.position.y && !isGroundedSave)
+                if (collide.transform.position.y < transform.position.y && !isGroundedSave)
                 {
                     bool _holdpress = InputHandler.JumpIsHeld;
 
@@ -268,7 +266,6 @@ public class PlayerCharacterMain : MonoBehaviour
 
     int _currentSprite;
     float _lockedUntil;
-
 
     /// <summary> CAmbiar estados del anim <br/> iiiiiiiiiiii mira como spriteo </summary>
     void HandleSprites()

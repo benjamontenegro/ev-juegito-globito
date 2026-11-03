@@ -23,7 +23,7 @@ public class SceneHandler : MonoBehaviour
         CountTimers();
         
         if (UnityEngine.InputSystem.Keyboard.current.rKey.wasPressedThisFrame)
-            TriggerPlayerRespawn();
+            Restart();
         
         PlayerIsAlive = (GameObject.FindWithTag("Player") != null) ? true : false;
 
