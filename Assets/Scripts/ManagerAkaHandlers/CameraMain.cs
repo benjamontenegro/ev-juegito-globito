@@ -1,5 +1,5 @@
 // using UnityEditor;
-using Unity.VectorGraphics;
+// using Unity.VectorGraphics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 

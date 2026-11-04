@@ -39,18 +39,18 @@ PrefabInstance:
     - target: {fileID: 7103583079627461005, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 5488370903067918852, guid: 8e51418f7accacf49ab881114648c696, type: 3}
+      objectReference: {fileID: 7749669627623287808, guid: f9c28978b43161841a37a77ef08b404d, type: 3}
     - target: {fileID: 7103583079627461005, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
       propertyPath: m_Color.b
-      value: 0.3607843
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7103583079627461005, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
       propertyPath: m_Color.g
-      value: 0.3607843
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7103583079627461005, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
       propertyPath: m_Color.r
-      value: 0.8039216
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8631454745252158176, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -78,14 +78,14 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 8724403974266133089, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 8037312989002416712}
+      addedObject: {fileID: 5589017437749777325}
   m_SourcePrefab: {fileID: 100100000, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
 --- !u!1 &3682460149004288456 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8724403974266133089, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
   m_PrefabInstance: {fileID: 5335066600029379497}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &8037312989002416712
+--- !u!114 &5589017437749777325
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -94,6 +94,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 3682460149004288456}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e07c8e68a93403a45b01a5ac413b7b43, type: 3}
+  m_Script: {fileID: 11500000, guid: 48d35ffeb1834344fb71e96ee96d6cbe, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ItemGem
+  m_EditorClassIdentifier: Assembly-CSharp::ItemAirtankMain

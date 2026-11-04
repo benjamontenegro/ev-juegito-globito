@@ -1,5 +1,5 @@
-using UnityEditor.SceneManagement;
-using UnityEditor.Timeline;
+// using UnityEditor.SceneManagement;
+// using UnityEditor.Timeline;
 using UnityEngine;
 
 public class BackgroundHandler : MonoBehaviour

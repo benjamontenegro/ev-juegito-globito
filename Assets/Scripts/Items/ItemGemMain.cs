@@ -12,7 +12,6 @@ public class ItemGemMain : MonoBehaviour, IEntityItem
     SpriteRenderer _spr;
 
     bool _isCollected = false;
-    float _sprScaleTimer;
 
     #endregion ############################################################
 
@@ -24,18 +23,9 @@ public class ItemGemMain : MonoBehaviour, IEntityItem
         _sfx = GameObject.FindWithTag("GameHandler").GetComponentInChildren<AudioManager>();
         _spr = GetComponent<SpriteRenderer>();
     }
-
-    void Update()
-    {
-        // _sprScaleTimer += Time.deltaTime;
-
-        // float yscale = Mathf.Sin(_sprScaleTimer *2f) *0.3f;
-
-        // transform.localScale = new Vector2(1f -yscale, 1f +yscale);
-    }
-
+    
     public bool CanItemRespawn() => false;
-    public bool IsCollected() => _isCollected;
+    public bool IsCollected {get => _isCollected ;}
 
     public void Collect(GameEntity TriggererEntity)
     {
@@ -43,6 +33,7 @@ public class ItemGemMain : MonoBehaviour, IEntityItem
         _sfx.PlayAudioClip("coin");
         _spr.enabled = !_spr.enabled ;
         Ent.ColliderToggleEnable(!_isCollected);
+        GameStatsManager.AddCoinCollected();
 
         // TriggererEntity.moveVel.y = 6f;
     }

@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEditor;
+// using UnityEditor;
 
 [RequireComponent(typeof(GameEntity))]
 public class PlayerCharacterMain : MonoBehaviour
@@ -45,13 +45,14 @@ public class PlayerCharacterMain : MonoBehaviour
     
     // [Header("Movimiento")]
 
-    float MoveMaxSpd = 8f;
+    float MoveMaxSpd = 6.8f;
     float MoveAcc = 2.6f;
     float MoveFri = 4f;
     float MoveAirAcc = 1.3f;
     float MoveAirFri = 0.2f;
 
-    float JumpSpd = 13.6f;
+    float JumpSpd = 13.2f;
+    float JumpMoveSpdBoost = 8.3f;
     
     bool isJumpHolding;
     float JumpHoldMult = 0.75f;
@@ -94,7 +95,7 @@ public class PlayerCharacterMain : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collide) => PlayerCollideCall(collide.gameObject, false);
 
-    void OnTriggerEnter2D(Collider2D collide) => PlayerCollideCall(collide.transform.parent.gameObject, true);
+    void OnTriggerEnter2D(Collider2D collide) => PlayerCollideCall(collide.gameObject, true);
 
     void OnDrawGizmos()
     {
@@ -107,8 +108,8 @@ public class PlayerCharacterMain : MonoBehaviour
         // string msg = $"\n xaxis {moveAxis.x}"
         // + $"\n xspeed sign {Math.Sign(XVel)}"
         // + $"\n does it WORK? {moveAxis.x == Mathf.Sign(XVel)}";
-        var msg = "speed same as axis?" + ( moveAxis.x == Mathf.Sign(XVel));
-        Handles.Label(transform.position -new Vector3(0, -1.5f), msg);
+        // var msg = "speed same as axis?" + ( moveAxis.x == Mathf.Sign(XVel));
+        // Handles.Label(transform.position -new Vector3(0, -1.5f), msg);
         // }
     }
     
@@ -127,7 +128,7 @@ public class PlayerCharacterMain : MonoBehaviour
         {
             isJumpHolding = false;
             _sfx.PlayAudioClip("land");
-            inflationsLeft = MaxNumberInflations;
+            RefillInflations(MaxNumberInflations);
         }
         _groundwas = _ground;
 
@@ -167,7 +168,11 @@ public class PlayerCharacterMain : MonoBehaviour
         // SALTO
         if (timerJumpBuffer > 0f && timerJumpCoyote > 0f)
         {
+            float _jumpxaxis = Mathf.Abs(XVel) / MoveMaxSpd *1.2f;
+
             YVel = JumpSpd;
+            XVel = JumpMoveSpdBoost *_jumpxaxis *_axis.x;
+            
             isJumpHolding = true;
 
             timerJumpBuffer = -0.017f;
@@ -232,9 +237,10 @@ public class PlayerCharacterMain : MonoBehaviour
             }
             else
             {
-                isGroundedSave = false;
-                Ent.isGrounded = false;
-                YVel += 0.25f;
+                // isGroundedSave = false;
+                // Ent.isGrounded = false;
+                YVel += 0.18f;
+                Ent.MoveToPos(transform.position + new Vector3(0, 0.3f));
             }
 
             if (moveAxis.x != 0)
@@ -272,19 +278,28 @@ public class PlayerCharacterMain : MonoBehaviour
         }
     }
 
+    public void RefillInflations(int amount = 1)
+    {
+        inflationsLeft = Mathf.Max(MaxNumberInflations, amount, inflationsLeft);
+        // if (amount > MaxNumberInflations)
+    }
+
     #region COLISION ENTIDADES!!!!!
     #endregion
     /// <summary> Al chocar con un enemigo </summary>
     void PlayerCollideCall(GameObject collide, bool IsTrigger)
     {
-        var _trdb = IsTrigger ? "trigger" : "collision";
-
         if (IsTrigger && collide.CompareTag("WallHurt"))
         {
             // Debug.Log("PICHAO");
             PlayerDie();
             return;
         }
+
+        var _trdb = IsTrigger ? "trigger" : "collision";
+
+        if (IsTrigger)
+            collide = collide.transform.parent.gameObject;
 
         // ESTO PARA ACCEDER AL OBJETO PADRE
         GameObject _object = collide;
@@ -298,6 +313,8 @@ public class PlayerCharacterMain : MonoBehaviour
 
             // bool _holdpress = InputHandler.JumpIsHeld;
 
+            RefillInflations();
+            
             switch (_springdir)
             {
                 default: break; /// 0 ARRIBA, 1 IZQUIERDA, 3 DERECHA
@@ -319,36 +336,26 @@ public class PlayerCharacterMain : MonoBehaviour
                 break;
             }
 
-            // if (_holdpress)
-            //     isJumpHolding = true;
-
-
             _sfx.PlayAudioClip("springbounce");
 
             _object.GetComponent<Animator>().CrossFade(Animator.StringToHash("Bounce"), 0.7f, 0);
+
             return;
         }
 
         if (collide.CompareTag("EntityItem"))
         {
-            IEntityItem item = _object.GetComponent<IEntityItem>();
-            if (item != null)
+            if (_object.TryGetComponent<IEntityItem>(out var item))
             {
-                // Debug.Log($"collided with item {item.GetEntityName()} {_trdb}");
-                
-                // if (!item.IsCollected())
                 item.Collect(Ent);
+                switch(item.GetEntityName())
+                {
+                    default: break;
+                    case "airtank":
+                        RefillInflations();
+                    break;
+                }
             }
-            else
-            {
-                Debug.Log($"collided with item (no interface) {_trdb}" );
-            }
-
-            // GameObject _coin = collide.transform.parent.gameObject;
-            // // Debug.Log($"colision con {_coin.GetComponent<GameEntity>().entityName}");
-
-            // _sfx.PlayAudioClip("coin");
-            // Destroy(_coin);
             return;
         }
 

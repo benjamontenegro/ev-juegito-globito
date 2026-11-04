@@ -1,4 +1,4 @@
-using UnityEngine;
+// using UnityEngine;
 
 /// <summary> Para todos los items </summary>
 public interface IEntityItem
@@ -7,7 +7,7 @@ public interface IEntityItem
     void Collect(GameEntity TriggererEntity);
 
     /// <summary> esta recolectado? </summary>
-    bool IsCollected();
+    bool IsCollected { get;}
     
     /// <summary> puede reaparecer? </summary>
     bool CanItemRespawn();
