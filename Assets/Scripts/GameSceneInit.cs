@@ -5,6 +5,6 @@ public class GameSceneInit : MonoBehaviour
 {
     void Awake()
     {
-            SceneManager.LoadScene("SceneLevel");
+            SceneManager.LoadScene("SceneMainMenu");
     }
 }

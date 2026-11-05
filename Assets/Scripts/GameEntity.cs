@@ -1,5 +1,5 @@
 // using System;
-using UnityEditor;
+// using UnityEditor;
 using UnityEngine;
 
 public enum EntityType
@@ -61,15 +61,15 @@ public class GameEntity : MonoBehaviour
             DrawSideDebug(false);
         }
                 
-        if (stats.debugTextEnable)
-        {
-            GUIStyle _style = GUIStyle.none;
-            _style.fontSize = 12;
-            _style.normal.textColor = Color.white;
+        // if (stats.debugTextEnable)
+        // {
+        //     GUIStyle _style = GUIStyle.none;
+        //     _style.fontSize = 12;
+        //     _style.normal.textColor = Color.white;
             
-            Handles.Label(transform.position -new Vector3(0, -1f),
-                $"xv {moveVel.x} yv {moveVel.y} \n gr {isGrounded} sd l{leftColl} r{rightColl}");
-        }
+        //     Handles.Label(transform.position -new Vector3(0, -1f),
+        //         $"xv {moveVel.x} yv {moveVel.y} \n gr {isGrounded} sd l{leftColl} r{rightColl}");
+        // }
         
     }
 
