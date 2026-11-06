@@ -1,0 +1,43 @@
+using UnityEngine;
+
+[CreateAssetMenu(fileName = "PlatformerStatsAsset", menuName = "Scriptable Objects/PlatformerStats")]
+public class PlatformerStats : ScriptableObject
+{
+    // 16 PIXELES POR UNIDAD. OSEA
+    // 8px -> 0.5f; 1px -> 0.0625f;
+
+    [Header("Velocidades")]
+    public float MaxFallSpd = 3f;
+    [Tooltip("Gravedad para que sea comun")]
+    public float GravSpd = 0.0156f; // 0.015625 (1px *0.25)
+
+    [Header("Colisiones uwu")]
+    public LayerMask AllWallFlags;
+    public LayerMask GroundFlags;
+    public LayerMask GroundOneWayFlags;
+    public LayerMask SideOneWayFlags;
+    public LayerMask SideFlags;
+
+    public LayerMask SideLeftFlags;
+    public LayerMask SideRightFlags;
+    
+    public LayerMask CeilFlags;
+
+    // 0.017f == FRACCION DE SEGUNDO QUE PASA UN FRAME
+    // OSEA QUE ALMENOS LAS DISTANCIAS SE TOCAN A 1 SEG??
+    // OJALA
+    
+    // public float GroundedColDist = 0.017f; //SIX SEVEN
+    public float GroundedColReach = 0.5f;
+    public float SideColReach = 0.5f;
+    public float ClippingColReach = 0.017f;
+    
+    public float HeadWidthDif = 0.25f;
+    public float ColReachDif = 0.0625f;
+
+    // public float SideColDist = 0.017f;
+
+    [Header("Debug")]
+    public bool debugBboxEnable = true;
+    public bool debugTextEnable = true;
+}
