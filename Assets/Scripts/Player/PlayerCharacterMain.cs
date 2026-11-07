@@ -1,4 +1,5 @@
 using UnityEngine;
+// using UnityEngine.Rendering.Universal;
 // using UnityEditor;
 
 [RequireComponent(typeof(GameEntity))]
@@ -166,21 +167,7 @@ public class PlayerCharacterMain : MonoBehaviour
             Mathf.MoveTowards(YVel, -_finalmaxfall, _finalgrav *60 *Time.fixedDeltaTime) : YVel;
 
         // SALTO
-        if (timerJumpBuffer > 0f && timerJumpCoyote > 0f)
-        {
-            float _jumpxaxis = Mathf.Abs(XVel) / MoveMaxSpd *1.2f;
-
-            YVel = JumpSpd;
-            XVel = JumpMoveSpdBoost *_jumpxaxis *_axis.x;
-            
-            isJumpHolding = true;
-
-            timerJumpBuffer = -0.017f;
-            timerJumpCoyote = -0.017f;
-            _groundwas = false; // FORZAR EL ISGROUNDSAVE A FALSO
-
-            _sfx.PlayAudioClip("jump");
-        }
+        Jump(_groundwas, _axis);
 
         // SOLTAR EL SALTO
         if (isJumpHolding && !InputHandler.JumpIsHeld)
@@ -204,6 +191,25 @@ public class PlayerCharacterMain : MonoBehaviour
 
         if (InputHandler.JumpWasPressed) // JUMP INPUTED
             timerJumpBuffer = 0.017f *7;
+    }
+
+    void Jump(bool groundWas, Vector2 Axis)
+    {
+        if (timerJumpBuffer > 0f && timerJumpCoyote > 0f)
+        {
+            float _jumpxaxis = Mathf.Abs(XVel) / MoveMaxSpd *1.2f;
+
+            YVel = JumpSpd;
+            XVel = _isHoldingDown ? JumpMoveSpdBoost *_jumpxaxis *Axis.x : XVel;
+            
+            isJumpHolding = true;
+
+            timerJumpBuffer = -0.017f;
+            timerJumpCoyote = -0.017f;
+            groundWas = false; // FORZAR EL ISGROUNDSAVE A FALSO
+
+            _sfx.PlayAudioClip("jump");
+        }
     }
 
     /// <summary> cambiar direccion y sprite segun sign(float)  </summary>
@@ -291,12 +297,10 @@ public class PlayerCharacterMain : MonoBehaviour
     {
         if (IsTrigger && collide.CompareTag("WallHurt"))
         {
-            // Debug.Log("PICHAO");
             PlayerDie();
             return;
         }
-
-        var _trdb = IsTrigger ? "trigger" : "collision";
+        // var _trdb = IsTrigger ? "trigger" : "collision";
 
         if (IsTrigger)
             collide = collide.transform.parent.gameObject;
@@ -304,43 +308,48 @@ public class PlayerCharacterMain : MonoBehaviour
         // ESTO PARA ACCEDER AL OBJETO PADRE
         GameObject _object = collide;
 
-        if (collide.CompareTag("EntitySpring"))
+        if (collide.CompareTag("EntityProp"))
         {
-            // Debug.Log($"SPRINGAO {_trdb}");
-            // GameObject _spring  = _object;
-            int _springdir = Mathf.RoundToInt(_object.transform.eulerAngles.z / 90);
-            bool _springLookRight = _springdir == 3;
-
-            // bool _holdpress = InputHandler.JumpIsHeld;
-
-            RefillInflations();
-            
-            switch (_springdir)
+            switch (_object.GetComponent<GameEntity>().entityName)
             {
-                default: break; /// 0 ARRIBA, 1 IZQUIERDA, 3 DERECHA
-                case 0:
-                    Ent.MoveToPos(new Vector3(
-                        Mathf.Lerp(transform.position.x, _object.transform.position.x, 0.7f), 
-                        _object.transform.position.y +0.8f));
-                    YVel = JumpSpd * 1.65f;
-                    XVel = 0f;
-                    timerStunMoveAxisX = (0.017f *3);
+                default: 
+                    Debug.Log("???");
                 break;
+                case "spring":
+                    // Debug.Log("SPRING");
+                    int _springdir = Mathf.RoundToInt(_object.transform.eulerAngles.z / 90);
+                    bool _springLookRight = _springdir == 3;
 
-                case 1: case 3:
-                    Ent.MoveToPos(new Vector3(_object.transform.position.x +(_springLookRight ? 0.5f : -0.5f)
-                        , Mathf.Lerp(transform.position.y, _object.transform.position.y +0.5f, 0.5f)));
-                    XVel = (MoveMaxSpd + 3.6f) * (_springLookRight ? 1 : -1) * 1.7f;
-                    YVel = JumpSpd;
-                    timerStunMoveAxisX = (0.017f *8);
-                break;
+                    RefillInflations();
+                    
+                    switch (_springdir)
+                    {
+                        default: break; /// 0 ARRIBA, 1 IZQUIERDA, 3 DERECHA
+                        // NO DEBERIA SER ASI!!!!!!!!!!!!!!!!
+                        // CAMBIAR A SIN(DIR) & COS(DIR) FLOJO!!!
+                        case 0:
+                            Ent.MoveToPos(new Vector3(
+                                Mathf.Lerp(transform.position.x, _object.transform.position.x, 0.7f), 
+                                _object.transform.position.y +0.8f));
+                            YVel = JumpSpd * 1.65f;
+                            XVel = 0f;
+                            timerStunMoveAxisX = (0.017f *3);
+                        break;
+
+                        case 1: case 3:
+                            Ent.MoveToPos(new Vector3(_object.transform.position.x +(_springLookRight ? 0.5f : -0.5f)
+                                , Mathf.Lerp(transform.position.y, _object.transform.position.y +0.5f, 0.5f)));
+                            XVel = (MoveMaxSpd + 3.6f) * (_springLookRight ? 1 : -1) * 1.7f;
+                            YVel = JumpSpd;
+                            timerStunMoveAxisX = (0.017f *8);
+                        break;
+                    }
+
+                    _sfx.PlayAudioClip("springbounce");
+                    
+                    _object.GetComponent<Animator>().CrossFade(Animator.StringToHash("Bounce"), 0.7f, 0);
+                return;
             }
-
-            _sfx.PlayAudioClip("springbounce");
-
-            _object.GetComponent<Animator>().CrossFade(Animator.StringToHash("Bounce"), 0.7f, 0);
-
-            return;
         }
 
         if (collide.CompareTag("EntityItem"))
@@ -387,7 +396,6 @@ public class PlayerCharacterMain : MonoBehaviour
                 break;
 
                 case "spikeball":
-
                     PlayerDie();
                 break;
             }

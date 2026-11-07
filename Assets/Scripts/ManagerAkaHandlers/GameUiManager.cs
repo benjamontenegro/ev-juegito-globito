@@ -16,6 +16,7 @@ public class GameUiManager : MonoBehaviour
     [SerializeField] Canvas uiCanvas;
 
     // COIN TALLY
+    [SerializeField] bool enableCoinTally = true;
     GameObject coinTally;
     Text coinTallyText;
     Image coinTallyIcon;
@@ -35,22 +36,28 @@ public class GameUiManager : MonoBehaviour
 
     void Awake()
     {
-        uiCanvas = GetComponentInChildren<Canvas>();
-        coinTally = uiCanvas.transform.Find("cointally").gameObject;
+        if (enableCoinTally)
+        {        
+            uiCanvas = GetComponentInChildren<Canvas>();
+            coinTally = uiCanvas.transform.Find("cointally").gameObject;
 
-        coinTallyText = coinTally.transform.Find("cointallytxt").GetComponent<Text>();
-        coinTallyIcon = coinTally.transform.Find("cointallyicon").GetComponent<Image>();
+            coinTallyText = coinTally.transform.Find("cointallytxt").GetComponent<Text>();
+            coinTallyIcon = coinTally.transform.Find("cointallyicon").GetComponent<Image>();
+        }
     }
 
     void Update()
     {
-        UiPositionsCalculate();
-        UiElementsUpdate();
+        if (enableCoinTally)
+        {
+            UiCoinTallyPosCalculate();
+            uiCoinTallyUpdate();
+        }
     }
 
     #region METODOS ############################################################
 
-    void UiPositionsCalculate()
+    void UiCoinTallyPosCalculate()
     {
         coinTallyMoveTimer -= Time.deltaTime;
         if (coinTallyCoinsPrev != GameStatsManager.CoinsCollected)
@@ -67,8 +74,8 @@ public class GameUiManager : MonoBehaviour
         coinTallyPosCurrent = Vector2.Lerp( Vector2.zero,
             new Vector2(-128f, 256), coinTallyPosCurrentLerp);
     }
-    
-    void UiElementsUpdate()
+
+    void uiCoinTallyUpdate()
     {
         coinTally.transform.position = new Vector2(coinTallyPosCurrent.x, coinTally.transform.position.y);
         coinTallyText.text = $"{GameStatsManager.CoinsCollected}";

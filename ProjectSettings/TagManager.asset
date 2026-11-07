@@ -11,6 +11,7 @@ TagManager:
   - WallHurt
   - EntitySpring
   - EntityItem
+  - EntityProp
   layers:
   - Default
   - TransparentFX
@@ -21,7 +22,7 @@ TagManager:
   - 
   - 
   - 
-  - 
+  - Entity
   - Wall
   - WallOneWay
   - WallRightOnly
