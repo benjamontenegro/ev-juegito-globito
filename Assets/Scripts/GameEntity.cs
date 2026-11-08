@@ -21,9 +21,6 @@ public class GameEntity : MonoBehaviour
     public PlatformerStats stats;
 
     [HideInInspector] public Vector2 moveVel;
-    // public Vector2Int moveVelInt;
-    // public Vector2 moveVelFract;s
-
     [HideInInspector] public Vector2 moveVelPrev;
     [HideInInspector] public bool lookDir; // TRUE == ->, FALSE == <-
 
@@ -85,8 +82,8 @@ public class GameEntity : MonoBehaviour
     public void GetCollisionChecks()
     {
         isGrounded = GetOnGround();
-        leftColl = GenOnWallSide(false);
-        rightColl = GenOnWallSide(true);
+        leftColl = GetOnWallSide(false);
+        rightColl = GetOnWallSide(true);
         bumpHead = HitCollAbove().collider != null;
         isGroundClipping = HitCollBody(true).collider != null;
         isWallSideClipping = HitCollBody(false).collider != null;
@@ -128,19 +125,16 @@ public class GameEntity : MonoBehaviour
             lookDir = true;
         }
     }
-
-    // private void AdjustMoveVelocity()
-    // {
-    //     moveVelFract += moveVel;
-    //     moveVelInt = Vector2Int.RoundToInt(moveVel);
-    //     moveVelFract -= moveVelInt;
-    // }
-
+    
     /// <summary> moveVel -> RigidBody2D.linearVelocity </summary>
     public void MoveApplyVelocity()
     {
-        // AdjustMoveVelocity();
         _rb.linearVelocity = new Vector2(moveVel.x, moveVel.y);
+    }
+
+    public void MoveToPos(Vector2 newPos)
+    {
+        _rb.MovePosition(newPos);
     }
 
     #endregion ############################################################
@@ -160,7 +154,7 @@ public class GameEntity : MonoBehaviour
         return false;
     }
 
-    public bool GenOnWallSide(bool isRightSide)
+    public bool GetOnWallSide(bool isRightSide)
     {
         bool _solidwall = HitCollSides(isRightSide, false).collider != null;
         
@@ -185,11 +179,6 @@ public class GameEntity : MonoBehaviour
             return true;
 
         return false;
-    }
-
-    public void MoveToPos(Vector2 newPos)
-    {
-        _rb.MovePosition(newPos);
     }
 
     /// <summary>

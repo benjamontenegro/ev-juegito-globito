@@ -9,7 +9,6 @@ TagManager:
   - EntityEnemy
   - GameHandler
   - WallHurt
-  - EntitySpring
   - EntityItem
   - EntityProp
   layers:
