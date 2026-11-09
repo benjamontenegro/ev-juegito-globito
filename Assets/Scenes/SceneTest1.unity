@@ -215,19 +215,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8666433006362150762, guid: ba44679a26766f44fb2f20aa2e5253ba, type: 3}
       propertyPath: m_NormalizedViewPortRect.x
-      value: 0.14860907
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8666433006362150762, guid: ba44679a26766f44fb2f20aa2e5253ba, type: 3}
       propertyPath: m_NormalizedViewPortRect.y
-      value: 0.106153846
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8666433006362150762, guid: ba44679a26766f44fb2f20aa2e5253ba, type: 3}
       propertyPath: m_NormalizedViewPortRect.width
-      value: 0.70278186
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8666433006362150762, guid: ba44679a26766f44fb2f20aa2e5253ba, type: 3}
       propertyPath: m_NormalizedViewPortRect.height
-      value: 0.7876923
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
