@@ -43,5 +43,5 @@ MonoBehaviour:
   ClippingColReach: 0.125
   HeadWidthDif: 0.25
   ColReachDif: 0.063
-  debugBboxEnable: 1
-  debugTextEnable: 0
+  debugBboxEnable: 0
+  debugTextEnable: 1

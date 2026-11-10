@@ -1,6 +1,10 @@
 using UnityEngine;
+// using LombaxGuy.STG;
+
 // using UnityEngine.Rendering.Universal;
-// using UnityEditor;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 [RequireComponent(typeof(GameEntity))]
 public class PlayerCharacterMain : MonoBehaviour
@@ -100,18 +104,28 @@ public class PlayerCharacterMain : MonoBehaviour
 
     void OnDrawGizmos()
     {
-        // if (PlatformerStats.debugTextEnable)
-        // {
-        // GUIStyle _style = GUIStyle.none;
-        // _style.fontSize = 7;
-        // _style.normal.textColor = Color.white;
-        
-        // string msg = $"\n xaxis {moveAxis.x}"
-        // + $"\n xspeed sign {Math.Sign(XVel)}"
-        // + $"\n does it WORK? {moveAxis.x == Mathf.Sign(XVel)}";
-        // var msg = "speed same as axis?" + ( moveAxis.x == Mathf.Sign(XVel));
-        // Handles.Label(transform.position -new Vector3(0, -1.5f), msg);
-        // }
+        if (Ent.stats.debugTextEnable)
+        {
+            Handles.Label(transform.position -new Vector3(0, -1.5f),
+             "coyote" +(timerJumpCoyote *60));
+        }
+
+        // #if UNITY_EDITOR
+        //     if (Ent.stats.debugTextEnable)
+        //     {
+        //         // GUIStyle _style = GUIStyle.none;
+        //         // _style.fontSize = 7;
+        //         // _style.normal.textColor = Color.white;
+                
+        //         // string msg = $"\n xaxis {moveAxis.x}"
+        //         // + $"\n xspeed sign {Mathf.Sign(XVel)}"
+        //         // + $"\n does it WORK? {moveAxis.x == Mathf.Sign(XVel)}";
+        //         // var msg = "speed same as axis?" + ( moveAxis.x == Mathf.Sign(XVel));
+        //         string msg = "jcoyote " +timerJumpCoyote + "\nbuffer" + timerJumpBuffer;
+        //         // Handles.Label(transform.position -new Vector3(0, -1.5f), msg);
+        //         TextGizmo.Draw(msg, transform.position -new Vector3(0, -1.5f));
+        //     }
+        // #endif
     }
     
     #endregion ####################################
@@ -130,6 +144,7 @@ public class PlayerCharacterMain : MonoBehaviour
             isJumpHolding = false;
             _sfx.PlayAudioClip("land");
             RefillInflations(MaxNumberInflations);
+            timerJumpCoyote = (0.017f *6);
         }
         _groundwas = _ground;
 
@@ -193,6 +208,7 @@ public class PlayerCharacterMain : MonoBehaviour
             timerJumpBuffer = 0.017f *7;
     }
 
+    /// <summary> salto(En el piso?, eje) </summary>
     void Jump(bool groundWas, Vector2 Axis)
     {
         if (timerJumpBuffer > 0f && timerJumpCoyote > 0f)
@@ -300,7 +316,6 @@ public class PlayerCharacterMain : MonoBehaviour
             PlayerDie();
             return;
         }
-        // var _trdb = IsTrigger ? "trigger" : "collision";
 
         if (IsTrigger)
             collide = collide.transform.parent.gameObject;
@@ -371,8 +386,6 @@ public class PlayerCharacterMain : MonoBehaviour
         if (collide.CompareTag("EntityEnemy"))
         {
             string enemy_name = _object.GetComponent<GameEntity>().entityName;
-            // Debug.Log($"ENEMIGO {enemy_name} {_trdb}");
-
             switch (enemy_name)
             {
                 default:
@@ -468,8 +481,7 @@ public class PlayerCharacterMain : MonoBehaviour
         // timerJumpBuffer = (timerJumpBuffer > 0f) ? 
         timerJumpBuffer -= Time.deltaTime; //: timerJumpBuffer;
         
-        timerJumpCoyote = isGroundedSave ? 
-            (0.017f *6) : timerJumpCoyote -Time.deltaTime;
+        timerJumpCoyote = isGroundedSave ? timerJumpCoyote : timerJumpCoyote -Time.deltaTime;
         
         timerInflated = isInflatedState ? 
             timerInflated +Time.deltaTime : timerInflated;

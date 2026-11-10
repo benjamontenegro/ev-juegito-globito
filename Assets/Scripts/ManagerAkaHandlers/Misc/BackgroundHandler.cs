@@ -24,7 +24,13 @@ public class BackgroundHandler : MonoBehaviour
     private int backgroundChilds;
     private float[] backgroundTexWidth;
 
-    private void Start()
+    void Awake() 
+    {
+        if (cameraPos != null)
+            transform.position = new(cameraPos.position.x ,cameraPos.position.y, transform.position.z);
+    }
+
+    void Start()
     {
         // backgroundTimeMove = 0;
 

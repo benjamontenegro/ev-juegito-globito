@@ -14,7 +14,7 @@ AnimatorStateMachine:
     m_Position: {x: 30, y: 130, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -1293629918465458232}
-    m_Position: {x: 30, y: 170, z: 0}
+    m_Position: {x: 30, y: 200, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []
@@ -33,7 +33,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Bounce
-  m_Speed: 1
+  m_Speed: 0.5
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 7977039805551821714}
