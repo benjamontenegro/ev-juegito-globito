@@ -13,16 +13,18 @@ public class PlayerCharacterMain : MonoBehaviour
 
     [Header("Referencias")]
 
-    GameEntity Ent;
+    [SerializeField] GameEntity Ent;
+    [SerializeField] PlatformerStats stats;
+    AudioManager _sfx;
+    SpriteRenderer _sprRender;
+    Animator _anim;
+
     /// <summary> (Ent.moveVel.x) </summary>
     float XVel { get => Ent.moveVel.x; set => Ent.moveVel.x = value; }
     /// <summary> (Ent.moveVel.y) </summary>
     float YVel { get => Ent.moveVel.y; set => Ent.moveVel.y = value; }
 
-    PlatformerStats stats;
-    AudioManager _sfx;
-    SpriteRenderer _spriteRenderer;
-    Animator _anim;
+    [Header("Variables/Campos")]
 
     float timerJumpBuffer;
     float timerJumpCoyote;
@@ -36,6 +38,8 @@ public class PlayerCharacterMain : MonoBehaviour
     int inflationsLeft;
     float timerInflated;
     float bumpHeadBounceBuffer = -4f;
+
+    int AnimStateTemp;
 
     [SerializeField] float GravInflatedSpd = 0.3f;
     [SerializeField] float MaxInflatedSpd = -3.5f;
@@ -55,6 +59,7 @@ public class PlayerCharacterMain : MonoBehaviour
     float MoveFri = 4f;
     float MoveAirAcc = 1.3f;
     float MoveAirFri = 0.2f;
+    float MoveTimeWalking;
 
     float JumpSpd = 13.2f;
     float JumpMoveSpdBoost = 8.3f;
@@ -69,12 +74,12 @@ public class PlayerCharacterMain : MonoBehaviour
 
     void Awake()
     {
-        Ent = GetComponent<GameEntity>();
+        if (Ent == null) 
+            Ent = GetComponent<GameEntity>();
         stats = Ent.stats;
 
-        _spriteRenderer = GetComponent<SpriteRenderer>();
+        _sprRender = GetComponent<SpriteRenderer>();
         _anim = GetComponent<Animator>();
-        
         _sfx = GameObject.FindWithTag("GameHandler").GetComponentInChildren<AudioManager>();
     }
 
@@ -107,25 +112,11 @@ public class PlayerCharacterMain : MonoBehaviour
         if (Ent.stats.debugTextEnable)
         {
             Handles.Label(transform.position -new Vector3(0, -1.5f),
-             "coyote" +(timerJumpCoyote *60));
+             "Current Sprite Int: " +_currentSprite
+             + "\nAnimStateTemp? " + AnimStateTemp
+             + $"\nTotal time Walking {Mathf.Round(MoveTimeWalking *60f)}"
+             );
         }
-
-        // #if UNITY_EDITOR
-        //     if (Ent.stats.debugTextEnable)
-        //     {
-        //         // GUIStyle _style = GUIStyle.none;
-        //         // _style.fontSize = 7;
-        //         // _style.normal.textColor = Color.white;
-                
-        //         // string msg = $"\n xaxis {moveAxis.x}"
-        //         // + $"\n xspeed sign {Mathf.Sign(XVel)}"
-        //         // + $"\n does it WORK? {moveAxis.x == Mathf.Sign(XVel)}";
-        //         // var msg = "speed same as axis?" + ( moveAxis.x == Mathf.Sign(XVel));
-        //         string msg = "jcoyote " +timerJumpCoyote + "\nbuffer" + timerJumpBuffer;
-        //         // Handles.Label(transform.position -new Vector3(0, -1.5f), msg);
-        //         TextGizmo.Draw(msg, transform.position -new Vector3(0, -1.5f));
-        //     }
-        // #endif
     }
     
     #endregion ####################################
@@ -145,6 +136,8 @@ public class PlayerCharacterMain : MonoBehaviour
             _sfx.PlayAudioClip("land");
             RefillInflations(MaxNumberInflations);
             timerJumpCoyote = (0.017f *6);
+
+            SetSpriteAnimState(sprIdleLand);
         }
         _groundwas = _ground;
 
@@ -164,8 +157,11 @@ public class PlayerCharacterMain : MonoBehaviour
         {
             XVel = Mathf.MoveTowards(XVel, _maxspd *_axis.x, _acc *60 *Time.deltaTime);
             
-            if (isGroundedSave)
+            if (isGroundedSave && AnimStateTemp == 0)
                 TurnDirection(-_axis.x);
+            
+            if (AnimStateTemp == 0 && MoveTimeWalking == 0f)
+                SetSpriteAnimState(sprWalkBegin);
         }
         else
         {
@@ -224,6 +220,7 @@ public class PlayerCharacterMain : MonoBehaviour
             timerJumpCoyote = -0.017f;
             groundWas = false; // FORZAR EL ISGROUNDSAVE A FALSO
 
+            ForceSpriteAnimStateEnd();
             _sfx.PlayAudioClip("jump");
         }
     }
@@ -235,12 +232,13 @@ public class PlayerCharacterMain : MonoBehaviour
         if (_dir == 0)
             return;
         
-        _spriteRenderer.flipX = _dir == 1;
+        _sprRender.flipX = _dir == 1;
         Ent.Turn(_dir);
     }
 
-    #region INFLARSE!!!!!
-    #endregion
+    #region INFLARSE!!!!! ############################################################
+    #endregion ############################################################
+
     /// <summary> comportamiento sobre inflacion... </summary>
     void Inflate()
     {
@@ -250,7 +248,6 @@ public class PlayerCharacterMain : MonoBehaviour
             isInflatedState = true;
             // Ent.isGrounded = false;
             
-            _sfx.PlayAudioClip("inflate");
             if (!isGroundedSave)
             {
                 // XVel *= 0.3f;
@@ -269,8 +266,11 @@ public class PlayerCharacterMain : MonoBehaviour
                 TurnDirection(-moveAxis.x);
             
             isJumpHolding = false;
-            
             inflationsLeft --;
+
+            _sfx.PlayAudioClip("inflate");
+            SetSpriteAnimState(sprBalloonSpawn);
+
         }
     
         // CHOCARSE CON EL TECHO
@@ -306,7 +306,7 @@ public class PlayerCharacterMain : MonoBehaviour
         // if (amount > MaxNumberInflations)
     }
 
-    #region COLISION ENTIDADES!!!!!
+    #region COLISION ENTIDADES!!!!! ############################################################
     #endregion
     /// <summary> Al chocar con un enemigo </summary>
     void PlayerCollideCall(GameObject collide, bool IsTrigger)
@@ -415,9 +415,8 @@ public class PlayerCharacterMain : MonoBehaviour
         }
     }
 
-    #region SPRITES!!!!!!!!!!
-    
-    // SPRITES!!!!!!!!!!!    
+    #region SPRITES!! ############################################################
+    // SPRITES!!!!!!!!!!!    (ANIMATION STATES)
 
     private static readonly int sprBalloonSpawn = Animator.StringToHash("ANIM_PJ_BALLOON_SPAWN");
     
@@ -445,38 +444,62 @@ public class PlayerCharacterMain : MonoBehaviour
     private static readonly int sprWalkBegin    = Animator.StringToHash("ANIM_PJ_WALK_BEGIN");
 
     int _currentSprite;
-    float _lockedUntil;
+    // float _lockedUntil;
+
+    bool _AnimStateTempBypassReset;
+
+    // AnimStateTemp!!!!!!!!!!!
+    // AnimStateTemp PUEDE SER UN HASH DE ANIMACION, O 0.
+    // SI ES 0., NO HAY NINGUNA ANIMACION TEMPORAL REPRODUCIENDOSE
 
     /// <summary> CAmbiar estados del anim <br/> iiiiiiiiiiii mira como spriteo </summary>
     void HandleSprites()
     {
-        int sprite = GetSpriteState();
+        // ACTUALIZAR ANIMACION SEGUN SPRANIM O NO
+        int sprite = GetSpriteState(_currentSprite);
         
+        // REPRODUCIR ANIMACION SI NO SE ESTA REPRODUCIOENDO
         if (sprite != _currentSprite)
         {
-            _anim.CrossFade(sprite, 0f, 0);
+            _anim.CrossFade(sprite, 0.0f, -1);
             _currentSprite = sprite;
         }
+
+        // // SI ANIMACION TEMPORAL TERMINO, REINICIA FRAME
+        if (AnimStateTemp != 0 && IsAnimationEnding() && !_AnimStateTempBypassReset)
+            AnimStateTemp = 0;
+            
+        _AnimStateTempBypassReset = false;
+    }
+
+    bool IsAnimationEnding()
+    {
+        AnimatorStateInfo _sprInfo = _anim.GetCurrentAnimatorStateInfo(0);
+        return _sprInfo.normalizedTime > 1.0f;
     }
 
     /// <summary> estados de animacion segun sus ids </summary>
-    int GetSpriteState()
+    int GetSpriteState(int CurrentSprite)
     {
-        if (Time.time < _lockedUntil)
-            return _currentSprite; // bloquea los q usen el lockstate
+        // if (Time.time < _lockedUntil)
+        //     return _currentSprite; // bloquea los q usen el lockstate
 
         bool _walk = moveAxis.x != 0;
-        bool _keyj = InputHandler.PlInp.Player.Attack1.WasPressedThisFrame();
 
-        // if (isInflatedState)
-        //     return sprBalloonIdle;
-        if (isGroundedSave)
+        if (AnimStateTemp == 0)
         {
-            if (_walk) 
-                return sprWalk;
-            return sprIdle;
+            if (isGroundedSave)
+            {
+                if (_walk) 
+                    return sprWalk;
+                return sprIdle;
+            }
+            return sprFall;   
         }
-        return sprFall;
+        else
+        {
+            return AnimStateTemp;
+        }
 
         // int Lockstate(int s, float t)
         // {
@@ -489,10 +512,27 @@ public class PlayerCharacterMain : MonoBehaviour
         //     return s;
         // }
     }
+
+    void SetSpriteAnimState(int stateName)
+    {
+        AnimStateTemp = stateName;
+        _AnimStateTempBypassReset = true;
+
+        _anim.CrossFade(AnimStateTemp, 0.0f, -1);
+        _currentSprite = AnimStateTemp;
+    }
+
+    void ForceSpriteAnimStateEnd()
+    {
+        AnimStateTemp = 0;
+        _AnimStateTempBypassReset = false;
+    }
+
     #endregion 
 
-    #region DELAYS Y TIMERS!!!!!
-    #endregion
+    #region DELAYS Y TIMERS!!!!! ############################################################
+    #endregion ############################################################
+
     /// <summary> contadores </summary>
     void DelayCounters()
     {
@@ -503,6 +543,9 @@ public class PlayerCharacterMain : MonoBehaviour
         
         timerInflated = isInflatedState ? 
             timerInflated +Time.deltaTime : timerInflated;
+
+        MoveTimeWalking = (moveAxis.x != 0) ?
+            MoveTimeWalking += Time.deltaTime : 0;
 
         bumpHeadBounceBuffer -= Time.deltaTime;
         timerStunMoveAxisX -= Time.deltaTime;

@@ -13,6 +13,10 @@ PrefabInstance:
       value: 0.75
       objectReference: {fileID: 0}
     - target: {fileID: 201803024154935604, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
+      propertyPath: m_Size.y
+      value: 1.375
+      objectReference: {fileID: 0}
+    - target: {fileID: 201803024154935604, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
       propertyPath: m_Offset.y
       value: 0
       objectReference: {fileID: 0}
@@ -79,7 +83,7 @@ PrefabInstance:
     - target: {fileID: 7103583079627461005, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 5429646629656715859, guid: 8c88efcbbf1e890438da6c4fdb16607e, type: 3}
+      objectReference: {fileID: 4249629791207552638, guid: 322e67d51b072744890ecdb4925fb58b, type: 3}
     - target: {fileID: 8631454745252158176, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
       propertyPath: m_LocalPosition.x
       value: -9.5
@@ -135,7 +139,7 @@ PrefabInstance:
     - target: {fileID: 8781263265352325043, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: 48ec624d7cd73184bb7938aeadfc5358, type: 2}
+      objectReference: {fileID: 9100000, guid: 00db204184790d04d8465c6622d97aaf, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -149,6 +153,17 @@ BoxCollider2D:
   m_CorrespondingSourceObject: {fileID: 201803024154935604, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
   m_PrefabInstance: {fileID: 1305494878200791957}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &3348701488803228802 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4352437599708655383, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
+  m_PrefabInstance: {fileID: 1305494878200791957}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7713896074391558644}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14fc9d561b27d124897deadc06d955be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EntityMovement
 --- !u!1 &7713896074391558644 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8724403974266133089, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
@@ -166,6 +181,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d6178c58c9ce2c43937d4c4417a6607, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerCharacterMain
+  Ent: {fileID: 3348701488803228802}
+  stats: {fileID: 11400000, guid: c008387af2301b548ab82f2813882786, type: 2}
   GravInflatedSpd: 0.3
   MaxInflatedSpd: -3.5
   MaxInflatedHoldDownSpd: -2.2
