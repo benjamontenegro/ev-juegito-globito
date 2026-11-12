@@ -418,13 +418,31 @@ public class PlayerCharacterMain : MonoBehaviour
     #region SPRITES!!!!!!!!!!
     
     // SPRITES!!!!!!!!!!!    
-    // esto lo saque de un tutorial ☉‿⚆
-    // una y otras mil cosas mas askjasdh
-    // me da wiwi si poner los sprites asi pero seria muy caradura decirlo
-    private static readonly int sprIdle = Animator.StringToHash("Idle");
-    private static readonly int sprWalk = Animator.StringToHash("Walk");
-    private static readonly int sprFall = Animator.StringToHash("Fall");
-    private static readonly int sprBalloonIdle = Animator.StringToHash("BalloonIdle");
+
+    private static readonly int sprBalloonSpawn = Animator.StringToHash("ANIM_PJ_BALLOON_SPAWN");
+    
+    private static readonly int sprDie = Animator.StringToHash("ANIM_PJ_DIE");
+
+    private static readonly int sprDuck         = Animator.StringToHash("ANIM_PJ_DUCK");
+    private static readonly int sprDuckBegin    = Animator.StringToHash("ANIM_PJ_DUCK_BEGIN");
+    private static readonly int sprDuckCrawl    = Animator.StringToHash("ANIM_PJ_DUCK_CRAWL");
+    private static readonly int sprDuckEnd      = Animator.StringToHash("ANIM_PJ_DUCK_END");
+    private static readonly int sprDuckFall     = Animator.StringToHash("ANIM_PJ_DUCK_FALL");
+
+    private static readonly int sprFall         = Animator.StringToHash("ANIM_PJ_FALL");
+    private static readonly int sprFlap         = Animator.StringToHash("ANIM_PJ_FLAP");
+
+    private static readonly int sprIdle         = Animator.StringToHash("ANIM_PJ_IDLE");
+    private static readonly int sprIdleLand     = Animator.StringToHash("ANIM_PJ_IDLE_LAND");
+    private static readonly int sprIdleWin      = Animator.StringToHash("ANIM_PJ_IDLE_WIN");
+
+    private static readonly int sprLongJump     = Animator.StringToHash("ANIM_PJ_LONGJUMP");
+    private static readonly int sprLongJumpAntic = Animator.StringToHash("ANIM_PJ_LONGJUMP_ANTIC");
+    private static readonly int sprLongJumpTemp = Animator.StringToHash("ANIM_PJ_LONGJUMP_TEMP");
+
+    private static readonly int sprStun         = Animator.StringToHash("ANIM_PJ_STUN");
+    private static readonly int sprWalk         = Animator.StringToHash("ANIM_PJ_WALK");
+    private static readonly int sprWalkBegin    = Animator.StringToHash("ANIM_PJ_WALK_BEGIN");
 
     int _currentSprite;
     float _lockedUntil;
@@ -450,8 +468,8 @@ public class PlayerCharacterMain : MonoBehaviour
         bool _walk = moveAxis.x != 0;
         bool _keyj = InputHandler.PlInp.Player.Attack1.WasPressedThisFrame();
 
-        if (isInflatedState)
-            return sprBalloonIdle;
+        // if (isInflatedState)
+        //     return sprBalloonIdle;
         if (isGroundedSave)
         {
             if (_walk) 
