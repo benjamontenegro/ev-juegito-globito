@@ -88,6 +88,10 @@ public class BackgroundHandler : MonoBehaviour
                 // SUMAR OFFSET AL FONDO
                 child.position = new Vector3(cameraPos.position.x +offsetX, child.position.y);
             }
+
+            // Vector3 roundedChildPos = new(Mathf.Round(child.position.x), Mathf.Round(child.position.y));
+
+            // child.position = roundedChildPos;
         }
 
         lastCameraPos = cameraPos.position;
