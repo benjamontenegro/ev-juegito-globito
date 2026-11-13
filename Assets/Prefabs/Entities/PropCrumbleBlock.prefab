@@ -81,7 +81,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 4778022478182018794, guid: 0ea3c46faabfb8e47be49cd1315db460, type: 3}
+  m_Sprite: {fileID: -965695495027935092, guid: df0e3bf6bce7a7540b333b89e4ee8c49, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -101,11 +101,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 201803024154935604, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
       propertyPath: m_Size.x
-      value: 0.875
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 201803024154935604, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
       propertyPath: m_Size.y
-      value: 0.875
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 201803024154935604, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
       propertyPath: m_Offset.y
@@ -113,7 +113,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 201803024154935604, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
       propertyPath: m_EdgeRadius
-      value: 0.0625
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1328290941958495077, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
       propertyPath: m_BodyType

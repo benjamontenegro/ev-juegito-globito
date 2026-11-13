@@ -19,6 +19,8 @@ public class PlayerCharacterMain : MonoBehaviour
     SpriteRenderer _sprRender;
     Animator _anim;
 
+    [SerializeField] Transform debugDrawPos;
+
     /// <summary> (Ent.moveVel.x) </summary>
     float XVel { get => Ent.moveVel.x; set => Ent.moveVel.x = value; }
     /// <summary> (Ent.moveVel.y) </summary>
@@ -59,7 +61,7 @@ public class PlayerCharacterMain : MonoBehaviour
     float MoveFri = 4f;
     float MoveAirAcc = 1.3f;
     float MoveAirFri = 0.2f;
-    float MoveTimeWalking;
+    float AnimStateWalkingDir;
 
     float JumpSpd = 13.2f;
     float JumpMoveSpdBoost = 8.3f;
@@ -81,6 +83,9 @@ public class PlayerCharacterMain : MonoBehaviour
         _sprRender = GetComponent<SpriteRenderer>();
         _anim = GetComponent<Animator>();
         _sfx = GameObject.FindWithTag("GameHandler").GetComponentInChildren<AudioManager>();
+
+        if (debugDrawPos == null)
+            debugDrawPos = transform;
     }
 
     void FixedUpdate()
@@ -111,11 +116,31 @@ public class PlayerCharacterMain : MonoBehaviour
     {
         if (Ent.stats.debugTextEnable)
         {
-            Handles.Label(transform.position -new Vector3(0, -1.5f),
-             "Current Sprite Int: " +_currentSprite
-             + "\nAnimStateTemp? " + AnimStateTemp
-             + $"\nTotal time Walking {Mathf.Round(MoveTimeWalking *60f)}"
-             );
+            string msg = "";
+
+            switch(debugDrawPos.position.z)
+            {
+                default: case -5:
+                msg = "LMAO";
+                break;
+                
+                case 0:
+                msg = "ANIMS" 
+                + $"\n Current Sprite Int: {_currentSprite}"
+                + $"\n AnimStateTemp {AnimStateTemp}"
+                + $"\n Total time Walking {AnimStateWalkingDir}";
+                break;
+
+                case 1:
+                msg = "BALLOON SHIT"
+                + $"\n Inflated? {isInflatedState}"
+                + $"\n inflations left {inflationsLeft}/{MaxNumberInflations}"
+                + $"\n inflation state coold {timerInflated *60}";
+                // + $"\n";
+                break;
+            }
+
+            Handles.Label(debugDrawPos.position, msg);
         }
     }
     
@@ -138,6 +163,7 @@ public class PlayerCharacterMain : MonoBehaviour
             timerJumpCoyote = (0.017f *6);
 
             SetSpriteAnimState(sprIdleLand);
+            // TurnDirection(-moveAxis.x);
         }
         _groundwas = _ground;
 
@@ -156,12 +182,6 @@ public class PlayerCharacterMain : MonoBehaviour
         if (_axis.x != 0)
         {
             XVel = Mathf.MoveTowards(XVel, _maxspd *_axis.x, _acc *60 *Time.deltaTime);
-            
-            if (isGroundedSave && AnimStateTemp == 0)
-                TurnDirection(-_axis.x);
-            
-            if (AnimStateTemp == 0 && MoveTimeWalking == 0f)
-                SetSpriteAnimState(sprWalkBegin);
         }
         else
         {
@@ -202,6 +222,18 @@ public class PlayerCharacterMain : MonoBehaviour
 
         if (InputHandler.JumpWasPressed) // JUMP INPUTED
             timerJumpBuffer = 0.017f *7;
+        
+        // COSAS EXTRAS PA PROBAR
+        if (isGroundedSave && AnimStateTemp == 0)
+        {
+            if (moveAxis.x != 0 && AnimStateWalkingDir != moveAxis.x)
+            {
+                SetSpriteAnimState(sprWalkBegin);
+                TurnDirection(-moveAxis.x);
+            }
+            AnimStateWalkingDir = moveAxis.x;
+        }
+        
     }
 
     /// <summary> salto(En el piso?, eje) </summary>
@@ -455,6 +487,10 @@ public class PlayerCharacterMain : MonoBehaviour
     /// <summary> CAmbiar estados del anim <br/> iiiiiiiiiiii mira como spriteo </summary>
     void HandleSprites()
     {
+        // // SI ANIMACION TEMPORAL TERMINO, REINICIA FRAME
+        if (AnimStateTemp != 0 && IsAnimationEnding() && !_AnimStateTempBypassReset)
+            AnimStateTemp = 0;
+
         // ACTUALIZAR ANIMACION SEGUN SPRANIM O NO
         int sprite = GetSpriteState(_currentSprite);
         
@@ -465,13 +501,10 @@ public class PlayerCharacterMain : MonoBehaviour
             _currentSprite = sprite;
         }
 
-        // // SI ANIMACION TEMPORAL TERMINO, REINICIA FRAME
-        if (AnimStateTemp != 0 && IsAnimationEnding() && !_AnimStateTempBypassReset)
-            AnimStateTemp = 0;
-            
         _AnimStateTempBypassReset = false;
     }
 
+    /// <summary> Revisar si la animacion esta terminando </summary>
     bool IsAnimationEnding()
     {
         AnimatorStateInfo _sprInfo = _anim.GetCurrentAnimatorStateInfo(0);
@@ -513,6 +546,7 @@ public class PlayerCharacterMain : MonoBehaviour
         // }
     }
 
+    /// <summary> Activar animacion temporal con X animacion </summary>
     void SetSpriteAnimState(int stateName)
     {
         AnimStateTemp = stateName;
@@ -522,6 +556,7 @@ public class PlayerCharacterMain : MonoBehaviour
         _currentSprite = AnimStateTemp;
     }
 
+    /// <summary> Desactivar animacion actual si hay </summary>
     void ForceSpriteAnimStateEnd()
     {
         AnimStateTemp = 0;
@@ -543,9 +578,6 @@ public class PlayerCharacterMain : MonoBehaviour
         
         timerInflated = isInflatedState ? 
             timerInflated +Time.deltaTime : timerInflated;
-
-        MoveTimeWalking = (moveAxis.x != 0) ?
-            MoveTimeWalking += Time.deltaTime : 0;
 
         bumpHeadBounceBuffer -= Time.deltaTime;
         timerStunMoveAxisX -= Time.deltaTime;

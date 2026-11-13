@@ -191,4 +191,4 @@ MonoBehaviour:
   MoveInflatedFri: 0.03
   InflatedHeadBumpSpd: -7
   InflateStateSwapTimer: 0.4
-  MaxNumberInflations: 0
+  MaxNumberInflations: 1

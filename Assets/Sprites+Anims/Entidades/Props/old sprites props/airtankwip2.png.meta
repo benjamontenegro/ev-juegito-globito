@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 0ea3c46faabfb8e47be49cd1315db460
+guid: f9c28978b43161841a37a77ef08b404d
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 4778022478182018794
-    second: bloquerompible_0
+      213: 7749669627623287808
+    second: airtankwip2_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -77,7 +77,7 @@ TextureImporter:
     textureFormat: -1
     textureCompression: 1
     compressionQuality: 50
-    crunchedCompression: 0
+    crunchedCompression: 1
     allowsAlphaSplitting: 0
     overridden: 0
     ignorePlatformSupport: 0
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: bloquerompible_0
+      name: airtankwip2_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 16
-        height: 16
+        x: 5
+        y: 4
+        width: 21
+        height: 23
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: aeeeedcf022fe4240800000000000000
-      internalID: 4778022478182018794
+      spriteID: 00cae11877b5c8b60800000000000000
+      internalID: 7749669627623287808
       vertices: []
       indices: 
       edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      bloquerompible_0: 4778022478182018794
+      airtankwip2_0: 7749669627623287808
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

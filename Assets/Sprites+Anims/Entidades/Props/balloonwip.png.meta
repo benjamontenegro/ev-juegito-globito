@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 8e51418f7accacf49ab881114648c696
+guid: 84df4e07e6743ce43bbce1a73a0dcf04
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 5488370903067918852
-    second: moneda_0
+      213: 5191946685422848789
+    second: balloonwip_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -77,7 +77,7 @@ TextureImporter:
     textureFormat: -1
     textureCompression: 1
     compressionQuality: 50
-    crunchedCompression: 0
+    crunchedCompression: 1
     allowsAlphaSplitting: 0
     overridden: 0
     ignorePlatformSupport: 0
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: moneda_0
+      name: balloonwip_0
       rect:
         serializedVersion: 2
-        x: 1
-        y: 1
-        width: 13
-        height: 15
+        x: 4
+        y: 4
+        width: 22
+        height: 24
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 40204f8f14c9a2c40800000000000000
-      internalID: 5488370903067918852
+      spriteID: 51b456590008d0840800000000000000
+      internalID: 5191946685422848789
       vertices: []
       indices: 
       edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      moneda_0: 5488370903067918852
+      balloonwip_0: 5191946685422848789
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

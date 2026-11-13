@@ -1,25 +1,43 @@
 fileFormatVersion: 2
-guid: bebf807c86fceaa4e96619664570762e
+guid: 1663463098fcacc48a9f1fda0c21b2c8
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 7516740503403434703
-    second: smokefx spritesheet_0
+      213: -3312241577448543376
+    second: explosionbig_0
   - first:
-      213: -820437697966423283
-    second: smokefx spritesheet_1
+      213: 5435554375062177515
+    second: explosionbig_1
   - first:
-      213: -4635013288651689864
-    second: smokefx spritesheet_2
+      213: -6881162693752370297
+    second: explosionbig_2
   - first:
-      213: 3897297488350289801
-    second: smokefx spritesheet_3
+      213: -3916212551792785766
+    second: explosionbig_3
   - first:
-      213: -4507677894085513168
-    second: smokefx spritesheet_4
+      213: 2931176745368384034
+    second: explosionbig_4
   - first:
-      213: 7629124648764148553
-    second: smokefx spritesheet_5
+      213: 5865893054010161429
+    second: explosionbig_5
+  - first:
+      213: 2726698838666722165
+    second: explosionbig_6
+  - first:
+      213: -3447192837765940924
+    second: explosionbig_7
+  - first:
+      213: -5232734286623034435
+    second: explosionbig_8
+  - first:
+      213: -5487543582727566920
+    second: explosionbig_9
+  - first:
+      213: 2287095524991120132
+    second: explosionbig_10
+  - first:
+      213: 3651174338337898548
+    second: explosionbig_11
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -92,7 +110,7 @@ TextureImporter:
     textureFormat: -1
     textureCompression: 1
     compressionQuality: 50
-    crunchedCompression: 0
+    crunchedCompression: 1
     allowsAlphaSplitting: 0
     overridden: 0
     ignorePlatformSupport: 0
@@ -115,13 +133,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: smokefx spritesheet_0
+      name: explosionbig_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 16
-        height: 16
+        width: 80
+        height: 80
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -130,20 +148,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: fc2172699a3d05860800000000000000
-      internalID: 7516740503403434703
+      spriteID: 07b66e595dd8802d0800000000000000
+      internalID: -3312241577448543376
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: smokefx spritesheet_1
+      name: explosionbig_1
       rect:
         serializedVersion: 2
-        x: 16
+        x: 80
         y: 0
-        width: 16
-        height: 16
+        width: 80
+        height: 80
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -152,20 +170,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: d034f54b2483d94f0800000000000000
-      internalID: -820437697966423283
+      spriteID: be6c6e2c7e7fe6b40800000000000000
+      internalID: 5435554375062177515
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: smokefx spritesheet_2
+      name: explosionbig_2
       rect:
         serializedVersion: 2
-        x: 32
+        x: 160
         y: 0
-        width: 16
-        height: 16
+        width: 80
+        height: 80
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -174,20 +192,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 87073b8a8ff1dafb0800000000000000
-      internalID: -4635013288651689864
+      spriteID: 78b483decf23180a0800000000000000
+      internalID: -6881162693752370297
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: smokefx spritesheet_3
+      name: explosionbig_3
       rect:
         serializedVersion: 2
-        x: 48
+        x: 240
         y: 0
-        width: 16
-        height: 16
+        width: 80
+        height: 80
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -196,20 +214,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 98f1429ba6bf51630800000000000000
-      internalID: 3897297488350289801
+      spriteID: a960771ee61d6a9c0800000000000000
+      internalID: -3916212551792785766
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: smokefx spritesheet_4
+      name: explosionbig_4
       rect:
         serializedVersion: 2
-        x: 64
+        x: 320
         y: 0
-        width: 16
-        height: 16
+        width: 80
+        height: 80
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -218,8 +236,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 030f62986d28171c0800000000000000
-      internalID: -4507677894085513168
+      spriteID: 222719948b1ada820800000000000000
+      internalID: 2931176745368384034
       vertices: []
       indices: 
       edges: []
@@ -228,7 +246,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 28389b4d3fe27ae48aad69e7a0e9b8d2
+    spriteID: dbc25559b57f8e14f9763d47a00656e1
     internalID: 0
     vertices: []
     indices: 
@@ -238,13 +256,13 @@ TextureImporter:
     spriteCustomMetadata:
       entries:
       - key: SpriteEditor.SliceSettings
-        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":16.0,"y":16.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":1,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":80.0,"y":80.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":1,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      smokefx spritesheet_0: 7516740503403434703
-      smokefx spritesheet_1: -820437697966423283
-      smokefx spritesheet_2: -4635013288651689864
-      smokefx spritesheet_3: 3897297488350289801
-      smokefx spritesheet_4: -4507677894085513168
+      explosionbig_0: -3312241577448543376
+      explosionbig_1: 5435554375062177515
+      explosionbig_2: -6881162693752370297
+      explosionbig_3: -3916212551792785766
+      explosionbig_4: 2931176745368384034
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

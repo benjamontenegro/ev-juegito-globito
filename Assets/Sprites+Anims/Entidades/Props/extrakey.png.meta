@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: f9c28978b43161841a37a77ef08b404d
+guid: dd8983f64a05b3c4baefc3ba25345c4f
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 7749669627623287808
-    second: airtankwip2_0
+      213: 5578065624306713478
+    second: extrakey_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -75,9 +75,9 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
-    crunchedCompression: 0
+    crunchedCompression: 1
     allowsAlphaSplitting: 0
     overridden: 0
     ignorePlatformSupport: 0
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: airtankwip2_0
+      name: extrakey_0
       rect:
         serializedVersion: 2
-        x: 5
-        y: 4
-        width: 21
-        height: 23
+        x: 0
+        y: 0
+        width: 16
+        height: 16
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 00cae11877b5c8b60800000000000000
-      internalID: 7749669627623287808
+      spriteID: 6838e96a125496d40800000000000000
+      internalID: 5578065624306713478
       vertices: []
       indices: 
       edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      airtankwip2_0: 7749669627623287808
+      extrakey_0: 5578065624306713478
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
