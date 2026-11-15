@@ -153,17 +153,6 @@ BoxCollider2D:
   m_CorrespondingSourceObject: {fileID: 201803024154935604, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
   m_PrefabInstance: {fileID: 1305494878200791957}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &3348701488803228802 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4352437599708655383, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
-  m_PrefabInstance: {fileID: 1305494878200791957}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7713896074391558644}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 14fc9d561b27d124897deadc06d955be, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EntityMovement
 --- !u!1 &7713896074391558644 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8724403974266133089, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
@@ -181,14 +170,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d6178c58c9ce2c43937d4c4417a6607, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerCharacterMain
-  Ent: {fileID: 3348701488803228802}
+  Entity: {fileID: 0}
   stats: {fileID: 11400000, guid: c008387af2301b548ab82f2813882786, type: 2}
-  GravInflatedSpd: 0.3
-  MaxInflatedSpd: -3.5
-  MaxInflatedHoldDownSpd: -2.2
-  MoveInflatedMaxSpd: 4
-  MoveInflatedAcc: 0.35
-  MoveInflatedFri: 0.03
-  InflatedHeadBumpSpd: -7
-  InflateStateSwapTimer: 0.4
-  MaxNumberInflations: 1
+  debugDrawPos: {fileID: 0}
+  JumpSpd: 13.5
+  InflatedGravSpd: 0.2
+  InflatedGravFallSpd: 0.05
+  InflatedRiseYvel: 2.5
+  InflatedJumpSpd: 7.2
+  InflatedMoveAirXvel: 4
+  InflatedMoveAcc: 0.35
+  InflatedMoveFri: 0.03
+  FlapSpd: 8.4
+  FlapSlowXvel: 1

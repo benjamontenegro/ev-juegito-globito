@@ -9,76 +9,74 @@ using UnityEditor;
 [RequireComponent(typeof(GameEntity))]
 public class PlayerCharacterMain : MonoBehaviour
 {
-    #region refs ####################################
+    #region refs ############################################################
 
-    [Header("Referencias")]
+        [Header("Referencias")]
 
-    [SerializeField] GameEntity Ent;
-    [SerializeField] PlatformerStats stats;
-    AudioManager _sfx;
-    SpriteRenderer _sprRender;
-    Animator _anim;
+        [SerializeField] GameEntity Entity;
+        [SerializeField] PlatformerStats stats;
+        AudioManager _sfx;
+        SpriteRenderer _sprRender;
+        Animator _anim;
+        [SerializeField] Transform debugDrawPos;
 
-    [SerializeField] Transform debugDrawPos;
+        /// <summary> (Entity.moveVel.x) </summary>
+        float XVel { get => Entity.moveVel.x; set => Entity.moveVel.x = value; }
+        /// <summary> (Entity.moveVel.y) </summary>
+        float YVel { get => Entity.moveVel.y; set => Entity.moveVel.y = value; }
 
-    /// <summary> (Ent.moveVel.x) </summary>
-    float XVel { get => Ent.moveVel.x; set => Ent.moveVel.x = value; }
-    /// <summary> (Ent.moveVel.y) </summary>
-    float YVel { get => Ent.moveVel.y; set => Ent.moveVel.y = value; }
+        [Header("Variables/Campos")]
 
-    [Header("Variables/Campos")]
+        float MoveXvel = 7f;
+        float MoveAcc = 2.6f;
+        float MoveFri = 4f;
+        float MoveAirAcc = 1.3f;
+        float MoveAirFri = 0.2f;
 
-    float timerJumpBuffer;
-    float timerJumpCoyote;
-    float timerStunMoveAxisX;
-    bool isGroundedSave; // CHECKEO DEL PISO PERSONAL, SE PASA AL ENT POR LAS WEAS
-    // LIT SOLO HECHO PARA EL TIMERJUMPCOYOTE DE MIERDA QUE NO ME AGARRABA
-    Vector2 moveAxis;
-    bool _isHoldingDown;
-    
-    bool isInflatedState = false;
-    int inflationsLeft;
-    float timerInflated;
-    float bumpHeadBounceBuffer = -4f;
+        float AnimStateWalkingDir;
 
-    int AnimStateTemp;
+        [SerializeField] float JumpSpd = 13.5f; // CALCULATE THIS
+        bool isJumpHolding;
+        float JumpHoldMinTime = 0.025f;
+        float JumpHoldMult = 0.75f;
+        float JumpEnemyStoolSpd = 10f;
 
-    [SerializeField] float GravInflatedSpd = 0.3f;
-    [SerializeField] float MaxInflatedSpd = -3.5f;
-    [SerializeField] float MaxInflatedHoldDownSpd = -2.2f;
+        // MOVEMENT VARIABLES ############################################################
+        [SerializeField] float InflatedGravSpd = 0.2f;
+        [SerializeField] float InflatedGravFallSpd = 0.05f;
+        [SerializeField] float InflatedRiseYvel = 2.5f;
+        [SerializeField] float InflatedJumpSpd = 3f;
+        float InflatedMoveXvel = 7f;
+        [SerializeField] float InflatedMoveAirXvel = 4f;
+        [SerializeField] float InflatedMoveAcc = 0.35f;
+        [SerializeField] float InflatedMoveFri = 0.03f;
+        float InflatedHeadBumpSpd = -5f;
+        int MaxNumberInflations = 1;
 
-    [SerializeField] float MoveInflatedMaxSpd = 4f;
-    [SerializeField] float MoveInflatedAcc = 0.35f;
-    [SerializeField] float MoveInflatedFri = 0.03f;
-    [SerializeField] float InflatedHeadBumpSpd = -7f;
-    [SerializeField] float InflateStateSwapTimer = 0.4f;
-    [SerializeField] int MaxNumberInflations = 1;
-    
-    // [Header("Movimiento")]
+        bool isInflatedState = false;
+        int inflationsLeft;
+        float timerInflated;
+        float bumpHeadBounceBuffer = -4f;
+        [SerializeField] float FlapSpd = 5.6f;
+        [SerializeField] float FlapSlowXvel = 3.8f;
 
-    float MoveMaxSpd = 6.8f;
-    float MoveAcc = 2.6f;
-    float MoveFri = 4f;
-    float MoveAirAcc = 1.3f;
-    float MoveAirFri = 0.2f;
-    float AnimStateWalkingDir;
-
-    float JumpSpd = 13.2f;
-    float JumpMoveSpdBoost = 8.3f;
-    
-    bool isJumpHolding;
-    float JumpHoldMult = 0.75f;
-    float JumpEnemyStoolSpd = 10f;
-    
+        float timerJumpInputBuffer;
+        float timerJumpCoyote;
+        float timerStunMoveAxisX;
+        bool isGroundedSave; 
+        // CHECKEO DEL PISO PERSONAL, SE PASA AL ENT POR LAS WEAS
+        Vector2 moveAxis;
+        bool _isHoldingDown;
+            
     #endregion####################################
     
-    #region llamadas o mensajes????? ####################################
+    #region EVENTOS ####################################
 
     void Awake()
     {
-        if (Ent == null) 
-            Ent = GetComponent<GameEntity>();
-        stats = Ent.stats;
+        if (Entity == null) 
+            Entity = GetComponent<GameEntity>();
+        stats = Entity.stats;
 
         _sprRender = GetComponent<SpriteRenderer>();
         _anim = GetComponent<Animator>();
@@ -90,31 +88,26 @@ public class PlayerCharacterMain : MonoBehaviour
 
     void FixedUpdate()
     {
-        Ent.PreCollisions(); // VELOCIDADES OLD
+        Entity.PreCollisions(); // VELOCIDADES OLD
         PlayerMove(); // KI
-        Ent.MoveApplyVelocity(); // VELOCITIES
-        Ent.GetCollisionChecks(); // ACTUALIZAR CHECKEO COLISIONES
-        Ent.PostCollisions(); // STOP SPEEDS BASED ON DETECTED COLLISIONS
+        Entity.MoveApplyVelocity(); // VELOCITIES
+        Entity.GetCollisionChecks(); // ACTUALIZAR CHECKEO COLISIONES
+        Entity.PostCollisions(); // STOP SPEEDS BASED ON DETECTED COLLISIONS
     }
+    void OnCollisionEnter2D(Collision2D collide) => PlayerCollideCall(collide.gameObject, false);
+    void OnTriggerEnter2D(Collider2D collide) => PlayerCollideCall(collide.gameObject, true);
 
     void Update()
     {
         DelayCounters(); // CHECK FOR COUNTERS
-
         SetInputs();
-        
         Inflate();
-
         HandleSprites();
     }
 
-    void OnCollisionEnter2D(Collision2D collide) => PlayerCollideCall(collide.gameObject, false);
-
-    void OnTriggerEnter2D(Collider2D collide) => PlayerCollideCall(collide.gameObject, true);
-
     void OnDrawGizmos()
     {
-        if (Ent.stats.debugTextEnable)
+        if (Entity.stats.debugTextEnable)
         {
             string msg = "";
 
@@ -138,6 +131,13 @@ public class PlayerCharacterMain : MonoBehaviour
                 + $"\n inflation state coold {timerInflated *60}";
                 // + $"\n";
                 break;
+
+                case 2:
+                msg = "SPEED SHIT"
+                + $"\njump inital spd {JumpSpd}"
+                + $"\njump ballon spd {InflatedJumpSpd}"
+                + $"\nflap spd {FlapSpd}";
+                break;
             }
 
             Handles.Label(debugDrawPos.position, msg);
@@ -151,37 +151,40 @@ public class PlayerCharacterMain : MonoBehaviour
     /// <summary> main pleyer </summary>
     void PlayerMove()
     {
-        bool _groundwas = Ent.isGrounded;
-        bool _ground = Ent.GetOnGround();
+        bool _groundwas = Entity.isGrounded;
+        bool _ground = Entity.GetOnGround();
 
         // LANDING
         if (_ground && !_groundwas)
         {
             isJumpHolding = false;
             _sfx.PlayAudioClip("land");
-            RefillInflations(MaxNumberInflations);
-            timerJumpCoyote = (0.017f *6);
+            if (!isInflatedState)
+                RefillInflations(MaxNumberInflations);
+            timerJumpCoyote = (0.017f *8);
 
             SetSpriteAnimState(sprIdleLand);
-            // TurnDirection(-moveAxis.x);
         }
         _groundwas = _ground;
 
         // SE MUEVE EN X PAPA 
         Vector2 _axis = timerStunMoveAxisX > 0 ? new Vector2(0, moveAxis.y) : moveAxis;
-        float _maxspd = isInflatedState ? MoveInflatedMaxSpd : MoveMaxSpd;
+        float _maxspd = isInflatedState ? 
+            (isGroundedSave ? InflatedMoveXvel : InflatedMoveAirXvel) : MoveXvel;
 
         // si el jugador presiona el mismo sentido de su velocidad,
         // se pasa de la velocidad maxima y esta en el aire: _l da true XD
         bool _axisspeed = moveAxis.x == Mathf.Sign(XVel);
         bool _l = _axisspeed && (Mathf.Abs(XVel) > _maxspd) && !isGroundedSave;
         
-        float _acc    = _ground ? MoveAcc : (_l ? 0 : (isInflatedState ? MoveInflatedAcc : MoveAirAcc));
-        float _fri    = _ground ? MoveFri : (isInflatedState ? MoveInflatedFri : MoveAirFri);
+        float _acc    = _ground ? MoveAcc : (_l ? 0 : (isInflatedState ? InflatedMoveAcc : MoveAirAcc));
+        float _fri    = _ground ? MoveFri : (isInflatedState ? InflatedMoveFri : MoveAirFri);
         
         if (_axis.x != 0)
         {
             XVel = Mathf.MoveTowards(XVel, _maxspd *_axis.x, _acc *60 *Time.deltaTime);
+            if (isGroundedSave)
+                TurnDirection(-_axis.x);
         }
         else
         {
@@ -189,21 +192,24 @@ public class PlayerCharacterMain : MonoBehaviour
         }
 
         // GRAVEDAD
-
-        var _finalgrav = isInflatedState ? GravInflatedSpd : stats.GravSpd;
+        var _finalgrav = isInflatedState ? 
+            (YVel > 0 ? InflatedGravSpd : InflatedGravFallSpd) : stats.GravSpd;
         var _finalmaxfall = isInflatedState ? 
-            (_isHoldingDown ? MaxInflatedHoldDownSpd : MaxInflatedSpd) : stats.MaxFallSpd;
+            InflatedRiseYvel : stats.MaxFallSpd;
 
         YVel = !_ground ? 
             Mathf.MoveTowards(YVel, -_finalmaxfall, _finalgrav *60 *Time.fixedDeltaTime) : YVel;
 
         // SALTO
-        Jump(_groundwas, _axis);
+        if (!(isInflatedState && timerJumpCoyote <= 0))
+            Jump(_groundwas);
+        else
+            FlapJump();
 
         // SOLTAR EL SALTO
-        if (isJumpHolding && !InputHandler.JumpIsHeld)
+        if (isJumpHolding && !InputHandler.JumpIsHeld && (timerJumpCoyote <= -JumpHoldMinTime))
         {
-            if (YVel > 0f)
+            if (YVel > 0f && !isInflatedState)
                 YVel = Mathf.Lerp(YVel, 0, JumpHoldMult);
             isJumpHolding = false;
         }
@@ -221,35 +227,35 @@ public class PlayerCharacterMain : MonoBehaviour
         _isHoldingDown = moveAxis.y == -1;
 
         if (InputHandler.JumpWasPressed) // JUMP INPUTED
-            timerJumpBuffer = 0.017f *7;
+            timerJumpInputBuffer = 0.017f *8;
         
-        // COSAS EXTRAS PA PROBAR
-        if (isGroundedSave && AnimStateTemp == 0)
-        {
-            if (moveAxis.x != 0 && AnimStateWalkingDir != moveAxis.x)
-            {
-                SetSpriteAnimState(sprWalkBegin);
-                TurnDirection(-moveAxis.x);
-            }
-            AnimStateWalkingDir = moveAxis.x;
-        }
+        // // COSAS EXTRAS PA PROBAR
+        // if (isGroundedSave && AnimStateTemp == 0)
+        // {
+        //     if (moveAxis.x != 0 && AnimStateWalkingDir != moveAxis.x)
+        //     {
+        //         SetSpriteAnimState(sprWalkBegin);
+        //         TurnDirection(-moveAxis.x);
+        //     }
+        //     AnimStateWalkingDir = moveAxis.x;
+        // }
         
     }
 
     /// <summary> salto(En el piso?, eje) </summary>
-    void Jump(bool groundWas, Vector2 Axis)
+    void Jump(bool groundWas)
     {
-        if (timerJumpBuffer > 0f && timerJumpCoyote > 0f)
+        if (timerJumpInputBuffer > 0f && timerJumpCoyote > 0f)
         {
-            float _jumpxaxis = Mathf.Abs(XVel) / MoveMaxSpd *1.2f;
+            // float _jumpxaxis = Mathf.Abs(XVel) / MoveXvel *1.2f;
 
-            YVel = JumpSpd;
-            XVel = _isHoldingDown ? JumpMoveSpdBoost *_jumpxaxis *Axis.x : XVel;
+            YVel = isInflatedState ? InflatedJumpSpd : JumpSpd;
+            // XVel = _isHoldingDown ? JumpMoveSpdBoost *_jumpxaxis *Axis.x : XVel;
             
             isJumpHolding = true;
 
-            timerJumpBuffer = -0.017f;
-            timerJumpCoyote = -0.017f;
+            timerJumpInputBuffer = 0.0f;
+            timerJumpCoyote = 0.0f;
             groundWas = false; // FORZAR EL ISGROUNDSAVE A FALSO
 
             ForceSpriteAnimStateEnd();
@@ -265,7 +271,36 @@ public class PlayerCharacterMain : MonoBehaviour
             return;
         
         _sprRender.flipX = _dir == 1;
-        Ent.Turn(_dir);
+        Entity.Turn(_dir);
+    }
+
+    #region DELAYS Y TIMERS!!!!! ############################################################
+    #endregion ############################################################
+
+    /// <summary> contadores </summary>
+    void DelayCounters()
+    {
+        // timerJumpInputBuffer = (timerJumpInputBuffer > 0f) ? 
+        timerJumpInputBuffer -= Time.deltaTime; //: timerJumpInputBuffer;
+        
+        timerJumpCoyote = isGroundedSave ? timerJumpCoyote : timerJumpCoyote -Time.deltaTime;
+        
+        timerInflated = isInflatedState ? 
+            timerInflated +Time.deltaTime : timerInflated;
+
+        bumpHeadBounceBuffer -= Time.deltaTime;
+        timerStunMoveAxisX -= Time.deltaTime;
+    }
+
+    #region MORIR!!!!!!!!!!!!
+    #endregion
+    /// <summary> al morirse (llama a scenehandler) </summary>
+    void PlayerDie()
+    {
+        _sfx.PlayAudioClip("hurt");
+        Destroy(gameObject);
+
+        GameObject.Find("SceneHandler").GetComponent<SceneHandler>().TriggerPlayerRespawn();
     }
 
     #region INFLARSE!!!!! ############################################################
@@ -275,23 +310,63 @@ public class PlayerCharacterMain : MonoBehaviour
     void Inflate()
     {
         // AL INFLARSE
+        InflateBegin();
+    
+        // CHOCARSE CON EL TECHO
+        if (isInflatedState && Entity.bumpHead && bumpHeadBounceBuffer < 0f)
+        {
+            bumpHeadBounceBuffer = 0.017f *4;
+            // XVel *= 0.3f;
+            YVel = InflatedHeadBumpSpd;
+
+            _sfx.PlayAudioClip("bounce");
+        }
+
+        // ALETEAR
+        // if (timerInflated >= 1.5f)
+        //     FlapJump();
+
+        // DEJAR IR EL AIRE
+        if (!InputHandler.AbilityIsHeld && isInflatedState)
+        {
+            isInflatedState = false;
+            timerInflated = 0f;
+
+            _sfx.PlayAudioClip("pop");
+            
+            if (moveAxis.x != 0)
+            {
+                // XVel = moveAxis.x *(MoveXvel *1.3f);
+                TurnDirection(-moveAxis.x);
+            }
+
+            if (isGroundedSave)
+            {
+                RefillInflations(MaxNumberInflations);
+            }
+        }
+    }
+
+    /// <summary> cuando el jugador presiona el boton de inflarse </summary>
+    void InflateBegin()
+    {
         if (InputHandler.AbilityIsHeld && !isInflatedState && inflationsLeft > 0)
         {
             isInflatedState = true;
-            // Ent.isGrounded = false;
+            // Entity.isGrounded = false;
             
             if (!isGroundedSave)
             {
                 // XVel *= 0.3f;
-                XVel = Mathf.Clamp(XVel, -MoveInflatedMaxSpd, MoveInflatedMaxSpd);
-                YVel = Mathf.Min(YVel, JumpSpd -5f);
+                XVel = Mathf.Clamp(XVel, -InflatedMoveXvel, InflatedMoveXvel);
+                YVel = Mathf.Clamp(YVel, -0.5f, 4f);
             }
             else
             {
                 // isGroundedSave = false;
-                // Ent.isGrounded = false;
-                YVel += 0.18f;
-                Ent.MoveToPos(transform.position + new Vector3(0, 0.3f));
+                // Entity.isGrounded = false;
+                // YVel += 0.18f;
+                // Entity.MoveToPos(transform.position + new Vector3(0, 0.3f));
             }
 
             if (moveAxis.x != 0)
@@ -302,33 +377,21 @@ public class PlayerCharacterMain : MonoBehaviour
 
             _sfx.PlayAudioClip("inflate");
             SetSpriteAnimState(sprBalloonSpawn);
-
         }
-    
-        // CHOCARSE CON EL TECHO
-        if (isInflatedState && Ent.bumpHead && bumpHeadBounceBuffer < 0f)
+    }
+
+    /// <summary> "salto" aleteo cuando esta inflado  </summary>
+    void FlapJump()
+    {
+        if (timerJumpInputBuffer > 0f)
         {
-            bumpHeadBounceBuffer = 0.017f *4;
+            YVel = (YVel <= 2f) ? FlapSpd *0.6f : FlapSpd;
+            XVel = Mathf.Clamp(XVel, -FlapSlowXvel, FlapSlowXvel);
+                        
+            timerJumpInputBuffer = -0.017f;
 
-            XVel *= 0.3f;
-            YVel = InflatedHeadBumpSpd;
-
-            _sfx.PlayAudioClip("bounce");
-        }
-
-        // DEJAR IR EL AIRE
-        if (!InputHandler.AbilityIsHeld && isInflatedState && (timerInflated > InflateStateSwapTimer))
-        {
-            isInflatedState = false;
-            timerInflated = 0f;
-
-            _sfx.PlayAudioClip("pop");
-            
-            if (moveAxis.x != 0)
-            {
-                // XVel = moveAxis.x *(MoveMaxSpd *1.3f);
-                TurnDirection(-moveAxis.x);
-            }
+            SetSpriteAnimState(sprFlap);
+            _sfx.PlayAudioClip("jump");
         }
     }
 
@@ -375,7 +438,7 @@ public class PlayerCharacterMain : MonoBehaviour
                         // NO DEBERIA SER ASI!!!!!!!!!!!!!!!!
                         // CAMBIAR A SIN(DIR) & COS(DIR) FLOJO!!!
                         case 0:
-                            Ent.MoveToPos(new Vector3(
+                            Entity.MoveToPos(new Vector3(
                                 Mathf.Lerp(transform.position.x, _object.transform.position.x, 0.7f), 
                                 _object.transform.position.y +0.8f));
                             YVel = JumpSpd * 1.65f;
@@ -384,9 +447,9 @@ public class PlayerCharacterMain : MonoBehaviour
                         break;
 
                         case 1: case 3:
-                            Ent.MoveToPos(new Vector3(_object.transform.position.x +(_springLookRight ? 0.5f : -0.5f)
+                            Entity.MoveToPos(new Vector3(_object.transform.position.x +(_springLookRight ? 0.5f : -0.5f)
                                 , Mathf.Lerp(transform.position.y, _object.transform.position.y +0.5f, 0.5f)));
-                            XVel = (MoveMaxSpd + 3.6f) * (_springLookRight ? 1 : -1) * 1.7f;
+                            XVel = (MoveXvel + 3.6f) * (_springLookRight ? 1 : -1) * 1.7f;
                             YVel = JumpSpd;
                             timerStunMoveAxisX = (0.017f *8);
                         break;
@@ -403,7 +466,7 @@ public class PlayerCharacterMain : MonoBehaviour
         {
             if (_object.TryGetComponent<IEntityItem>(out var item))
             {
-                item.Collect(Ent);
+                item.Collect(Entity);
                 switch(item.GetEntityName())
                 {
                     default: break;
@@ -448,151 +511,107 @@ public class PlayerCharacterMain : MonoBehaviour
     }
 
     #region SPRITES!! ############################################################
-    // SPRITES!!!!!!!!!!!    (ANIMATION STATES)
+        // SPRITES!!!!!!!!!!!    (ANIMATION STATES)
 
-    private static readonly int sprBalloonSpawn = Animator.StringToHash("ANIM_PJ_BALLOON_SPAWN");
-    
-    private static readonly int sprDie = Animator.StringToHash("ANIM_PJ_DIE");
-
-    private static readonly int sprDuck         = Animator.StringToHash("ANIM_PJ_DUCK");
-    private static readonly int sprDuckBegin    = Animator.StringToHash("ANIM_PJ_DUCK_BEGIN");
-    private static readonly int sprDuckCrawl    = Animator.StringToHash("ANIM_PJ_DUCK_CRAWL");
-    private static readonly int sprDuckEnd      = Animator.StringToHash("ANIM_PJ_DUCK_END");
-    private static readonly int sprDuckFall     = Animator.StringToHash("ANIM_PJ_DUCK_FALL");
-
-    private static readonly int sprFall         = Animator.StringToHash("ANIM_PJ_FALL");
-    private static readonly int sprFlap         = Animator.StringToHash("ANIM_PJ_FLAP");
-
-    private static readonly int sprIdle         = Animator.StringToHash("ANIM_PJ_IDLE");
-    private static readonly int sprIdleLand     = Animator.StringToHash("ANIM_PJ_IDLE_LAND");
-    private static readonly int sprIdleWin      = Animator.StringToHash("ANIM_PJ_IDLE_WIN");
-
-    private static readonly int sprLongJump     = Animator.StringToHash("ANIM_PJ_LONGJUMP");
-    private static readonly int sprLongJumpAntic = Animator.StringToHash("ANIM_PJ_LONGJUMP_ANTIC");
-    private static readonly int sprLongJumpTemp = Animator.StringToHash("ANIM_PJ_LONGJUMP_TEMP");
-
-    private static readonly int sprStun         = Animator.StringToHash("ANIM_PJ_STUN");
-    private static readonly int sprWalk         = Animator.StringToHash("ANIM_PJ_WALK");
-    private static readonly int sprWalkBegin    = Animator.StringToHash("ANIM_PJ_WALK_BEGIN");
-
-    int _currentSprite;
-    // float _lockedUntil;
-
-    bool _AnimStateTempBypassReset;
-
-    // AnimStateTemp!!!!!!!!!!!
-    // AnimStateTemp PUEDE SER UN HASH DE ANIMACION, O 0.
-    // SI ES 0., NO HAY NINGUNA ANIMACION TEMPORAL REPRODUCIENDOSE
-
-    /// <summary> CAmbiar estados del anim <br/> iiiiiiiiiiii mira como spriteo </summary>
-    void HandleSprites()
-    {
-        // // SI ANIMACION TEMPORAL TERMINO, REINICIA FRAME
-        if (AnimStateTemp != 0 && IsAnimationEnding() && !_AnimStateTempBypassReset)
-            AnimStateTemp = 0;
-
-        // ACTUALIZAR ANIMACION SEGUN SPRANIM O NO
-        int sprite = GetSpriteState(_currentSprite);
+        private static readonly int sprBalloonSpawn = Animator.StringToHash("ANIM_PJ_BALLOON_SPAWN");
         
-        // REPRODUCIR ANIMACION SI NO SE ESTA REPRODUCIOENDO
-        if (sprite != _currentSprite)
+        private static readonly int sprDie = Animator.StringToHash("ANIM_PJ_DIE");
+
+        private static readonly int sprDuck         = Animator.StringToHash("ANIM_PJ_DUCK");
+        private static readonly int sprDuckBegin    = Animator.StringToHash("ANIM_PJ_DUCK_BEGIN");
+        private static readonly int sprDuckCrawl    = Animator.StringToHash("ANIM_PJ_DUCK_CRAWL");
+        private static readonly int sprDuckEnd      = Animator.StringToHash("ANIM_PJ_DUCK_END");
+        private static readonly int sprDuckFall     = Animator.StringToHash("ANIM_PJ_DUCK_FALL");
+
+        private static readonly int sprFall         = Animator.StringToHash("ANIM_PJ_FALL");
+        private static readonly int sprFlap         = Animator.StringToHash("ANIM_PJ_FLAP");
+
+        private static readonly int sprIdle         = Animator.StringToHash("ANIM_PJ_IDLE");
+        private static readonly int sprIdleLand     = Animator.StringToHash("ANIM_PJ_IDLE_LAND");
+        private static readonly int sprIdleWin      = Animator.StringToHash("ANIM_PJ_IDLE_WIN");
+
+        private static readonly int sprLongJump     = Animator.StringToHash("ANIM_PJ_LONGJUMP");
+        private static readonly int sprLongJumpAntic = Animator.StringToHash("ANIM_PJ_LONGJUMP_ANTIC");
+        private static readonly int sprLongJumpTemp = Animator.StringToHash("ANIM_PJ_LONGJUMP_TEMP");
+
+        private static readonly int sprStun         = Animator.StringToHash("ANIM_PJ_STUN");
+        private static readonly int sprWalk         = Animator.StringToHash("ANIM_PJ_WALK");
+        private static readonly int sprWalkBegin    = Animator.StringToHash("ANIM_PJ_WALK_BEGIN");
+
+        int _currentSprite;
+        int AnimStateTemp;
+        // float _lockedUntil;
+        bool _AnimStateTempBypassReset;
+        
+        // AnimStateTemp PUEDE SER UN HASH DE ANIMACION, O 0.
+        // SI ES 0., NO HAY NINGUNA ANIMACION TEMPORAL REPRODUCIENDOSE
+
+        /// <summary> CAmbiar estados del anim <br/> iiiiiiiiiiii mira como spriteo </summary>
+        void HandleSprites()
         {
-            _anim.CrossFade(sprite, 0.0f, -1);
-            _currentSprite = sprite;
-        }
+            // // SI ANIMACION TEMPORAL TERMINO, REINICIA FRAME
+            if (AnimStateTemp != 0 && IsAnimationEnding() && !_AnimStateTempBypassReset)
+                AnimStateTemp = 0;
 
-        _AnimStateTempBypassReset = false;
-    }
-
-    /// <summary> Revisar si la animacion esta terminando </summary>
-    bool IsAnimationEnding()
-    {
-        AnimatorStateInfo _sprInfo = _anim.GetCurrentAnimatorStateInfo(0);
-        return _sprInfo.normalizedTime > 1.0f;
-    }
-
-    /// <summary> estados de animacion segun sus ids </summary>
-    int GetSpriteState(int CurrentSprite)
-    {
-        // if (Time.time < _lockedUntil)
-        //     return _currentSprite; // bloquea los q usen el lockstate
-
-        bool _walk = moveAxis.x != 0;
-
-        if (AnimStateTemp == 0)
-        {
-            if (isGroundedSave)
+            // ACTUALIZAR ANIMACION SEGUN SPRANIM O NO
+            int sprite = GetSpriteState(_currentSprite);
+            
+            // REPRODUCIR ANIMACION SI NO SE ESTA REPRODUCIOENDO
+            if (sprite != _currentSprite)
             {
-                if (_walk) 
-                    return sprWalk;
-                return sprIdle;
+                _anim.CrossFade(sprite, 0.0f, -1);
+                _currentSprite = sprite;
             }
-            return sprFall;   
+
+            _AnimStateTempBypassReset = false;
         }
-        else
+
+        /// <summary> Revisar si la animacion esta terminando </summary>
+        bool IsAnimationEnding()
         {
-            return AnimStateTemp;
+            AnimatorStateInfo _sprInfo = _anim.GetCurrentAnimatorStateInfo(0);
+            return _sprInfo.normalizedTime > 1.0f;
         }
 
-        // int Lockstate(int s, float t)
-        // {
-        //     // Es lo mismoque un crossfade pero
-        //     // lo bloquea por un tiempo
-        //     _lockedUntil = Time.time +t;
-        //     // PODRIA SER UN TIMER MEJOR HMMMM
-        //     // O DETECTAR CUANDO SE ACABE EL SPRITE
-        //     // ESTO ES TEMPORAL MANITO
-        //     return s;
-        // }
-    }
+        /// <summary> estados de animacion segun sus ids </summary>
+        int GetSpriteState(int CurrentSprite)
+        {
+            bool _walk = moveAxis.x != 0;
 
-    /// <summary> Activar animacion temporal con X animacion </summary>
-    void SetSpriteAnimState(int stateName)
-    {
-        AnimStateTemp = stateName;
-        _AnimStateTempBypassReset = true;
+            if (AnimStateTemp == 0)
+            {
+                if (isGroundedSave)
+                {
+                    if (_walk) 
+                        return sprWalk;
+                    return sprIdle;
+                }
+                return sprFall;   
+            }
+            else
+                return AnimStateTemp;
+        }
 
-        _anim.CrossFade(AnimStateTemp, 0.0f, -1);
-        _currentSprite = AnimStateTemp;
-    }
+        /// <summary> Activar animacion temporal con X animacion </summary>
+        void SetSpriteAnimState(int stateName)
+        {
+            AnimStateTemp = stateName;
+            _AnimStateTempBypassReset = true;
 
-    /// <summary> Desactivar animacion actual si hay </summary>
-    void ForceSpriteAnimStateEnd()
-    {
-        AnimStateTemp = 0;
-        _AnimStateTempBypassReset = false;
-    }
+            // _anim.CrossFade(AnimStateTemp, 0.0f, -1);
+            _anim.Play(AnimStateTemp, -1, 0.0f);
+            _currentSprite = AnimStateTemp;
+            _anim.Update(0.0f);
+        }
+
+        /// <summary> Desactivar animacion actual si hay </summary>
+        void ForceSpriteAnimStateEnd()
+        {
+            AnimStateTemp = 0;
+            _AnimStateTempBypassReset = false;
+        }
 
     #endregion 
-
-    #region DELAYS Y TIMERS!!!!! ############################################################
-    #endregion ############################################################
-
-    /// <summary> contadores </summary>
-    void DelayCounters()
-    {
-        // timerJumpBuffer = (timerJumpBuffer > 0f) ? 
-        timerJumpBuffer -= Time.deltaTime; //: timerJumpBuffer;
-        
-        timerJumpCoyote = isGroundedSave ? timerJumpCoyote : timerJumpCoyote -Time.deltaTime;
-        
-        timerInflated = isInflatedState ? 
-            timerInflated +Time.deltaTime : timerInflated;
-
-        bumpHeadBounceBuffer -= Time.deltaTime;
-        timerStunMoveAxisX -= Time.deltaTime;
-    }
-
-    #region MORIR!!!!!!!!!!!!
-    #endregion
-    /// <summary> al morirse (llama a scenehandler) </summary>
-    void PlayerDie()
-    {
-        _sfx.PlayAudioClip("hurt");
-        Destroy(gameObject);
-
-        GameObject.Find("SceneHandler").GetComponent<SceneHandler>().TriggerPlayerRespawn();
-    }
 
     #endregion ####################################
 }

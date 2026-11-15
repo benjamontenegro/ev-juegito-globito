@@ -7,9 +7,9 @@ public class PlatformerStats : ScriptableObject
     // 8px -> 0.5f; 1px -> 0.0625f;
 
     [Header("Velocidades")]
-    public float MaxFallSpd = 3f;
+    public float MaxFallSpd = 24f;
     [Tooltip("Gravedad para que sea comun")]
-    public float GravSpd = 0.0156f; // 0.015625 (1px *0.25)
+    public float GravSpd = 0.7f; // 0.015625 (1px *0.25)
 
     [Header("Colisiones uwu")]
     public LayerMask AllWallFlags;
