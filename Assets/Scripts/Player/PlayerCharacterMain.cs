@@ -142,6 +142,11 @@ public class PlayerCharacterMain : MonoBehaviour
 
             Handles.Label(debugDrawPos.position, msg);
         }
+
+        if (isInflatedState)
+        {
+            Gizmos.DrawSphere(transform.position +(Vector3.up *1.2f), 0.7f);
+        }
     }
     
     #endregion ####################################
@@ -309,8 +314,18 @@ public class PlayerCharacterMain : MonoBehaviour
     /// <summary> comportamiento sobre inflacion... </summary>
     void Inflate()
     {
+        // DEJAR IR EL AIRE
+        if (isInflatedState)
+        {
+            Deflate();
+        }
+        else
+        {
+            InflateBegin();
+        }
+
         // AL INFLARSE
-        InflateBegin();
+        
     
         // CHOCARSE CON EL TECHO
         if (isInflatedState && Entity.bumpHead && bumpHeadBounceBuffer < 0f)
@@ -325,32 +340,12 @@ public class PlayerCharacterMain : MonoBehaviour
         // ALETEAR
         // if (timerInflated >= 1.5f)
         //     FlapJump();
-
-        // DEJAR IR EL AIRE
-        if (!InputHandler.AbilityIsHeld && isInflatedState)
-        {
-            isInflatedState = false;
-            timerInflated = 0f;
-
-            _sfx.PlayAudioClip("pop");
-            
-            if (moveAxis.x != 0)
-            {
-                // XVel = moveAxis.x *(MoveXvel *1.3f);
-                TurnDirection(-moveAxis.x);
-            }
-
-            if (isGroundedSave)
-            {
-                RefillInflations(MaxNumberInflations);
-            }
-        }
     }
 
     /// <summary> cuando el jugador presiona el boton de inflarse </summary>
     void InflateBegin()
     {
-        if (InputHandler.AbilityIsHeld && !isInflatedState && inflationsLeft > 0)
+        if (InputHandler.AbilityWasPressed && inflationsLeft > 0)
         {
             isInflatedState = true;
             // Entity.isGrounded = false;
@@ -359,14 +354,7 @@ public class PlayerCharacterMain : MonoBehaviour
             {
                 // XVel *= 0.3f;
                 XVel = Mathf.Clamp(XVel, -InflatedMoveXvel, InflatedMoveXvel);
-                YVel = Mathf.Clamp(YVel, -0.5f, 4f);
-            }
-            else
-            {
-                // isGroundedSave = false;
-                // Entity.isGrounded = false;
-                // YVel += 0.18f;
-                // Entity.MoveToPos(transform.position + new Vector3(0, 0.3f));
+                YVel = Mathf.Clamp(YVel, -InflatedRiseYvel, 3.7f);
             }
 
             if (moveAxis.x != 0)
@@ -380,15 +368,34 @@ public class PlayerCharacterMain : MonoBehaviour
         }
     }
 
+    void Deflate()
+    {
+        if (InputHandler.AbilityWasPressed)
+        {
+            isInflatedState = false;
+            timerInflated = 0f;
+
+            _sfx.PlayAudioClip("pop");
+            
+            if (moveAxis.x != 0)
+                TurnDirection(-moveAxis.x);
+
+            if (isGroundedSave)
+                RefillInflations(MaxNumberInflations);
+        }
+    }
+
     /// <summary> "salto" aleteo cuando esta inflado  </summary>
     void FlapJump()
     {
         if (timerJumpInputBuffer > 0f)
         {
-            YVel = (YVel <= 2f) ? FlapSpd *0.6f : FlapSpd;
+            YVel = (YVel <= 1f) ? FlapSpd *0.4f : FlapSpd;
             XVel = Mathf.Clamp(XVel, -FlapSlowXvel, FlapSlowXvel);
                         
             timerJumpInputBuffer = -0.017f;
+            if (moveAxis.x != 0)
+                TurnDirection(-moveAxis.x);
 
             SetSpriteAnimState(sprFlap);
             _sfx.PlayAudioClip("jump");

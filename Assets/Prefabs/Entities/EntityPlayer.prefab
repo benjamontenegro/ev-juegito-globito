@@ -176,7 +176,7 @@ MonoBehaviour:
   JumpSpd: 13.5
   InflatedGravSpd: 0.2
   InflatedGravFallSpd: 0.05
-  InflatedRiseYvel: 2.5
+  InflatedRiseYvel: 4
   InflatedJumpSpd: 7.2
   InflatedMoveAirXvel: 4
   InflatedMoveAcc: 0.35
