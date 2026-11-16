@@ -143,10 +143,10 @@ public class PlayerCharacterMain : MonoBehaviour
             Handles.Label(debugDrawPos.position, msg);
         }
 
-        if (isInflatedState)
-        {
-            Gizmos.DrawSphere(transform.position +(Vector3.up *1.2f), 0.7f);
-        }
+        // if (isInflatedState)
+        // {
+        //     Gizmos.DrawSphere(transform.position +(Vector3.up *1.2f), 0.7f);
+        // }
     }
     
     #endregion ####################################
@@ -310,6 +310,11 @@ public class PlayerCharacterMain : MonoBehaviour
 
     #region INFLARSE!!!!! ############################################################
     #endregion ############################################################
+
+    public bool IsInflated()
+    {
+        return isInflatedState;
+    }
 
     /// <summary> comportamiento sobre inflacion... </summary>
     void Inflate()

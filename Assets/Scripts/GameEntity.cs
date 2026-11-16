@@ -12,6 +12,7 @@ public enum EntityType
     ITEM
 }
 
+/// <summary> Mono en el nivel </summary>
 [RequireComponent(typeof(Rigidbody2D))]
 // [RequireComponent(typeof(Collider2D))]
 public class GameEntity : MonoBehaviour
