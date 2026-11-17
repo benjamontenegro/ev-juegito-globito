@@ -126,7 +126,10 @@ public class GameEntity : MonoBehaviour
             lookDir = true;
         }
     }
-    
+
+    /// <summary> returns 1 if Looking right or -1 otherwise </summary>
+    public float GetLookDir() => lookDir ? 1 : -1;
+
     /// <summary> moveVel -> RigidBody2D.linearVelocity </summary>
     public void MoveApplyVelocity()
     {

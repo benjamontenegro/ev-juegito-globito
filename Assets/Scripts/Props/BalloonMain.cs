@@ -4,23 +4,25 @@ using UnityEngine;
 
 public class BalloonMain : MonoBehaviour
 {
+    #region REFS ############################################################
     [SerializeField] GameEntity Entity;
     float Xvel { get => Entity.moveVel.x; set => Entity.moveVel.x = value; }
     float Yvel { get => Entity.moveVel.y; set => Entity.moveVel.y = value; }
+    AudioManager _sfx;
 
     [Header("Fisicas de resorte")]
     [SerializeField] float MoveSpringFactor = 2.1f;
-    [SerializeField] float XvelSpringFactorMult = 0.5f;
+    float XvelSpringFactorMult = 0.5f;
     [SerializeField] float MoveSpringDampening = 0.2f;
-    [SerializeField] float XvelSpringDampMult = 0.5f;
+    float XvelSpringDampMult = 0.5f;
     [SerializeField] Transform posTarget;
 
     [Header("Ajuste horizontal")]
-    [SerializeField] bool doPosVerticalAdjust = true;
+    bool doPosVerticalAdjust = true;
     [SerializeField] float posVerticalAdjustXMargin = 2f;
     [SerializeField] float posVerticalAdjustXMult = 0.3f;
     [SerializeField] float posVerticalAdjustXHeight = 1f;
-    [SerializeField] float posVerticalAdjustAngle = 135f;
+    float posVerticalAdjustAngle = 135f;
     float posVerticalAdjust;
     [SerializeField] float posHorizontalOffset = 0f;
 
@@ -32,13 +34,24 @@ public class BalloonMain : MonoBehaviour
     float _sprVerticalAdjustAngle;
     Vector2 _sprScale;
     float sprAngleOffset = 90f;
+
+    bool sprSpawnSequence = true;
+    float BalloonTime = 0.0f;
+    float sprSpawnSequenceTimeEnd = 0.017f *9;
     
     [SerializeField] LineRenderer balloonLine;
+
+    #endregion ############################################################
+
+    void Awake()
+    {
+        _sfx = GameObject.FindWithTag("GameHandler").GetComponentInChildren<AudioManager>();
+    }
 
     void FixedUpdate()
     {
         // Entity.PreCollisions();
-        MovimientoResorte();
+        MoveBalloon();
         Entity.MoveApplyVelocity();
         // Entity.GetCollisionChecks(); // ACTUALIZAR CHECKEO COLISIONES
         // Entity.PostCollisions(); // STOP SPEEDS BASED ON DETECTED COLLISIONS
@@ -47,22 +60,25 @@ public class BalloonMain : MonoBehaviour
     void Update()
     {
         HandleSprites();
+        HandleBalloonSequence();
     }
 
     #region METODOS ############################################################
     #endregion
 
-    void MovimientoResorte()
+    void MoveBalloon()
     {
         Vector3 MovePosTarget = posTarget.position + new Vector3(0, posVerticalAdjust);
         Vector2 _diff = transform.position - MovePosTarget;
         
         if (doPosVerticalAdjust)
         {
+            float tempAdjustHeight = !sprSpawnSequence ? posVerticalAdjustXHeight : -0.3f;
+            
             bool _yDisplace = Mathf.Abs(_diff.x) <= posVerticalAdjustXMargin;
             posVerticalAdjust = _yDisplace ? Mathf.Cos(
                 (_diff.x -posHorizontalOffset) *posVerticalAdjustAngle *
-                Mathf.Deg2Rad *posVerticalAdjustXMult) * posVerticalAdjustXHeight : 0;
+                Mathf.Deg2Rad *posVerticalAdjustXMult) * tempAdjustHeight : 0;
         }
         
         // Vector2 _moveDir = new( -Mathf.Sign(_diff.x), -Mathf.Sign(_diff.y));
@@ -75,35 +91,20 @@ public class BalloonMain : MonoBehaviour
         Yvel += _Yacc;
     }
 
-    void OnDrawGizmos()
+    /// <summary> cambiar el transform objetivo del globo </summary>
+    public void SetPosTarget(Transform newTarget)
     {
-        // Vector3 MovePosTarget = posTarget.position + new Vector3(0, posVerticalAdjust);
-        // Vector2 _diff = transform.position - MovePosTarget;
-
-        // Vector2 _moveDir = new( -Mathf.Sign(_diff.x), -Mathf.Sign(_diff.y));
-        // Gizmos.DrawSphere(new Vector3(MovePosTarget.x, MovePosTarget.y, 0), 0.1f);
-        // Gizmos.DrawLine(MovePosTarget, MovePosTarget + new Vector3(0, posVerticalAdjust));
-        // Gizmos.DrawLine(MovePosTarget + new Vector3(0, posVerticalAdjust)
-        // , MovePosTarget + new Vector3(posVerticalAdjustXMargin, posVerticalAdjust));
-
-        float _angleToPos = GetAngleToPosition(transform.position, posTarget.position);
-        float _angleAdjusted = Mathf.Round(_angleToPos /22.5f) *22.5f;
-
-        Gizmos.DrawRay(transform.position, new Vector3(Xvel /4, Yvel /4));
-        Gizmos.DrawRay(transform.position, 
-            new Vector3(Mathf.Cos(_angleToPos *Mathf.Deg2Rad),
-             Mathf.Sin(_angleToPos *Mathf.Deg2Rad)));
-
-        Gizmos.color = Color.blue;
-        Gizmos.DrawRay(transform.position, 
-            new Vector3(Mathf.Cos(_angleAdjusted *Mathf.Deg2Rad),
-             Mathf.Sin(_angleAdjusted *Mathf.Deg2Rad)));
-            
-        // Gizmos.color = Color.blue;
-        // DrawArrowRay(transform.position +new Vector3(0, 0), new Vector3(0, _moveDir.y));
-        // DrawArrowRay(transform.position +new Vector3(0, 0), new Vector3(_moveDir.x, 0));
+        posTarget = newTarget;
     }
 
+    /// <summary> darle un empujon al globo </summary>
+    public void MoveForce(Vector2 Force)
+    {
+        Xvel = Force.x;
+        Yvel = Force.y;
+    }
+
+    /// <summary> sprites globo y spritetransforms globo </summary>
     void HandleSprites()
     {
         // ANGULO DEL SPRITE
@@ -115,18 +116,49 @@ public class BalloonMain : MonoBehaviour
         _spriteTransform.Rotate(0f, 0f, _sprVerticalAdjustAngle - (_currentSprEuler - sprAngleOffset));
 
         // ESCALA DEL SPRITE
-        
 
-        // _spriteTransform.localScale = _sprScale;
+        if (!sprSpawnSequence) 
+            _sprScale = Vector2.Lerp(_sprScale, Vector2.one, 0.25f);
+        
+        _spriteTransform.localScale = _sprScale;
 
         // LINEA/CUERDA
+
         float _lineanglerad = _sprVerticalAdjustAngle *Mathf.Deg2Rad ;
         Vector3 _linepos = transform.position + new Vector3(
-            Mathf.Cos(_lineanglerad) *0.6f, Mathf.Sin(_lineanglerad) *0.6f, transform.position.z +1);
+            Mathf.Cos(_lineanglerad) *0.6f, Mathf.Sin(_lineanglerad) *0.6f, transform.position.z +2);
 
         balloonLine.SetPosition(0, _linepos);
         balloonLine.SetPosition(1, new Vector3(
-            posTarget.position.x, posTarget.position.y, posTarget.position.z +1));
+            posTarget.position.x, posTarget.position.y, posTarget.position.z +2));
+    }
+
+    void HandleBalloonSequence()
+    {
+        if (BalloonTime < sprSpawnSequenceTimeEnd)
+        {
+            if (BalloonTime == 0)
+            {
+                _sprScale = new Vector2(0.3f, 0.15f);
+                _spriteTransform.transform.position = 
+                    _spriteTransform.transform.position + new Vector3(0, 0, -8f);
+            }
+            _sprScale = Vector2.Lerp(_sprScale, Vector2.one, 0.1f);
+        }
+        else
+        {
+            if (sprSpawnSequence)
+            {
+                sprSpawnSequence = false;
+                _sprScale = new Vector2(2f, 2f);
+                _spriteTransform.transform.position = 
+                    new Vector3(
+                    _spriteTransform.transform.position.x, 
+                    _spriteTransform.transform.position.y, 0f);
+            }
+        }
+
+        BalloonTime += Time.deltaTime;
     }
 
     /// <summary> literally. <br/> (in degrees) </summary>
@@ -134,6 +166,13 @@ public class BalloonMain : MonoBehaviour
     {
         Vector2 direction = end - start;
         return Mathf.Atan2(direction.y, direction.x) *Mathf.Rad2Deg;
+    }
+
+    /// <summary> reventar </summary>
+    public void Die()
+    {
+        _sfx.PlayAudioClip("pop");
+        Destroy(gameObject);
     }
 
     // void DrawArrowRay(Vector3 origin, Vector3 direction)

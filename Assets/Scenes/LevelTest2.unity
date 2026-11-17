@@ -132,14 +132,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 129992623513050637, guid: ba44679a26766f44fb2f20aa2e5253ba, type: 3}
-      propertyPath: camFollowSpd
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 129992623513050637, guid: ba44679a26766f44fb2f20aa2e5253ba, type: 3}
-      propertyPath: camDebugToggle
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 4297195964785798032, guid: ba44679a26766f44fb2f20aa2e5253ba, type: 3}
       propertyPath: m_LocalPosition.x
       value: -1
@@ -170,7 +162,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8666433006362150762, guid: ba44679a26766f44fb2f20aa2e5253ba, type: 3}
       propertyPath: m_NormalizedViewPortRect.x
-      value: 0.055408973
+      value: 0.054172765
       objectReference: {fileID: 0}
     - target: {fileID: 8666433006362150762, guid: ba44679a26766f44fb2f20aa2e5253ba, type: 3}
       propertyPath: m_NormalizedViewPortRect.y
@@ -178,7 +170,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8666433006362150762, guid: ba44679a26766f44fb2f20aa2e5253ba, type: 3}
       propertyPath: m_NormalizedViewPortRect.width
-      value: 0.8880277
+      value: 0.8922035
       objectReference: {fileID: 0}
     - target: {fileID: 8666433006362150762, guid: ba44679a26766f44fb2f20aa2e5253ba, type: 3}
       propertyPath: m_NormalizedViewPortRect.height
@@ -218,40 +210,28 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1016971639}
     - target: {fileID: 2455822675337466315, guid: 9f739c2bf1e25e842aae09a40db0b655, type: 3}
-      propertyPath: FlapSpd
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 2455822675337466315, guid: 9f739c2bf1e25e842aae09a40db0b655, type: 3}
-      propertyPath: FlapSlowXvel
-      value: 4
-      objectReference: {fileID: 0}
+      propertyPath: prefBalloon
+      value: 
+      objectReference: {fileID: 7987478387943325563, guid: b0d1ee5556979e944b63629d265fecb9, type: 3}
     - target: {fileID: 2455822675337466315, guid: 9f739c2bf1e25e842aae09a40db0b655, type: 3}
       propertyPath: debugDrawPos
       value: 
       objectReference: {fileID: 1974406560}
     - target: {fileID: 2455822675337466315, guid: 9f739c2bf1e25e842aae09a40db0b655, type: 3}
       propertyPath: InflatedGravSpd
-      value: 0.2
+      value: 0.23
       objectReference: {fileID: 0}
     - target: {fileID: 2455822675337466315, guid: 9f739c2bf1e25e842aae09a40db0b655, type: 3}
       propertyPath: InflatedJumpSpd
-      value: 7.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 2455822675337466315, guid: 9f739c2bf1e25e842aae09a40db0b655, type: 3}
-      propertyPath: InflatedMoveAcc
-      value: 0.4
-      objectReference: {fileID: 0}
-    - target: {fileID: 2455822675337466315, guid: 9f739c2bf1e25e842aae09a40db0b655, type: 3}
-      propertyPath: InflatedMoveFri
-      value: 0.02
+      value: 7.7
       objectReference: {fileID: 0}
     - target: {fileID: 2455822675337466315, guid: 9f739c2bf1e25e842aae09a40db0b655, type: 3}
       propertyPath: JumpHoldMinTime
       value: 0.03
       objectReference: {fileID: 0}
     - target: {fileID: 2455822675337466315, guid: 9f739c2bf1e25e842aae09a40db0b655, type: 3}
-      propertyPath: InflatedRiseYvel
-      value: 4
+      propertyPath: InflatedFallYvel
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2455822675337466315, guid: 9f739c2bf1e25e842aae09a40db0b655, type: 3}
       propertyPath: JumpRegMaxHeight
@@ -259,7 +239,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2455822675337466315, guid: 9f739c2bf1e25e842aae09a40db0b655, type: 3}
       propertyPath: InflatedGravFallSpd
-      value: 0.06
+      value: 0.04
+      objectReference: {fileID: 0}
+    - target: {fileID: 2455822675337466315, guid: 9f739c2bf1e25e842aae09a40db0b655, type: 3}
+      propertyPath: InflatedFallFastYvel
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 3348701488803228802, guid: 9f739c2bf1e25e842aae09a40db0b655, type: 3}
       propertyPath: entityType
@@ -295,120 +279,8 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7338363739254380917, guid: 9f739c2bf1e25e842aae09a40db0b655, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1974406560}
-    - targetCorrespondingSourceObject: {fileID: 7338363739254380917, guid: 9f739c2bf1e25e842aae09a40db0b655, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1508545257}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9f739c2bf1e25e842aae09a40db0b655, type: 3}
---- !u!1 &1508545256
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1508545257}
-  - component: {fileID: 1508545258}
-  - component: {fileID: 1508545259}
-  m_Layer: 0
-  m_Name: Balloon WIP
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1508545257
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1508545256}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 5}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 402396265}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &1508545258
-SpriteRenderer:
-  serializedVersion: 2
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1508545256}
-  m_Enabled: 1
-  m_CastShadows: 0
-  m_ReceiveShadows: 0
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 0
-  m_RayTraceProcedural: 0
-  m_RayTracingAccelStructBuildFlagsOverride: 0
-  m_RayTracingAccelStructBuildFlags: 1
-  m_SmallMeshCulling: 1
-  m_ForceMeshLod: -1
-  m_MeshLodSelectionBias: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 0
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_MaskInteraction: 0
-  m_Sprite: {fileID: 5191946685422848789, guid: 84df4e07e6743ce43bbce1a73a0dcf04, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
-  m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 1.375, y: 1.5}
-  m_AdaptiveModeThreshold: 0.5
-  m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
-  m_SpriteSortPoint: 0
---- !u!114 &1508545259
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1508545256}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c4b89b850611b954ca307fdaa1e91966, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BalloonController
-  Entity: {fileID: 0}
-  Stats: {fileID: 11400000, guid: c008387af2301b548ab82f2813882786, type: 2}
-  MoveAcc: 0.1
-  MoveMaxVel: 1.2
-  BalloonTarget: {fileID: 402396265}
 --- !u!1001 &1894237683
 PrefabInstance:
   m_ObjectHideFlags: 0

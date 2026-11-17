@@ -1,7 +1,10 @@
 using UnityEngine;
+using Unity.Mathematics;
+
 // using LombaxGuy.STG;
 
 // using UnityEngine.Rendering.Universal;
+
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -25,16 +28,12 @@ public class PlayerCharacterMain : MonoBehaviour
         /// <summary> (Entity.moveVel.y) </summary>
         float YVel { get => Entity.moveVel.y; set => Entity.moveVel.y = value; }
 
-        [Header("Variables/Campos")]
-
+        [Header("Movimiento (Regular)")]
         float MoveXvel = 7f;
         float MoveAcc = 2.6f;
         float MoveFri = 4f;
         float MoveAirAcc = 1.3f;
         float MoveAirFri = 0.2f;
-
-        float AnimStateWalkingDir;
-
         [SerializeField] float JumpSpd = 13.5f; // CALCULATE THIS
         bool isJumpHolding;
         float JumpHoldMinTime = 0.025f;
@@ -42,14 +41,16 @@ public class PlayerCharacterMain : MonoBehaviour
         float JumpEnemyStoolSpd = 10f;
 
         // MOVEMENT VARIABLES ############################################################
+        [Header("Movimiento (Inflado)")]
         [SerializeField] float InflatedGravSpd = 0.2f;
-        [SerializeField] float InflatedGravFallSpd = 0.05f;
-        [SerializeField] float InflatedRiseYvel = 2.5f;
-        [SerializeField] float InflatedJumpSpd = 3f;
+        [SerializeField] float InflatedGravFallSpd = 0.06f;
+        [SerializeField] float InflatedFallYvel = 3.2f;
+        [SerializeField] float InflatedFallFastYvel = 6.4f;
+        [SerializeField] float InflatedJumpSpd = 7.2f;
         float InflatedMoveXvel = 7f;
         [SerializeField] float InflatedMoveAirXvel = 4f;
-        [SerializeField] float InflatedMoveAcc = 0.35f;
-        [SerializeField] float InflatedMoveFri = 0.03f;
+        [SerializeField] float InflatedMoveAcc = 0.4f;
+        [SerializeField] float InflatedMoveFri = 0.02f;
         float InflatedHeadBumpSpd = -5f;
         int MaxNumberInflations = 1;
 
@@ -57,8 +58,11 @@ public class PlayerCharacterMain : MonoBehaviour
         int inflationsLeft;
         float timerInflated;
         float bumpHeadBounceBuffer = -4f;
-        [SerializeField] float FlapSpd = 5.6f;
-        [SerializeField] float FlapSlowXvel = 3.8f;
+        [SerializeField] float FlapSpd = 9f;
+        [SerializeField] float FlapSlowXvel = 4f;
+
+        GameObject CurrentBalloonObj;
+        [SerializeField] GameObject prefBalloon;
 
         float timerJumpInputBuffer;
         float timerJumpCoyote;
@@ -120,8 +124,7 @@ public class PlayerCharacterMain : MonoBehaviour
                 case 0:
                 msg = "ANIMS" 
                 + $"\n Current Sprite Int: {_currentSprite}"
-                + $"\n AnimStateTemp {AnimStateTemp}"
-                + $"\n Total time Walking {AnimStateWalkingDir}";
+                + $"\n AnimStateTemp {AnimStateTemp}";
                 break;
 
                 case 1:
@@ -189,7 +192,7 @@ public class PlayerCharacterMain : MonoBehaviour
         {
             XVel = Mathf.MoveTowards(XVel, _maxspd *_axis.x, _acc *60 *Time.deltaTime);
             if (isGroundedSave)
-                TurnDirection(-_axis.x);
+                TurnDirection(_axis.x);
         }
         else
         {
@@ -198,9 +201,12 @@ public class PlayerCharacterMain : MonoBehaviour
 
         // GRAVEDAD
         var _finalgrav = isInflatedState ? 
-            (YVel > 0 ? InflatedGravSpd : InflatedGravFallSpd) : stats.GravSpd;
+            (YVel > 0 || _isHoldingDown ? InflatedGravSpd : InflatedGravFallSpd) : stats.GravSpd;
         var _finalmaxfall = isInflatedState ? 
-            InflatedRiseYvel : stats.MaxFallSpd;
+            (_isHoldingDown ? InflatedFallFastYvel : InflatedFallYvel) : stats.MaxFallSpd;
+        
+        if (isInflatedState && YVel < -InflatedFallYvel && !_isHoldingDown)
+            _finalgrav = stats.GravSpd;
 
         YVel = !_ground ? 
             Mathf.MoveTowards(YVel, -_finalmaxfall, _finalgrav *60 *Time.fixedDeltaTime) : YVel;
@@ -240,7 +246,7 @@ public class PlayerCharacterMain : MonoBehaviour
         //     if (moveAxis.x != 0 && AnimStateWalkingDir != moveAxis.x)
         //     {
         //         SetSpriteAnimState(sprWalkBegin);
-        //         TurnDirection(-moveAxis.x);
+        //         TurnDirection(moveAxis.x);
         //     }
         //     AnimStateWalkingDir = moveAxis.x;
         // }
@@ -275,7 +281,7 @@ public class PlayerCharacterMain : MonoBehaviour
         if (_dir == 0)
             return;
         
-        _sprRender.flipX = _dir == 1;
+        _sprRender.flipX = _dir != 1;
         Entity.Turn(_dir);
     }
 
@@ -331,7 +337,6 @@ public class PlayerCharacterMain : MonoBehaviour
 
         // AL INFLARSE
         
-    
         // CHOCARSE CON EL TECHO
         if (isInflatedState && Entity.bumpHead && bumpHeadBounceBuffer < 0f)
         {
@@ -353,17 +358,24 @@ public class PlayerCharacterMain : MonoBehaviour
         if (InputHandler.AbilityWasPressed && inflationsLeft > 0)
         {
             isInflatedState = true;
+            if (moveAxis.x != 0)
+                TurnDirection(moveAxis.x);
+
+            CurrentBalloonObj = Instantiate(prefBalloon, 
+                transform.position + new Vector3(0.4f *Entity.GetLookDir(), 0, 3), 
+                quaternion.identity);
+            CurrentBalloonObj.GetComponent<BalloonMain>().SetPosTarget(transform);
+            CurrentBalloonObj.GetComponent<BalloonMain>().MoveForce(
+                Vector3.right *Entity.GetLookDir() *4f);
+
             // Entity.isGrounded = false;
             
             if (!isGroundedSave)
             {
                 // XVel *= 0.3f;
                 XVel = Mathf.Clamp(XVel, -InflatedMoveXvel, InflatedMoveXvel);
-                YVel = Mathf.Clamp(YVel, -InflatedRiseYvel, 3.7f);
+                YVel = Mathf.Clamp(YVel, -InflatedFallYvel, 3.7f);
             }
-
-            if (moveAxis.x != 0)
-                TurnDirection(-moveAxis.x);
             
             isJumpHolding = false;
             inflationsLeft --;
@@ -377,13 +389,17 @@ public class PlayerCharacterMain : MonoBehaviour
     {
         if (InputHandler.AbilityWasPressed)
         {
+
+            if (CurrentBalloonObj != null)
+                CurrentBalloonObj.GetComponent<BalloonMain>().Die();
+
             isInflatedState = false;
             timerInflated = 0f;
 
-            _sfx.PlayAudioClip("pop");
+            // _sfx.PlayAudioClip("pop");
             
             if (moveAxis.x != 0)
-                TurnDirection(-moveAxis.x);
+                TurnDirection(moveAxis.x);
 
             if (isGroundedSave)
                 RefillInflations(MaxNumberInflations);
@@ -400,7 +416,7 @@ public class PlayerCharacterMain : MonoBehaviour
                         
             timerJumpInputBuffer = -0.017f;
             if (moveAxis.x != 0)
-                TurnDirection(-moveAxis.x);
+                TurnDirection(moveAxis.x);
 
             SetSpriteAnimState(sprFlap);
             _sfx.PlayAudioClip("jump");

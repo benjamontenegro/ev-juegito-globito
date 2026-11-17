@@ -134,7 +134,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8724403974266133089, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
       propertyPath: m_Name
-      value: EntityPlayer
+      value: EntPlayer
       objectReference: {fileID: 0}
     - target: {fileID: 8724403974266133089, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
       propertyPath: m_Layer
@@ -183,11 +183,11 @@ MonoBehaviour:
   debugDrawPos: {fileID: 0}
   JumpSpd: 13.5
   InflatedGravSpd: 0.2
-  InflatedGravFallSpd: 0.05
+  InflatedGravFallSpd: 0.06
   InflatedRiseYvel: 4
   InflatedJumpSpd: 7.2
   InflatedMoveAirXvel: 4
-  InflatedMoveAcc: 0.35
-  InflatedMoveFri: 0.03
-  FlapSpd: 8.4
-  FlapSlowXvel: 1
+  InflatedMoveAcc: 0.4
+  InflatedMoveFri: 0.02
+  FlapSpd: 9
+  FlapSlowXvel: 4
