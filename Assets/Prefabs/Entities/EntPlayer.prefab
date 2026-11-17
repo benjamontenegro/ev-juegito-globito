@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2114079579846030284
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 800661656103883268}
+  m_Layer: 0
+  m_Name: drawpos
+  m_TagString: Untagged
+  m_Icon: {fileID: 4162164826716764455, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &800661656103883268
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2114079579846030284}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -4, y: 3.5, z: 6}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7338363739254380917}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1305494878200791957
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -150,7 +181,10 @@ PrefabInstance:
       objectReference: {fileID: 9100000, guid: 00db204184790d04d8465c6622d97aaf, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 8631454745252158176, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 800661656103883268}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 8724403974266133089, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
       insertIndex: 4
@@ -159,6 +193,22 @@ PrefabInstance:
 --- !u!61 &1212310958489911969 stripped
 BoxCollider2D:
   m_CorrespondingSourceObject: {fileID: 201803024154935604, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
+  m_PrefabInstance: {fileID: 1305494878200791957}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3348701488803228802 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4352437599708655383, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
+  m_PrefabInstance: {fileID: 1305494878200791957}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7713896074391558644}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14fc9d561b27d124897deadc06d955be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EntityMovement
+--- !u!4 &7338363739254380917 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8631454745252158176, guid: a8f1a8d9575b8374cb2634a0b63bfb2d, type: 3}
   m_PrefabInstance: {fileID: 1305494878200791957}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &7713896074391558644 stripped
@@ -178,16 +228,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d6178c58c9ce2c43937d4c4417a6607, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerCharacterMain
-  Entity: {fileID: 0}
+  Entity: {fileID: 3348701488803228802}
   stats: {fileID: 11400000, guid: c008387af2301b548ab82f2813882786, type: 2}
-  debugDrawPos: {fileID: 0}
+  debugDrawPos: {fileID: 800661656103883268}
   JumpSpd: 13.5
-  InflatedGravSpd: 0.2
-  InflatedGravFallSpd: 0.06
-  InflatedRiseYvel: 4
-  InflatedJumpSpd: 7.2
+  InflatedGravSpd: 0.23
+  InflatedGravFallSpd: 0.04
+  InflatedFallYvel: 2
+  InflatedFallFastYvel: 7
+  InflatedJumpSpd: 7.7
   InflatedMoveAirXvel: 4
   InflatedMoveAcc: 0.4
   InflatedMoveFri: 0.02
   FlapSpd: 9
   FlapSlowXvel: 4
+  prefBalloon: {fileID: 7987478387943325563, guid: b0d1ee5556979e944b63629d265fecb9, type: 3}

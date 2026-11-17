@@ -42,11 +42,11 @@ public class PlayerCharacterMain : MonoBehaviour
 
         // MOVEMENT VARIABLES ############################################################
         [Header("Movimiento (Inflado)")]
-        [SerializeField] float InflatedGravSpd = 0.2f;
-        [SerializeField] float InflatedGravFallSpd = 0.06f;
-        [SerializeField] float InflatedFallYvel = 3.2f;
-        [SerializeField] float InflatedFallFastYvel = 6.4f;
-        [SerializeField] float InflatedJumpSpd = 7.2f;
+        [SerializeField] float InflatedGravSpd = 0.23f;
+        [SerializeField] float InflatedGravFallSpd = 0.04f;
+        [SerializeField] float InflatedFallYvel = 2f;
+        [SerializeField] float InflatedFallFastYvel = 7f;
+        [SerializeField] float InflatedJumpSpd = 7.7f;
         float InflatedMoveXvel = 7f;
         [SerializeField] float InflatedMoveAirXvel = 4f;
         [SerializeField] float InflatedMoveAcc = 0.4f;
@@ -239,18 +239,6 @@ public class PlayerCharacterMain : MonoBehaviour
 
         if (InputHandler.JumpWasPressed) // JUMP INPUTED
             timerJumpInputBuffer = 0.017f *8;
-        
-        // // COSAS EXTRAS PA PROBAR
-        // if (isGroundedSave && AnimStateTemp == 0)
-        // {
-        //     if (moveAxis.x != 0 && AnimStateWalkingDir != moveAxis.x)
-        //     {
-        //         SetSpriteAnimState(sprWalkBegin);
-        //         TurnDirection(moveAxis.x);
-        //     }
-        //     AnimStateWalkingDir = moveAxis.x;
-        // }
-        
     }
 
     /// <summary> salto(En el piso?, eje) </summary>
