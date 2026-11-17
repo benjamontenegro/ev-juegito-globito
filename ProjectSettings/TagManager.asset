@@ -60,5 +60,14 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: SpriteLayer Back
+    uniqueID: 2978249067
+    locked: 0
+  - name: SpriteLayer Main
+    uniqueID: 2857796917
+    locked: 0
+  - name: SpriteLayer Front
+    uniqueID: 919911351
+    locked: 0
   m_RenderingLayers:
   - Default

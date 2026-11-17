@@ -44,4 +44,4 @@ MonoBehaviour:
   HeadWidthDif: 0.25
   ColReachDif: 0.063
   debugBboxEnable: 0
-  debugTextEnable: 1
+  debugTextEnable: 0
