@@ -11,6 +11,7 @@ TagManager:
   - WallHurt
   - EntityItem
   - EntityProp
+  - RoomBound
   layers:
   - Default
   - TransparentFX
@@ -28,7 +29,7 @@ TagManager:
   - WallLeftOnly
   - 
   - 
-  - 
+  - RoomBound
   - 
   - 
   - 

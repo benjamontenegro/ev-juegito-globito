@@ -109,49 +109,45 @@ public class PlayerCharacterMain : MonoBehaviour
         HandleSprites();
     }
 
-    void OnDrawGizmos()
-    {
-        if (Entity.stats.debugTextEnable)
-        {
-            string msg = "";
+    // void OnDrawGizmos()
+    // {
+    //     if (Entity.stats.debugTextEnable)
+    //     {
+    //         string msg = "";
 
-            switch(debugDrawPos.position.z)
-            {
-                default: case -5:
-                msg = "LMAO";
-                break;
+    //         switch(debugDrawPos.position.z)
+    //         {
+    //             default: case -5:
+    //             msg = "LMAO";
+    //             break;
                 
-                case 0:
-                msg = "ANIMS" 
-                + $"\n Current Sprite Int: {_currentSprite}"
-                + $"\n AnimStateTemp {AnimStateTemp}";
-                break;
+    //             case 0:
+    //             msg = "ANIMS" 
+    //             + $"\n Current Sprite Int: {_currentSprite}"
+    //             + $"\n AnimStateTemp {AnimStateTemp}";
+    //             break;
 
-                case 1:
-                msg = "BALLOON SHIT"
-                + $"\n Inflated? {isInflatedState}"
-                + $"\n inflations left {inflationsLeft}/{MaxNumberInflations}"
-                + $"\n inflation state coold {timerInflated *60}";
-                // + $"\n";
-                break;
+    //             case 1:
+    //             msg = "BALLOON SHIT"
+    //             + $"\n Inflated? {isInflatedState}"
+    //             + $"\n inflations left {inflationsLeft}/{MaxNumberInflations}"
+    //             + $"\n inflation state coold {timerInflated *60}";
+    //             // + $"\n";
+    //             break;
 
-                case 2:
-                msg = "SPEED SHIT"
-                + $"\njump inital spd {JumpSpd}"
-                + $"\njump ballon spd {InflatedJumpSpd}"
-                + $"\nflap spd {FlapSpd}";
-                break;
-            }
+    //             case 2:
+    //             msg = "SPEED SHIT"
+    //             + $"\njump inital spd {JumpSpd}"
+    //             + $"\njump ballon spd {InflatedJumpSpd}"
+    //             + $"\nflap spd {FlapSpd}";
+    //             break;
+    //         }
 
-            Handles.Label(debugDrawPos.position, msg);
-        }
+    //         Handles.Label(debugDrawPos.position, msg);
+    //     }
 
-        // if (isInflatedState)
-        // {
-        //     Gizmos.DrawSphere(transform.position +(Vector3.up *1.2f), 0.7f);
-        // }
-    }
-    
+    // }
+
     #endregion ####################################
 
     #region METODOS ############################################
@@ -463,8 +459,9 @@ public class PlayerCharacterMain : MonoBehaviour
                         break;
 
                         case 1: case 3:
-                            Entity.MoveToPos(new Vector3(_object.transform.position.x +(_springLookRight ? 0.5f : -0.5f)
-                                , Mathf.Lerp(transform.position.y, _object.transform.position.y +0.5f, 0.5f)));
+                            Entity.MoveToPos(
+                                new Vector3(_object.transform.position.x +(_springLookRight ? 0.5f : -0.5f), 
+                                Mathf.Lerp(transform.position.y, _object.transform.position.y +0.5f, 0.5f)));
                             XVel = (MoveXvel + 3.6f) * (_springLookRight ? 1 : -1) * 1.7f;
                             YVel = JumpSpd;
                             timerStunMoveAxisX = (0.017f *8);
