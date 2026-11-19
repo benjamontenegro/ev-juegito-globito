@@ -23,11 +23,13 @@ MonoBehaviour:
   - m_enabled: 1
     m_path: Assets/Scenes/SceneInit.unity
   - m_enabled: 1
-    m_path: Assets/Scenes/SceneMainMenu.unity
+    m_path: Assets/Scenes/MainMenu.unity
   - m_enabled: 1
-    m_path: Assets/Scenes/SceneLevel.unity
+    m_path: Assets/Scenes/LevelTest1.unity
   - m_enabled: 1
-    m_path: Assets/Scenes/SceneTest1.unity
+    m_path: Assets/Scenes/LevelTest2.unity
+  - m_enabled: 1
+    m_path: Assets/Scenes/LevelDemoStage.unity
   m_HasScriptingDefines: 0
   m_ScriptingDefines: []
   m_PlayerSettingsYaml:

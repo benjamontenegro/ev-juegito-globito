@@ -12,7 +12,7 @@ public class CameraMain : MonoBehaviour
     public static Vector2 Size { get; } = new Vector2(30, 16);
 
     #region REFS ############################################################
-    public Transform cameraTarget;
+    [SerializeField] public Transform cameraTarget;
     // private Collider2D cameraBoundDetector;
     public LayerMask cameraBoundLayer;
     public RaycastHit2D lastCameraBound;
@@ -34,11 +34,12 @@ public class CameraMain : MonoBehaviour
 
     void Awake()
     {
+        lastCameraBound = new RaycastHit2D();
         // GET PLAYER
         if (cameraTarget == null)
         {
-            cameraTarget = GameObject.FindWithTag("Player").transform;
-            // cameraTarget.TryGetComponent<Collider2D>(out cameraBoundDetector);
+            GameObject _pl = GameObject.FindWithTag("Player");
+            cameraTarget = (_pl != null) ? _pl.transform : null;
         }
     }
 
@@ -62,7 +63,7 @@ public class CameraMain : MonoBehaviour
                 CameraOnTest(InputHandler.Movement);
             break;
             case CameraMode.NONE:
-                CameraOnStand();
+                CameraOnNoTarget();
             break;
         }
     }
@@ -72,9 +73,9 @@ public class CameraMain : MonoBehaviour
         string msg_name = lastCameraBound == true ? 
             "yes, " + lastCameraBound.collider.gameObject.name : "nope";
 
-        Handles.Label(transform.position, 
-        $"CAMERA MODE {camMode}"
-        + $"\nis it in zone ? {msg_name}"
+        // Handles.Label(transform.position, 
+        // $"CAMERA MODE {camMode}"
+        // + $"\nis it in zone ? {msg_name}"
         );
     }
 
@@ -90,15 +91,18 @@ public class CameraMain : MonoBehaviour
             camMode = CameraMode.TEST;
             return;
         }
-
-        lastCameraBound = Physics2D.Raycast(cameraTarget.position, Vector2.zero, 0, cameraBoundLayer);
         
-        if (cameraTarget != null)
+        if (cameraTarget == null)
         {
-            camMode = (lastCameraBound == true) ? CameraMode.FOLLOW_LOCK : CameraMode.FOLLOW;
+            camMode = CameraMode.NONE;
         }
         else
-            camMode = CameraMode.NONE;
+        {
+            lastCameraBound = Physics2D.Raycast(
+                cameraTarget.position, Vector2.zero, 0, cameraBoundLayer);
+            camMode = (lastCameraBound == true) ? 
+                CameraMode.FOLLOW_LOCK : CameraMode.FOLLOW;
+        }
     }
 
     private void CameraOnFollow()
@@ -109,7 +113,7 @@ public class CameraMain : MonoBehaviour
         CameraMoveSmooth(transform.position, camPosDesired, camFollowSpd);
     }
 
-    private void CameraOnStand()
+    private void CameraOnNoTarget()
     {
         CameraMoveSmooth(transform.position, camPosDesired, camFollowSpd);
     }

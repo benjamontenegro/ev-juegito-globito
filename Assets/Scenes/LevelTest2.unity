@@ -275,26 +275,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2837712015511303595, guid: 724170e707591ce45a63ae8c6e1a0936, type: 3}
-      propertyPath: m_Color.a
-      value: 0.007843138
-      objectReference: {fileID: 0}
-    - target: {fileID: 2837712015511303595, guid: 724170e707591ce45a63ae8c6e1a0936, type: 3}
-      propertyPath: m_Color.b
-      value: 0.17034149
-      objectReference: {fileID: 0}
-    - target: {fileID: 2837712015511303595, guid: 724170e707591ce45a63ae8c6e1a0936, type: 3}
-      propertyPath: m_Color.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2837712015511303595, guid: 724170e707591ce45a63ae8c6e1a0936, type: 3}
-      propertyPath: m_Color.r
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2837712015511303595, guid: 724170e707591ce45a63ae8c6e1a0936, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 5366747223666960580, guid: 724170e707591ce45a63ae8c6e1a0936, type: 3}
       propertyPath: m_Name
       value: RoomBound.01

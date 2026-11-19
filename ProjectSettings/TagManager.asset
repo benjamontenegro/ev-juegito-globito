@@ -70,5 +70,8 @@ TagManager:
   - name: SpriteLayer Front
     uniqueID: 919911351
     locked: 0
+  - name: UiLayer1
+    uniqueID: 3129389665
+    locked: 0
   m_RenderingLayers:
   - Default

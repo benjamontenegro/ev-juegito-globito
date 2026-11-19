@@ -3,8 +3,11 @@ using UnityEngine.SceneManagement;
 
 public class GameSceneInit : MonoBehaviour
 {
+    [SerializeField] Scene SceneToLoad;
+
     void Awake()
     {
-            SceneManager.LoadScene("SceneMainMenu");
+        SceneManager.LoadScene(SceneToLoad.buildIndex);
+            // SceneManager.LoadScene("SceneMainMenu");
     }
 }

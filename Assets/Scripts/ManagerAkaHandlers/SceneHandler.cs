@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 public class SceneHandler : MonoBehaviour
@@ -22,8 +23,11 @@ public class SceneHandler : MonoBehaviour
     {
         CountTimers();
         
-        if (UnityEngine.InputSystem.Keyboard.current.rKey.wasPressedThisFrame)
+        if (Keyboard.current.rKey.wasPressedThisFrame)
             Restart();
+        
+        if (Keyboard.current.mKey.wasPressedThisFrame)
+            SceneManager.LoadScene("MainMenu");
         
         PlayerIsAlive = (GameObject.FindWithTag("Player") != null) ? true : false;
 

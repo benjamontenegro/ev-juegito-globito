@@ -60,17 +60,18 @@ public class PlayerCharacterMain : MonoBehaviour
         float bumpHeadBounceBuffer = -4f;
         [SerializeField] float FlapSpd = 9f;
         [SerializeField] float FlapSlowXvel = 4f;
+        [SerializeField] float FlapFastfallMult = 0.8f;
 
         GameObject CurrentBalloonObj;
         [SerializeField] GameObject prefBalloon;
 
+        Vector2 moveAxis;
+        bool _isHoldingDown;
         float timerJumpInputBuffer;
         float timerJumpCoyote;
         float timerStunMoveAxisX;
         bool isGroundedSave; 
         // CHECKEO DEL PISO PERSONAL, SE PASA AL ENT POR LAS WEAS
-        Vector2 moveAxis;
-        bool _isHoldingDown;
             
     #endregion####################################
     
@@ -395,7 +396,8 @@ public class PlayerCharacterMain : MonoBehaviour
     {
         if (timerJumpInputBuffer > 0f)
         {
-            YVel = (YVel <= 1f) ? FlapSpd *0.4f : FlapSpd;
+            YVel = ((YVel <= 1f) 
+                ? FlapSpd *0.4f : FlapSpd) * (_isHoldingDown ? FlapFastfallMult : 1f);
             XVel = Mathf.Clamp(XVel, -FlapSlowXvel, FlapSlowXvel);
                         
             timerJumpInputBuffer = -0.017f;
@@ -424,7 +426,7 @@ public class PlayerCharacterMain : MonoBehaviour
             return;
         }
 
-        if (IsTrigger)
+        if (IsTrigger && !collide.CompareTag("RoomBound"))
             collide = collide.transform.parent.gameObject;
 
         // ESTO PARA ACCEDER AL OBJETO PADRE
@@ -499,16 +501,16 @@ public class PlayerCharacterMain : MonoBehaviour
                 default:
                     if (collide.transform.position.y < transform.position.y && !isGroundedSave)
                     {
-                        bool _holdpress = InputHandler.JumpIsHeld;
+                        // bool _holdpress = InputHandler.JumpIsHeld;
 
                         _sfx.PlayAudioClip("bump");
 
-                        YVel = JumpEnemyStoolSpd * (_holdpress ? 1.4f : 1f);
-                        if (_holdpress)
-                        {
-                            isJumpHolding = true;
-                            // dsps tmbn aplicarle algo al enemigosinono
-                        }
+                        YVel = JumpEnemyStoolSpd * 1.3f;//(_holdpress ? 1.4f : 1f);
+                        // if (_holdpress)
+                        // {
+                        //     isJumpHolding = true;
+                        //     // dsps tmbn aplicarle algo al enemigosinono
+                        // }
                     }
                     else
                     {
