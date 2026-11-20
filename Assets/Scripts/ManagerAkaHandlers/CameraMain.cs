@@ -1,6 +1,9 @@
 // using UnityEditor;
 // using Unity.VectorGraphics;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
+
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -70,13 +73,13 @@ public class CameraMain : MonoBehaviour
 
     void OnDrawGizmos()
     {
-        string msg_name = lastCameraBound == true ? 
+        string msg_name = lastCameraBound == true ?
             "yes, " + lastCameraBound.collider.gameObject.name : "nope";
 
         // Handles.Label(transform.position, 
         // $"CAMERA MODE {camMode}"
         // + $"\nis it in zone ? {msg_name}"
-        );
+
     }
 
     #region METODOS ############################################################

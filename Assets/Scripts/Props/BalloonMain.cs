@@ -68,6 +68,12 @@ public class BalloonMain : MonoBehaviour
 
     void MoveBalloon()
     {
+        if (posTarget == null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
         Vector3 MovePosTarget = posTarget.position + new Vector3(0, posVerticalAdjust);
         Vector2 _diff = transform.position - MovePosTarget;
         
@@ -92,10 +98,7 @@ public class BalloonMain : MonoBehaviour
     }
 
     /// <summary> cambiar el transform objetivo del globo </summary>
-    public void SetPosTarget(Transform newTarget)
-    {
-        posTarget = newTarget;
-    }
+    public void SetPosTarget(Transform newTarget) => posTarget = newTarget;
 
     /// <summary> darle un empujon al globo </summary>
     public void MoveForce(Vector2 Force)
